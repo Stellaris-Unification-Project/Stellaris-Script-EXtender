@@ -1,0 +1,16 @@
+Ingame string creator
+Ingame string assigner
+Keyboard impl with above 2
+
+Page based event boilerplate
+- Simple select values event
+- Advanced execute code on choice
+
+List Functions:
+- Export list to event targets
+
+Basic Mod auto update functionality
+
+3.1 List Functions
+- Sort by variable
+- Sort by trigger value
