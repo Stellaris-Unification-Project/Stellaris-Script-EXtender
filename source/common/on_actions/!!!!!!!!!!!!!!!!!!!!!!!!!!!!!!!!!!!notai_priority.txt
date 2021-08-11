@@ -1,0 +1,21 @@
+on_game_start = {
+	events = {
+		se_setup.0
+		se_setup.1
+	}
+}
+
+on_random_number_create_digit = {
+	random_events = {
+		1 = se_rng.0
+		1 = se_rng.1
+		1 = se_rng.2
+		1 = se_rng.3
+		1 = se_rng.4
+		1 = se_rng.5
+		1 = se_rng.6
+		1 = se_rng.7
+		1 = se_rng.8
+		2 = se_rng.9
+	}
+}

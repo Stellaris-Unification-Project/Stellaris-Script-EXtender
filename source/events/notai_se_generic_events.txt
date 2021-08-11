@@ -1,0 +1,421 @@
+namespace = se_setup
+
+ #######################
+##### Library Setup #####
+ #######################
+
+event = {
+	id = se_setup.0
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		set_global_flag = script_extender_enabled						# Generic mod installed key
+		set_global_flag = se_pulse_engine_available						# Specifies that the pulse engine is available
+		fire_on_action = { on_action = on_game_start_begin }
+		# Done for compatibility with vanilla
+		if = {
+			limit = { exists = event_target:global_event_country }
+			clear_global_event_target = global_event_country
+		}
+		every_country = {
+			limit = { is_country_type = global_event }
+			destroy_country = yes
+		}
+	}
+}
+
+event = {
+	id = se_setup.1
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = { NOT = { exists = event_target:se_global_event_database } }
+	immediate = {
+		create_species = {
+			name = se_database_species_name
+			class = MACHINE
+			traits = {}
+			effect = { se_save_as_global_event_target = { event_target_name = se_database_entry_species } }
+		}
+		se_create_database = yes
+		event_target:se_last_created_database = {
+			set_variable = {
+				which = se_global_database_count
+				value = 1
+			}
+			se_save_as_global_event_target = { event_target_name = se_global_database }
+		}
+		se_create_event_country = { identifier = se_private_event_country }
+		event_target:se_return_value = { se_save_as_global_event_target = { event_target_name = se_event_country } }
+		se_clear_return_target = yes
+	}
+}
+
+ ######################
+##### Paged Events #####
+ ######################
+
+namespace = se_pagination
+
+
+ ########################
+##### Random Numbers #####
+ ########################
+
+namespace = se_rng
+
+country_event = {
+	id = se_rng.0
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = { factor = 1 }
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_min_checks
+			check_variable = {
+				which = se_rng_min_current_column
+				value < 1
+			}
+		}
+	}
+	immediate = {
+		set_variable = {
+			which = se_rng_column_value
+			value = 0
+		}
+	}
+}
+country_event = {
+	id = se_rng.1
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = -0.5
+			NOT = { has_country_flag = se_rng_disable_max_checks }
+			check_variable = {
+				which = se_rng_max_current_column
+				value = 1
+			}
+		}
+	}
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_max_checks
+			check_variable = {
+				which = se_rng_max_current_column
+				value > 0
+			}
+		}
+		OR = {
+			has_country_flag = se_rng_disable_min_checks
+			check_variable = {
+				which = se_rng_min_current_column
+				value < 2
+			}
+		}
+	}
+	immediate = {
+		set_variable = {
+			which = se_rng_column_value
+			value = 1
+		}
+	}
+}
+country_event = {
+	id = se_rng.2
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = -0.5
+			NOT = { has_country_flag = se_rng_disable_max_checks }
+			check_variable = {
+				which = se_rng_max_current_column
+				value = 2
+			}
+		}
+	}
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_max_checks
+			check_variable = {
+				which = se_rng_max_current_column
+				value > 1
+			}
+		}
+		OR = {
+			has_country_flag = se_rng_disable_min_checks
+			check_variable = {
+				which = se_rng_min_current_column
+				value < 3
+			}
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = se_rng_column_value
+			value = 2
+		}
+	}
+}
+country_event = {
+	id = se_rng.3
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = -0.5
+			NOT = { has_country_flag = se_rng_disable_max_checks }
+			check_variable = {
+				which = se_rng_max_current_column
+				value = 3
+			}
+		}
+	}
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_max_checks
+			check_variable = {
+				which = se_rng_max_current_column
+				value > 2
+			}
+		}
+		OR = {
+			has_country_flag = se_rng_disable_min_checks
+			check_variable = {
+				which = se_rng_min_current_column
+				value < 4
+			}
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = se_rng_column_value
+			value = 3
+		}
+	}
+}
+country_event = {
+	id = se_rng.4
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = -0.5
+			NOT = { has_country_flag = se_rng_disable_max_checks }
+			check_variable = {
+				which = se_rng_max_current_column
+				value = 4
+			}
+		}
+	}
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_max_checks
+			check_variable = {
+				which = se_rng_max_current_column
+				value > 3
+			}
+		}
+		OR = {
+			has_country_flag = se_rng_disable_min_checks
+			check_variable = {
+				which = se_rng_min_current_column
+				value < 5
+			}
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = se_rng_column_value
+			value = 4
+		}
+	}
+}
+country_event = {
+	id = se_rng.5
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = -0.5
+			NOT = { has_country_flag = se_rng_disable_max_checks }
+			check_variable = {
+				which = se_rng_max_current_column
+				value = 5
+			}
+		}
+	}
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_max_checks
+			check_variable = {
+				which = se_rng_max_current_column
+				value > 4
+			}
+		}
+		OR = {
+			has_country_flag = se_rng_disable_min_checks
+			check_variable = {
+				which = se_rng_min_current_column
+				value < 6
+			}
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = se_rng_column_value
+			value = 5
+		}
+	}
+}
+country_event = {
+	id = se_rng.6
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = -0.5
+			NOT = { has_country_flag = se_rng_disable_max_checks }
+			check_variable = {
+				which = se_rng_max_current_column
+				value = 6
+			}
+		}
+	}
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_max_checks
+			check_variable = {
+				which = se_rng_max_current_column
+				value > 5
+			}
+		}
+		OR = {
+			has_country_flag = se_rng_disable_min_checks
+			check_variable = {
+				which = se_rng_min_current_column
+				value < 7
+			}
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = se_rng_column_value
+			value = 6
+		}
+	}
+}
+country_event = {
+	id = se_rng.7
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = -0.5
+			NOT = { has_country_flag = se_rng_disable_max_checks }
+			check_variable = {
+				which = se_rng_max_current_column
+				value = 7
+			}
+		}
+	}
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_max_checks
+			check_variable = {
+				which = se_rng_max_current_column
+				value > 6
+			}
+		}
+		OR = {
+			has_country_flag = se_rng_disable_min_checks
+			check_variable = {
+				which = se_rng_min_current_column
+				value < 8
+			}
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = se_rng_column_value
+			value = 7
+		}
+	}
+}
+country_event = {
+	id = se_rng.8
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = -0.5
+			NOT = { has_country_flag = se_rng_disable_max_checks }
+			check_variable = {
+				which = se_rng_max_current_column
+				value = 8
+			}
+		}
+	}
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_max_checks
+			check_variable = {
+				which = se_rng_max_current_column
+				value > 7
+			}
+		}
+		OR = {
+			has_country_flag = se_rng_disable_min_checks
+			check_variable = {
+				which = se_rng_min_current_column
+				value < 9
+			}
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = se_rng_column_value
+			value = 8
+		}
+	}
+}
+country_event = {
+	id = se_rng.9
+	is_triggered_only = yes
+	hide_window = yes
+	weight_multiplier = {
+		factor = 1
+		modifier = {
+			factor = -0.5
+			NOT = { has_country_flag = se_rng_disable_max_checks }
+			check_variable = {
+				which = se_rng_max_current_column
+				value = 9
+			}
+		}
+	}
+	trigger = {
+		OR = {
+			has_country_flag = se_rng_disable_max_checks
+			check_variable = {
+				which = se_rng_max_current_column
+				value > 8
+			}
+		}
+	}
+	immediate = {
+		change_variable = {
+			which = se_rng_column_value
+			value = 9
+		}
+	}
+}

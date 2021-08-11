@@ -1,0 +1,526 @@
+##### Reference
+# Variables can display up to 10^14 integer places
+# Variables only have 10^-5 in decimal places (0.00000)
+# Variable division only works up to values around the range of 10^9
+# Variable multiplication only works up to values around the range of 10^6
+# Bracket commands in log statements within scripted effects/triggers require a \\ prefix to ensure the bracket command works
+
+
+
+
+### Creates a unique event country for the specific id
+### Parameters
+# identifier - the unique id of the country
+# overwrite(Optional) - boolean indicating whether any existing event countries with that identifier should be deleted, if it will not be deleted it will return a matching country instead.
+se_create_event_country = {
+	random_country = {
+		limit = {
+			is_country_type = se_event_country
+			has_country_flag = $identifier$
+		}
+		if = {
+			limit = { always = $overwrite|no$ }
+			destroy_country = yes
+		}
+		else = { se_save_as_global_event_target = { event_target_name = se_discovered_event_country } }
+	}
+	if = {
+		limit = { NOT = { exists = event_target:se_discovered_event_country } }
+		create_country = {
+			name = $identifier$
+			type = se_event_country
+			effect = {
+				set_country_flag = $identifier$
+				se_save_as_global_event_target = { event_target_name = se_discovered_event_country }
+			}
+		}
+	}
+	event_target:se_discovered_event_country = {
+		se_save_as_global_event_target = { event_target_name = se_last_created_event_country }
+		se_save_as_global_event_target = { event_target_name = se_return_value }
+	}
+	if = {
+		limit = { exists = event_target:se_discovered_event_country }
+		clear_global_event_target = se_discovered_event_country
+	}
+}
+
+### Gets the event country with the given unique id
+### Parameters
+# identifier - the unique id of the country
+se_get_event_country = {
+	random_country = {
+		limit = {
+			is_country_type = se_event_country
+			has_country_flag = $identifier$
+		}
+		se_save_as_global_event_target = { event_target_name = se_return_value }
+	}
+}
+
+### Creates a new global event target, clearing the value if it existed beforehand
+### Parameters
+# event_target_name - The name of the event target
+se_save_as_global_event_target = {
+	if = {
+		limit = { exists = event_target:$event_target_name$ }
+		clear_global_event_target = $event_target_name$
+	}
+	save_global_event_target_as = $event_target_name$
+}
+
+### Checks to see if the variable is set and if it is not, sets it.
+### Parameters
+# variable - The name of the variable to check for
+# value(Optional) - the value the variable is set to, if not set will assign 0
+se_ensure_variable_is_set = {
+	if = {
+		limit = { NOT = { is_variable_set = $variable$ } }
+		set_variable = {
+			which = $variable$
+			value = $value|0$
+		}
+	}
+}
+
+### Increases the value of the variable by 1
+### Parameters
+# variable - The name of the variable to increment
+se_increment = {
+	change_variable = {
+		which = $variable$
+		value = 1
+	}
+}
+
+### Decreases the value of the variable by 1
+### Parameters
+# variable - The name of the variable to decrement
+se_decrement = {
+	subtract_variable = {
+		which = $variable$
+		value = 1
+	}
+}
+
+### Clears the event target se_return_value if it exists
+se_clear_return_target = {
+	if = {
+		limit = { exists = event_target:se_return_value }
+		clear_global_event_target = se_return_value
+	}
+}
+
+### Forces an executed on unsupported scope error, dumping a complete log of existing scopes and their types + scope chains
+se_dump_scopes_effect = {
+	if = {
+		limit = { is_scope_type = country }
+		set_planet_flag = dump_scopes
+	}
+	else = { set_country_flag = dump_scopes }
+}
+
+### Logs a large quanitity of scope types, names, and ids
+se_log_scopes_effect = {
+	log = "This = \\[This.GetScopeType] | \\[This.GetName]"
+}
+
+### Creates a random number and places it in the given variable
+### Parameters
+# variable - The name of the variable to randomize
+# decimals(Optional) - The minimum amount of decimal places to go for the random(defaults to 0)
+# min(Optional) - The minimum value of the variable, can be a variable in the same scope or static number(defaults to 0)
+# max(Optional) - The maximum value of the variable, can be a variable in the same scope or static number(defaults to 100)
+se_random_variable = {
+	set_variable = {
+		which = se_rng_number_min
+		value = $min|0$
+	}
+	set_variable = {
+		which = se_rng_number_max
+		value = $max|100$
+	}
+	set_variable = {
+		which = se_rng_decimal_places
+		value = $decimals|-1$
+	}
+	event_target:se_event_country = {
+		### Grab the number of decimal places for the random variable(less than 0 means use max/min)
+		set_variable = {
+			which = se_rng_decimal_places
+			value = { scope = prev variable = se_rng_decimal_places }
+		}
+		### If the value is below 0(standard behaviour) we calculate decimal places by max and min
+		if = {
+			limit = {
+				check_variable = {
+					which = se_rng_decimal_places
+					value < 0
+				}
+			}
+			clear_variable = se_rng_decimal_places
+		}
+		[[decimals]
+			### Decimals on variables can only go as low as five places (0.00000), any lower is not supported so we won't bother calculating it
+			else_if = {
+				limit = {
+					check_variable = {
+						which = se_rng_decimal_places
+						value > 5
+					}
+				}
+				set_variable = {
+					which = se_rng_decimal_places
+					value = 5
+				}
+			}
+			### Decimal places are displayed as integers, so we will assume 
+			else_if = {
+				limit = {
+					check_variable = {
+						which = se_rng_decimal_places
+						value < 1
+					}
+				}
+				set_variable = {
+					which = se_rng_decimal_places_temp
+					value = se_rng_decimal_places
+				}
+				set_variable = {
+					which = se_rng_decimal_places
+					value = 0
+				}
+				modulo_variable = {
+					which = se_rng_decimal_places_temp
+					value = 1
+				}
+				while = {
+					limit = {
+						check_variable = {
+							which = se_rng_decimal_places_temp
+							value != 0
+						}
+					}
+					multiply_variable = {
+						which = se_rng_decimal_places_temp
+						value = 10
+					}
+					change_variable = {
+						which = se_rng_decimal_places
+						value = 1
+					}
+					modulo_variable = {
+						which = se_rng_decimal_places_temp
+						value = 1
+					}
+				}
+				clear_variable = se_rng_decimal_places_temp
+			}
+		]
+		set_variable = {
+			which = se_rng_max
+			value = { scope = prev variable = se_rng_number_max }
+		}
+		[[max]
+			set_variable = {
+				which = se_rng_max_mult
+				value = 0.00001
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = se_rng_max_mult
+						value < se_rng_max
+					}
+				}
+				multiply_variable = {
+					which = se_rng_max_mult
+					value = 10
+				}
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = se_rng_max_mult
+						value > se_rng_max
+					}
+				}
+				divide_variable = {
+					which = se_rng_max_mult
+					value = 10
+				}
+			}
+			### Determines decimal places of the max if not already set
+			if = {
+				limit = { NOT = { is_variable_set = se_rng_decimal_places } }
+				set_variable = {
+					which = se_rng_max_temp
+					value = se_rng_max
+				}
+				set_variable = {
+					which = se_rng_decimal_places_temp
+					value = 0
+				}
+				modulo_variable = {
+					which = se_rng_max_temp
+					value = 1
+				}
+				while = {
+					limit = {
+						check_variable = {
+							which = se_rng_max_temp
+							value != 0
+						}
+					}
+					multiply_variable = {
+						which = se_rng_max_temp
+						value = 10
+					}
+					change_variable = {
+						which = se_rng_decimal_places
+						value = 1
+					}
+					if = {
+						limit = {
+							check_variable = {
+								which = se_rng_max_temp
+								value > 1
+							}
+						}
+						modulo_variable = {
+							which = se_rng_max_temp
+							value = 1
+						}
+					}
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = se_rng_decimal_places_temp
+							value > 0
+						}
+					}
+					set_variable = {
+						which = se_rng_decimal_places
+						value = se_rng_decimal_places_temp
+					}
+				}
+				clear_variable = se_rng_decimal_places_temp
+				clear_variable = se_rng_max_temp
+			}
+		]
+		if = {
+			limit = { NOT = { is_variable_set = se_rng_max_mult } }
+			set_variable = {
+				which = se_rng_max_mult
+				value = 100
+			}
+		}
+		set_variable = {
+			which = se_rng_min
+			value = { scope = prev variable = se_rng_number_min }
+		}
+		[[min]
+			### Determines decimal places of the min if not already set
+			if = {
+				limit = { NOT = { is_variable_set = se_rng_decimal_places } }
+				set_variable = {
+					which = se_rng_min_temp
+					value = se_rng_min
+				}
+				set_variable = {
+					which = se_rng_decimal_places_temp
+					value = 0
+				}
+				modulo_variable = {
+					which = se_rng_min_temp
+					value = 1
+				}
+				while = {
+					limit = {
+						check_variable = {
+							which = se_rng_min_temp
+							value != 0
+						}
+					}
+					multiply_variable = {
+						which = se_rng_min_temp
+						value = 10
+					}
+					change_variable = {
+						which = se_rng_decimal_places_temp
+						value = 1
+					}
+					if = {
+						limit = {
+							check_variable = {
+								which = se_rng_min_temp
+								value > 1
+							}
+						}
+						modulo_variable = {
+							which = se_rng_min_temp
+							value = 1
+						}
+					}
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = se_rng_decimal_places_temp
+							value > 0
+						}
+					}
+					set_variable = {
+						which = se_rng_decimal_places
+						value = se_rng_decimal_places_temp
+					}
+				}
+				clear_variable = se_rng_decimal_places_temp
+				clear_variable = se_rng_min_temp
+			}
+		]
+		### If decimal places still haven't been assigned we assume 0
+		set_variable = {
+			which = se_rng_number
+			value = 0
+		}
+		set_variable = {
+			which = se_rng_current_mult
+			value = se_rng_max_mult
+		}
+		set_variable = {
+			which = se_rng_min_mult
+			value = 1
+		}
+		if = {
+			limit = { is_variable_set = se_rng_decimal_places }
+			while = {
+				count < se_rng_decimal_places
+				divide_variable = {
+					which = se_rng_min_mult
+					value = 10
+				}
+			}
+			clear_variable = se_rng_decimal_places
+		}
+		while = {
+			limit = {
+				check_variable = {
+					which = se_rng_current_mult
+					value >= se_rng_min_mult
+				}
+			}
+			# Retrieve the current column by dividing down until the existing value is in the ones
+			set_variable = {
+				which = se_rng_max_current_column
+				value = se_rng_max
+			}
+			divide_variable = {
+				which = se_rng_max_current_column
+				value = se_rng_current_mult
+			}
+			# Delete the decimals/values below the ones
+			floor_variable = se_rng_max_current_column
+			# Remove all values above the ones
+			modulo_variable = {
+				which = se_rng_max_current_column
+				value = 10
+			}
+			# Retrieve the current column by dividing down until the existing value is in the ones
+			set_variable = {
+				which = se_rng_min_current_column
+				value = se_rng_min
+			}
+			divide_variable = {
+				which = se_rng_min_current_column
+				value = se_rng_current_mult
+			}
+			# If the min is not less than one(proving min is less than the currently adding number) remove any values below
+			if = {
+				limit = {
+					NOT = {
+						check_variable = {
+							which = se_rng_min_current_column
+							value < 1
+						}
+					}
+				}
+				floor_variable = se_rng_min_current_column
+			}
+			# Remove values above the ones column
+			modulo_variable = {
+				which = se_rng_min_current_column
+				value = 10
+			}
+			set_variable = {
+				which = se_rng_column_value
+				value = 0
+			}
+			fire_on_action = { on_action = on_random_number_create_digit } # Create a random value for the column
+			### If the value is less than the max, disable max checks
+			if = {
+				limit = {
+					check_variable = {
+						which = se_rng_column_value
+						value < se_rng_max_current_column
+					}
+				}
+				set_country_flag = se_rng_disable_max_checks
+			}
+			### If the value is greater than the min disable min checks
+			if = {
+				limit = {
+					check_variable = {
+						which = se_rng_column_value
+						value > se_rng_min_current_column
+					}
+				}
+				set_country_flag = se_rng_disable_min_checks
+			}
+			multiply_variable = {
+				which = se_rng_column_value
+				value = se_rng_current_mult
+			}
+			change_variable = {
+				which = se_rng_number
+				value = se_rng_column_value
+			}
+			divide_variable = {
+				which = se_rng_current_mult
+				value = 10
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = se_rng_number
+					value < se_rng_min
+				}
+			}
+			change_variable = {
+				which = se_rng_number
+				value = se_rng_min
+			}
+		}
+		clear_variable = se_rng_max
+		clear_variable = se_rng_min
+		clear_variable = se_rng_max_current_column
+		clear_variable = se_rng_min_current_column
+		clear_variable = se_rng_max_mult
+		clear_variable = se_rng_min_mult
+		clear_variable = se_rng_current_mult
+		clear_variable = se_rng_column_value
+		remove_country_flag = se_rng_disable_max_checks
+		remove_country_flag = se_rng_disable_min_checks
+	}
+	clear_variable = se_rng_number_min
+	clear_variable = se_rng_number_max
+	clear_variable = se_rng_decimal_places
+	set_variable = {
+		which = $variable$
+		value = { scope = event_target:se_event_country variable = se_rng_number }
+	}
+}
+
+### Todo, math effects, rapid logarithms and exponents

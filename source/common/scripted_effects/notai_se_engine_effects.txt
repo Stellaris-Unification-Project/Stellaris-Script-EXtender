@@ -1,0 +1,26 @@
+se_enable_pulse = {
+	[[scopeless_daily]
+	if = {
+		limit = { always = $scopeless_daily$ }
+		set_global_flag = se_active_daily_pulse
+	}
+	]
+	[[daily_country]
+	if = {
+		limit = { always = $daily_country$ }
+		set_global_flag = se_active_daily_pulse_country
+	}
+	]
+	[[scopeless_weekly]
+	if = { 
+		limit = { always = $scopeless_weekly$ }
+		set_global_flag = se_active_weekly_pulse
+	}
+	]
+	[[weekly_country]
+	if = {
+		limit = { always = $weekly_country$ }
+		set_global_flag = se_active_weekly_pulse_country
+	}
+	]
+}

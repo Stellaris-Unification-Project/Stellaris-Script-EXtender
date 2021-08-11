@@ -1,0 +1,96 @@
+defined_text = {
+	name = GetScopeType
+	text = {
+		trigger = { is_scope_type = ambient_object }
+		localization_key = se_scope_name_ambient_object
+	}
+	text = {
+		trigger = { is_scope_type = archaeological_site }
+		localization_key = se_scope_name_archaeological_site
+	}
+	text = {
+		trigger = { is_scope_type = army }
+		localization_key = se_scope_name_army
+	}
+	text = {
+		trigger = { is_scope_type = country }
+		localization_key = se_scope_name_country
+	}
+	text = {
+		trigger = { is_scope_type = deposit }
+		localization_key = se_scope_name_deposit
+	}
+	text = {
+		trigger = { is_scope_type = espionage_asset }
+		localization_key = se_scope_name_espionage_asset
+	}
+	text = {
+		trigger = { is_scope_type = espionage_operation }
+		localization_key = se_scope_name_espionage_operation
+	}
+	text = {
+		trigger = { is_scope_type = federation }
+		localization_key = se_scope_name_federation
+	}
+	text = {
+		trigger = { is_scope_type = first_contact }
+		localization_key = se_scope_name_first_contact
+	}
+	text = {
+		trigger = { is_scope_type = fleet }
+		localization_key = se_scope_name_fleet
+	}
+	text = {
+		trigger = { is_scope_type = galactic_object }
+		localization_key = se_scope_name_galactic_object
+	}
+	text = {
+		trigger = { is_scope_type = leader }
+		localization_key = se_scope_name_leader
+	}
+	text = {
+		trigger = { is_scope_type = megastructure }
+		localization_key = se_scope_name_megastructure
+	}
+	text = {
+		trigger = { is_scope_type = planet }
+		localization_key = se_scope_name_planet
+	}
+	text = {
+		trigger = { is_scope_type = pop_faction }
+		localization_key = se_scope_name_pop_faction
+	}
+	text = {
+		trigger = { is_scope_type = pop }
+		localization_key = se_scope_name_pop
+	}
+	text = {
+		trigger = { is_scope_type = sector }
+		localization_key = se_scope_name_sector
+	}
+	text = {
+		trigger = { is_scope_type = ship }
+		localization_key = se_scope_name_ship
+	}
+	text = {
+		trigger = { is_scope_type = spynetwork }
+		localization_key = se_scope_name_spynetwork
+	}
+	text = {
+		trigger = { is_scope_type = starbase }
+		localization_key = se_scope_name_starbase
+	}
+	text = {
+		trigger = { is_scope_type = war }
+		localization_key = se_scope_name_war
+	}
+	text = { localization_key = se_scope_unknown }
+}
+defined_text = {
+	name = GetNameOrFallback
+	text = {
+		trigger = { se_scope_has_name = yes }
+		localization_key = se_get_name
+	}
+	text = { localization_key = se_get_name_fallback }
+}

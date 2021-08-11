@@ -1,0 +1,40 @@
+se_is_database = {
+	is_scope_type = country
+	is_country_type = se_database_country
+}
+se_is_database_entry = {
+	is_scope_type = leader
+	exists = owner
+	owner = { is_scope_type = country }
+	has_leader_flag = se_database_entry
+}
+se_is_list_header = {
+	is_scope_type = leader
+	exists = owner
+	owner = { is_scope_type = country }
+	has_leader_flag = se_list_header
+}
+se_is_list_item = {
+	is_scope_type = leader
+	exists = owner
+	owner = { is_scope_type = country }
+	has_leader_flag = se_item_in_list
+}
+se_is_list_enumerator = {
+	is_scope_type = leader
+	exists = owner
+	owner = { is_scope_type = country }
+	has_leader_flag = se_database_list_enumerator
+}
+### Forces an executed on unsupported scope error, dumping a complete log of existing scopes and their types + scope chains
+se_dump_scopes_trigger = {
+	if = {
+		limit = { is_scope_type = country }
+		has_planet_flag = dump_scopes
+	}
+	else = { has_country_flag = dump_scopes }
+}
+
+se_log_scopes_trigger = {
+	
+}

@@ -1,0 +1,84 @@
+se_keyboard_object_locked = {
+	hidden_trigger = {
+		if = {
+			limit = { is_scope_type = megastructure }
+			has_megastructure_flag = se_keyboard_locked
+		}
+		else_if = {
+			limit = { is_scope_type = planet }
+			has_planet_flag = se_keyboard_locked
+		}
+		else_if = {
+			limit = { is_scope_type = planet }
+			has_planet_flag = se_keyboard_locked
+		}
+		else_if = {
+			limit = { is_scope_type = country }
+			has_country_flag = se_keyboard_locked
+		}
+		else_if = {
+			limit = { is_scope_type = ship }
+			has_ship_flag = se_keyboard_locked
+		}
+		else_if = {
+			limit = { is_scope_type = fleet }
+			has_fleet_flag = se_keyboard_locked
+		}
+		else_if = {
+			limit = { is_scope_type = galactic_object }
+			has_star_flag = se_keyboard_locked
+		}
+		else_if = {
+			limit = { is_scope_type = leader }
+			has_leader_flag = se_keyboard_locked
+		}
+		else_if = {
+			limit = { is_scope_type = pop_faction }
+			has_pop_faction_flag = se_keyboard_locked
+		}
+		else_if = {
+			limit = { is_scope_type = federation }
+			has_federation_flag = se_keyboard_locked
+		}
+	}
+}
+se_scope_has_name = {
+	hidden_trigger = {
+		OR = {
+			is_scope_type = ambient_object
+			is_scope_type = army
+			is_scope_type = country
+			is_scope_type = deposit
+			is_scope_type = espionage_asset
+			is_scope_type = espionage_operation
+			is_scope_type = federation
+			is_scope_type = first_contact
+			is_scope_type = fleet
+			is_scope_type = galactic_object
+			is_scope_type = war
+			is_scope_type = leader
+			is_scope_type = megastructure
+			is_scope_type = planet
+			is_scope_type = pop_faction
+			is_scope_type = pop
+			is_scope_type = sector
+			is_scope_type = ship
+			is_scope_type = species
+			is_scope_type = starbase
+		}
+	}
+}
+se_scope_can_be_named = {
+	hidden_trigger = {
+		is_scope_type = army
+		is_scope_type = country
+		is_scope_type = federation
+		is_scope_type = fleet
+		is_scope_type = galactic_object
+		is_scope_type = leader
+		is_scope_type = megastructure
+		is_scope_type = planet
+		is_scope_type = pop_faction
+		is_scope_type = ship
+	}
+}

@@ -1,0 +1,442 @@
+### Creates a database object
+### Parameters
+# bind_to_scope(Optional) - a scope object to lock database access to(any request for it will require a reference to that scope to be passed)
+### Access return value by scope - event_target:se_last_created_database or event_target:se_return_value
+se_create_database = {
+	se_clear_return_target = yes
+	[[bind_to_scope]
+		if = {
+			limit = { is_scope_set = event_target:$bind_to_scope$ }
+			event_target:$bind_to_scope$ = { save_global_event_target_as = se_hidden_db_owner }
+		}
+		else_if = {
+			limit = { is_scope_set = $bind_to_scope$ }
+			$bind_to_scope$ = { save_global_event_target_as = se_hidden_db_owner }
+		}
+		if = {
+			limit = { exists = event_target:se_hidden_db_owner }
+			se_get_database = { bound_to = event_target:se_hidden_db_owner }
+			if = {
+				limit = { NOT = { exists = event_target:se_return_value } }
+	]
+			create_country = {
+				type = se_database_country
+				effect = {
+					[[bind_to_scope]
+					if = {
+						limit = { exists = event_target:se_hidden_db_owner }
+							set_country_flag = se_bound_to_object_@event_target:se_hidden_db_owner
+							set_name = se_database_bound_name						
+					}
+					else_]if = {
+						limit = { exists = event_target:se_global_database }
+						set_name = se_database_unbound_name
+					}
+					else = { set_name = se_database_backup_name }
+					set_variable = {
+						which = se_database_entry_count
+						value = 0
+					}
+					se_save_as_global_event_target = { event_target_name = se_last_created_database }
+					se_save_as_global_event_target = { event_target_name = se_return_value }
+				}
+			}
+		[[bind_to_scope]
+			if = {
+				limit = { exists = event_target:se_hidden_db_owner }
+				clear_global_event_target = se_hidden_db_owner
+			}
+		}
+		]
+	}
+}
+
+### Deletes a specific database from the game
+### Parameters
+# database(optional) - A direct scope to a database declaration(will be verified before deletion)
+# bound_to(optional) - The database(if any) bound to the associated object
+### If none of these are written the effect will use the calling scope to determine
+se_delete_database = {
+	[[database]
+		if = {
+			limit = { is_scope_set = event_target:$database$ }
+			event_target:$database$ = { save_global_event_target_as = se_database_to_delete }
+		}
+		else_if = {
+			limit = { is_scope_set = $database$ }
+			$database$ = { save_global_event_target_as = se_database_to_delete }
+		}
+		else = { log_error = "Parameter 'database' was set but is not a valid scope" }
+		if = {
+			limit = { exists = event_target:se_database_to_delete }
+			event_target:se_database_to_delete = {
+				if = {
+					limit = { se_is_database = yes }
+					se_internal_delete_database = yes
+					set_global_flag = se_delete_performed
+				}
+				else = { log_error = "Parameter 'database' does not point to a valid database scope" }
+			}
+		}
+	]
+	[[bound_to]
+		if = {
+			limit = { NOT = { has_global_flag = se_delete_performed } }
+			if = {
+				limit = { exists = $bound_to$ }
+				$bound_to$ = { save_global_event_target_as = se_hidden_database_to_delete_owner }
+			}
+			else_if = {
+				limit = { exists = event_target:$bound_to$ }
+				event_target:$bound_to$ = { save_global_event_target_as = se_hidden_database_to_delete_owner }
+			}
+			else = { log_error = "Parameter 'bound_to' was set but is not a valid scope" }
+			if = {
+				limit = { exists = event_target:se_hidden_database_to_delete_owner }
+				random_country = {
+					limit = {
+						se_is_database = yes
+						has_country_flag = se_bound_to_object_@event_target:se_hidden_database_to_delete_owner
+					}
+					se_internal_delete_database = yes
+				}
+				set_global_flag = se_delete_performed
+			}
+		}
+	]
+	if = {
+		limit = { NOT = { has_global_flag = se_delete_performed } }
+		if = {
+			limit = { is_country_type = se_database_country }
+			se_internal_delete_database = yes
+		}
+		else = {
+			random_country = {
+				limit = {
+					is_country_type = se_database_country
+					has_country_flag = se_bound_to_object_@this
+				}
+				se_internal_delete_database = yes
+			}
+		}
+	}
+	else = { remove_global_flag = se_delete_performed }
+	[[database]
+		if = {
+			limit = { exists = event_target:se_database_to_delete }
+			clear_global_event_target = se_database_to_delete
+		}
+	]
+	[[bound_to]
+		if = {
+			limit = { exists = event_target:se_hidden_database_to_delete_owner }
+			clear_global_event_target = se_hidden_database_to_delete_owner
+		}
+	]
+}
+
+### Internal use, do not use outside of code within this mod
+se_internal_delete_database = {
+	every_owned_leader = {
+		kill_leader = {
+			fire = yes
+			show_notification = no
+		}
+	}
+	every_owned_fleet = { delete_fleet = this }
+	destroy_country = yes
+}
+
+### Retrieves a database object
+### Parameters
+# bound_to(Optional if identifier is set) - checks for a database belonging to a specific scope(only accepts valid scopes)
+# identifier(Optional if bound to scope is set) - gets flag unique to this database
+### Access return value by scope - event_target:se_return_value
+se_get_database = {
+	se_clear_return_target = yes
+	[[bound_to]
+		set_global_flag = se_optional_parameter_set
+		if = {
+			limit = { is_scope_set = event_target:$bound_to$ }
+			event_target:$bound_to$ = { save_global_event_target_as = se_hidden_db_target }
+		}
+		else_if = {
+			limit = { is_scope_set = $bound_to$ }
+			$bound_to$ = { save_global_event_target_as = se_hidden_db_target }
+		}
+	]
+	[[identifier]set_global_flag = se_optional_parameter_set]
+	if = {
+		limit = { has_global_flag = se_optional_parameter_set }
+		random_country = {
+			limit = {
+				is_country_type = se_database_country
+				[[bound_to]
+					AND = {
+						exists = event_target:se_hidden_db_target
+						has_country_flag = se_bound_to_object_@event_target:se_hidden_db_target
+					}
+				]
+				[[identifier]has_country_flag = $identifier$]
+			}
+			se_save_as_global_event_target = { event_target_name = se_return_value }
+		}
+	}
+	else = { log_error = "se_get_database has no valid method to seach for a database" }
+	[[bound_to]
+		if = {
+			limit = { exists = event_target:se_hidden_db_target }
+			clear_global_event_target = se_hidden_db_target
+		}
+	]
+}
+
+### Sets a flag to a database(accessed by se_get_database)
+### Parameters
+# flag - the flag to be added to the database
+# days(optional) 	- 	days for the flag to expire
+# months(optional) 	- 	months for the flag to expire
+# years(optional)	-	years for the flag to expire
+### If none of the optional parameters are added, the flag will remain until removed
+se_set_database_flag = {
+	if = {
+		limit = { se_is_database = yes }
+		[[days]
+			set_variable = {
+				which = se_database_days_value
+				value = $days$
+			}
+		]
+		[[months]
+			set_variable = {
+				which = se_database_months_value
+				value = $months$
+			}
+		]
+		[[years]
+			set_variable = {
+				which = se_database_years_value
+				value = $years$
+			}
+		]
+		if = {
+			limit = {
+				OR = {
+					[[days]
+						check_variable = {
+							which = se_database_days_value
+							value = $days$
+						}
+					]
+					[[months]
+						check_variable = {
+							which = se_database_months_value
+							value = $months$
+						}
+					]
+					[[years]
+						check_variable = {
+							which = se_database_years_value
+							value = $years$
+						}
+					]
+					always = no
+				}
+			}
+			[[days]clear_variable = se_database_days_value]
+			[[months]clear_variable = se_database_months_value]
+			[[years]clear_variable = se_database_years_value]
+			set_timed_country_flag = {
+				flag = $flag$
+				days = $days|0$
+				[[months]months = $months$]
+				[[years]years = $years$]
+			}
+		}
+		else = { set_country_flag = $flag$ }
+	}
+	else = { log_error = "Invalid call to se_set_database_flag, scope is not a database" }
+}
+
+### Removes a flag to a database(accessed by se_get_database)
+### Parameters
+# flag - the flag to be removed from the database
+se_remove_database_flag = {
+	if = {
+		limit = {
+			is_scope_type = country
+			is_country_type = se_database_country
+		}
+		remove_country_flag = $flag$
+	}
+	else = { log_error = "Invalid call to se_remove_database_flag, scope is not a database" }
+}
+
+### Creates a new database entry
+### Requires to be in the scope of a database(use se_get_database to get the database reference)
+### Parameters
+# identifier - A unique identifier for the entry, will not create a new entry if an entry with this identifier already exists
+# overwrite(optional) - Whether to delete the existing database entry if it finds one
+### Access return value by scope - event_target:se_return_value
+se_create_database_entry = {
+	se_clear_return_target = yes
+	if = {
+		limit = { se_is_database = yes }
+		random_owned_leader = {
+			limit = {
+				se_is_database_entry = yes
+				has_leader_flag = $identifier$
+			}
+			if ={
+				limit = { always = $overwrite|no$ }
+				se_internal_remove_database_entry = yes
+			}
+			else = { se_save_as_global_event_target = { event_target_name = se_return_value } }
+		}
+		if = {
+			limit = { NOT = { exists = event_target:se_return_value } }
+			se_increment = { variable = se_database_entry_count }
+			create_leader = {
+				name = $identifier$
+				class = governor
+				species = event_target:se_database_entry_species
+				traits = {}
+				immortal = yes
+				effect = {
+					set_leader_flag = $identifier$
+					set_leader_flag = se_database_entry
+					se_save_as_global_event_target = { event_target_name = se_return_value }
+				}
+			}
+		}
+	}
+	else = { log_error = "Error in se_create_database_entry: Scope THIS is not a database" }
+}
+
+### Removes an entry from the database
+### Requires to be the in the scope of the database(use se_get_database to get the database reference)
+### Parameters
+# identifier - a unique identifier for the entry
+se_remove_database_entry = {
+	if = {
+		limit = { se_is_database = yes }
+		random_owned_leader = {
+			limit = {
+				se_is_database_entry = yes
+				has_leader_flag = $identifier$
+			}
+			owner = { se_decrement = { variable = se_database_entry_count } }
+			se_internal_remove_database_entry = yes
+		}
+	}
+	else = { log_error = "Error in se_remove_database_entry: Scope THIS is not a database" }
+}
+
+### Internal use, do not use outside of code within this mod
+se_internal_remove_database_entry = {
+	kill_leader = {
+		fire = yes
+		show_notification = no
+	}
+}
+
+### Retrieves an entry from a database
+### Requires to be in the scope of a database(use se_get_database to get the database reference)
+### Parameters
+# identifier - A unique identifier to the entry that needs to be found
+### Access return value by scope - event_target:se_return_value
+se_get_database_entry = {
+	if = {
+		limit = { se_is_database = yes }
+		random_owned_leader = {
+			limit = {
+				se_is_database_entry = yes
+				has_leader_flag = $identifier$
+			}
+			se_save_as_global_event_target = { event_target_name = se_return_value }
+		}
+	}
+	else = { log_error = "Error in se_get_database_entry: Executing scope is not a database" }
+}
+
+### Adds a flag to a database entry
+### Requires to be in the scope of a database entry(use se_get_database_entry to get the reference)
+### Parameters
+# flag - the flag to add to the entry
+# scope - the scope to create a dynamic flag
+# days(optional) 	- 	days for the flag to expire
+# months(optional) 	- 	months for the flag to expire
+# years(optional)	-	years for the flag to expire
+### If none of the optional parameters are added, the flag will remain until removed
+se_set_database_entry_flag = {
+	if = {
+		limit = { se_is_database_entry = yes }
+		[[days]
+			set_variable = {
+				which = se_entry_days_value
+				value = $days$
+			}
+		]
+		[[months]
+			set_variable = {
+				which = se_entry_months_value
+				value = $months$
+			}
+		]
+		[[years]
+			set_variable = {
+				which = se_entry_years_value
+				value = $years$
+			}
+		]
+		if = {
+			limit = {
+				OR = {
+					[[days]
+						check_variable = {
+							which = se_entry_days_value
+							value = $days$
+						}
+					]
+					[[months]
+						check_variable = {
+							which = se_entry_months_value
+							value = $months$
+						}
+					]
+					[[years]
+						check_variable = {
+							which = se_entry_years_value
+							value = $years$
+						}
+					]
+					always = no
+				}
+			}
+			[[days]clear_variable = se_entry_days_value]
+			[[months]clear_variable = se_entry_months_value]
+			[[years]clear_variable = se_entry_years_value]
+			set_timed_leader_flag = {
+				flag = $flag$
+				days = $days|0$
+				[[months]months = $months$]
+				[[years]years = $years$]
+			}
+		}
+		else = { set_leader_flag = $flag$ }
+		
+	}
+	else = { log_error = "Error in se_add_database_entry_flag: Executing scope is not a database entry" }
+}
+
+### Removes a flag to a database entry
+### Requires to be in the scope of a database entry(use se_get_database_entry to get the reference)
+### Parameters
+# flag - the flag to be removed from the entry
+se_remove_database_entry_flag = {
+	if = {
+		limit = { se_is_database_entry = yes }
+		remove_leader_flag = $flag$
+	}
+	else = { log_error = "Error in se_remove_database_entry_flag: Executing scope is not a database entry" }
+}

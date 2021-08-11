@@ -1,0 +1,652 @@
+### Adds a given entry to a list
+### Requires to be in the scope of a database entry(use se_get_database_entry to get the reference)
+### Parameters
+# identifier - A database unique id of the list
+se_add_to_list = {
+	if = {
+		limit = { se_is_database_entry = yes }
+		owner = {
+			random_owned_leader ={
+				limit = {
+					se_is_list_header = yes
+					has_leader_flag = $identifier$
+				}
+				save_global_event_target_as = se_hidden_list_header_object
+			}
+		}
+		if = {
+			limit = { se_is_list_item = yes }
+			log_error = "se_add_to_list: Database entry already belongs to a list, it cannot belong to multiple at once"
+		}
+		else_if = {
+			limit = { exists = event_target:se_hidden_list_header_object }
+			se_internal_convert_entry_to_list = yes
+			clear_global_event_target = se_hidden_list_header_object
+		}
+		else = { log_error = "se_add_to_list: No list with given identifier exists" }
+	}
+	else = { log_error = "se_add_to_list: Calling scope is not a valid database entry" }
+}
+
+### Removes a given database entry from a list
+### Requires to be in the scope of a database entry(use se_get_database_entry to get the reference)
+### Parameters
+# identifier - A database unique id for the list
+# delete_item(Optional) - Whether the database item should be deleted or just removed from the list, defaults to yes
+# new_identifier(Optional) - A database unique id for the entry if removed
+se_remove_from_list = {
+	if = {
+		limit = { se_is_list_item = yes }
+		owner = {
+			random_owned_leader = {
+				limit = {
+					se_is_list_header = yes
+					has_leader_flag = $identifier$
+				}
+				save_global_event_target_as = se_hidden_list_header_object
+			}
+		}
+		if = {
+			limit = { exists = event_target:se_hidden_list_header_object }
+			if = {
+				limit = { always = $delete_item|yes$ }
+				se_internal_remove_database_entry = yes
+			}
+			else = {
+				se_internal_convert_list_to_entry = yes
+				[[new_identifier]
+					set_leader_flag = $identifier$
+					set_name = $identifier$
+				]
+			}
+			event_target:se_hidden_list_header_object = {
+				se_decrement = { variable = se_list_item_count }
+				se_internal_reindex_list = yes
+			}
+			clear_global_event_target = se_hidden_list_header_object
+		}
+		else = { log_error = "se_remove_from_list: No list with the given identifier exists" }
+	}
+	else = { log_error = "se_remove_from_list: Calling scope is not a valid list item" }
+}
+
+### Creates a new list to the database
+### Requires to be in the scope of a database(use se_get_database to get the database reference)
+### Parameters
+# identifier - A database unique id for the list
+# overwrite(Optional) - Determines whether to delete any existing list with the same identifier, defaults to no
+se_create_list = {
+	se_clear_return_target = yes
+	if = {
+		limit = { se_is_database = yes }
+		save_global_event_target_as = se_hidden_current_scope_database
+	}
+	else = {
+		se_get_database { bound_to = this }
+		if = {
+			limit = { exists = event_target:se_return_value }
+			event_target:se_return_value = { save_global_event_target_as = se_hidden_current_scope_database }
+			se_clear_return_target = yes
+		}
+		else = {
+			se_create_database = { bind_to_scope = this }
+			event_target:se_return_value = { save_global_event_target_as = se_hidden_current_scope_database }
+			se_clear_return_target = yes
+		}
+	}
+	event_target:se_hidden_current_scope_database = {
+		random_owned_leader = {
+			limit = {
+				se_is_list_header = yes
+				has_leader_flag = $identifier$
+			}
+			if = {
+				limit = { always = $overwrite|no$ }
+				owner = {
+					every_owned_leader = {
+						limit = {
+							se_is_list_item = yes
+							has_leader_flag = se_list_item_of_@prevprev
+						}
+						se_internal_remove_database_entry = yes
+					}
+				}
+				se_internal_remove_database_entry = yes
+			}
+			else = { se_save_as_global_event_target = { event_target_name = se_return_value } }
+		}
+		if = { 
+			limit = { NOT = { exists = event_target:se_return_value } }
+			create_leader = {
+				name = se_list_name
+				class = governor
+				species = event_target:se_database_entry_species
+				immortal = yes
+				effect = {
+					set_leader_flag = se_list_header
+					set_leader_flag = $identifier$
+					set_variable = {
+						which = se_list_item_count
+						value = 0
+					}
+					se_save_as_global_event_target = { event_target_name = se_return_value }
+				}
+			}
+			create_leader = {
+				name = se_list_enumerator_name
+				class = governor
+				species = event_target:se_database_entry_species
+				immortal = yes
+				effect = {
+					set_leader_flag = se_database_list_enumerator
+					set_leader_flag = se_enumerator_$identifier$
+					set_leader_flag = se_enumerator_of_@event_target:se_return_value
+					set_variable = {
+						which = se_current_index
+						value = 0
+					}
+					se_save_as_global_event_target = { event_target_name = se_current_enumerator }
+				}
+			}
+		}
+	}
+	clear_global_event_target = se_hidden_current_scope_database
+}
+
+### Deletes a list
+### Parameters
+# identifier - A database unique id for the list
+# delete_item(Optional) - Determines if the list items should be deleted or converted to database entries, defaults to yes
+se_delete_list = {
+	se_clear_return_target = yes
+	if = {
+		limit = { se_is_database = yes }
+		save_global_event_target_as = se_hidden_current_scope_database
+	}
+	else = {
+		se_get_database { bound_to = this }
+		if = {
+			limit = { exists = event_target:se_return_value }
+			event_target:se_return_value = { save_global_event_target_as = se_hidden_current_scope_database }
+			se_clear_return_target = yes
+		}
+	}
+	if = {
+		limit = { exists = event_target:se_hidden_current_scope_database }
+		event_target:se_hidden_current_scope_database = {
+			random_owned_leader = {
+				limit = {
+					se_is_list_header = yes
+					has_leader_flag = $identifier$
+				}
+				se_save_as_global_event_target = { event_target_name = se_hidden_current_scope_list }
+				se_internal_remove_database_entry = yes
+			}
+			if = {
+				limit = { exists = @event_target:se_hidden_current_scope_list }
+				random_owned_leader = {
+					limit = {
+						se_is_list_enumerator = yes
+						has_leader_flag = se_enumerator_of_@event_target:se_hidden_current_scope_list
+					}
+					se_internal_remove_database_entry = yes
+				}
+				every_owned_leader = {
+					limit = {
+						se_is_list_item = yes
+						has_leader_flag = se_list_item_of_@event_target:se_hidden_current_scope_list
+					}
+					if = {
+						limit = { always = $delete_item|yes$ }
+						se_internal_remove_database_entry = yes
+					}
+					else = { se_internal_convert_list_to_entry = yes }
+				}
+				clear_global_event_target = se_hidden_current_scope_list
+			}
+		}
+		clear_global_event_target = se_hidden_current_scope_database
+	}
+	else = { log_error = "Error in se_delete_list: Scope 'this' is not a database and does not have an obviously accessable database" }
+}
+
+### Creates and adds a list entry to a database
+### Parameters
+# identifier - A database unique id for the list
+se_create_list_entry = {
+	se_clear_return_target = yes
+	if = {
+		limit = { se_is_database = yes }
+		save_global_event_target_as = se_hidden_current_scope_database
+	}
+	else = {
+		se_get_database = { bound_to = this }
+		if = {
+			limit = { exists = event_target:se_return_value }
+			event_target:se_return_value = { save_global_event_target_as = se_hidden_current_scope_database }
+			se_clear_return_target = yes
+		}
+	}
+	if = {
+		limit = { exists = event_target:se_hidden_current_scope_database }
+		event_target:se_hidden_current_scope_database = {
+			random_owned_leader = {
+				limit = {
+					se_is_database_entry = yes
+					has_leader_flag = se_list_header
+					has_leader_flag = $identifier$
+				}
+				save_global_event_target_as = se_hidden_list_header_object
+			}
+			if = {
+				limit = { exists = event_target:se_hidden_list_header_object }
+				create_leader = {
+					name = se_database_entry_name
+					class = governor
+					species = event_target:se_database_entry_species
+					immortal = yes
+					effect = {
+						set_leader_flag = se_item_in_list
+						set_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
+						set_variable = {
+							which = se_list_index
+							value = { scope = event_target:se_hidden_list_header_object variable = se_list_item_count }
+						}
+						event_target:se_hidden_list_header_object = { se_increment = { variable = se_list_item_count } }
+						se_save_as_global_event_target = { event_target_name = se_return_value }
+					}
+				}
+				clear_global_event_target = se_hidden_list_header_object			
+			}
+			else = { log_error = "se_create_list_entry: No list with the given identifier exists" }
+		}
+		clear_global_event_target = se_hidden_current_scope_database
+	}
+	else = { log_error = "se_create_list_entry: Scope 'this' is not a database and does not have an obviously accessable database" }
+}
+
+### Creates and adds a list entry to a database
+### Parameters
+# identifier - The database unique id of the list
+# index - The index of the entry in the list
+# delete_item(Optional) - Whether to completely delete the item in question or just remove it from the given list
+se_remove_list_entry = {
+	se_clear_return_target = yes
+	if = {
+		limit = { se_is_database = yes }
+		save_global_event_target_as = se_hidden_current_scope_database
+	}
+	else = {
+		se_get_database = { bound_to = this }
+		if = {
+			limit = { exists = event_target:se_return_value }
+			event_target:se_return_value = { save_global_event_target_as = se_hidden_current_scope_database }
+			se_clear_return_target = yes
+		}
+	}
+	if = {
+		limit = { exists = event_target:se_hidden_current_scope_database }
+		event_target:se_hidden_current_scope_database = {
+			random_owned_leader = {
+				limit = {
+					se_is_database_entry = yes
+					has_leader_flag = se_list_header
+					has_leader_flag = $identifier$
+				}
+				save_global_event_target_as = se_hidden_list_header_object
+			}
+			if = {
+				limit = { exists = event_target:se_hidden_list_header_object }
+				random_owned_leader = {
+					limit = {
+						se_is_database_entry = yes
+						has_leader_flag = se_item_in_list
+						has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
+						check_variable = {
+							which = se_list_index
+							value = $index$
+						}
+					}
+					if = {
+						limit = { always = $delete_item|no$ }
+						se_internal_remove_database_entry = yes
+					}
+					else = { se_internal_convert_list_to_entry = yes }
+					event_target:se_hidden_list_header_object = {
+						se_decrement = { variable = se_list_item_count }
+						se_internal_reindex_list = yes
+					}
+				}
+				clear_global_event_target = se_hidden_list_header_object
+			}
+		}
+		clear_global_event_target = se_hidden_current_scope_database
+	}
+	else = { log_error = "se_remove_list_entry: Scope 'this' is not a database and does not have an obviously accessable database" }
+}
+
+### Retrieves a list entry from a list
+### Parameters
+# identifier - The database unique id of the list
+# index(Optional) - The index of the list item
+# limiter(Optional) - A simple scripted_trigger accepting yes or no values(example: my_trigger = yes), effect will input yes for this trigger
+# first(Optional) - Exclusive with Last, if limiter parameter is filled will take the first item found
+# last(Optional) - Exclusive with first, if limiter parameter is filled will take the last item found
+# if neither first or last are specified the effect will select a random value
+se_get_list_entry = {
+	if = {
+		limit = {
+			always = $first|no$
+			always = $last|no$
+		}
+		log_error = "se_get_list_entry: Cannot select both parameters 'first' and 'last'"
+	}
+	else_if = {
+		limit = {
+			[[index]always = yes]
+			OR = {
+				always = $first|no$
+				always = $last|no$
+			}
+		}
+		log_error = "se_get_list_entry: Cannot select both parameters 'first' or 'last' with parameter 'index'"
+	}
+	else = {
+		se_clear_return_target = yes
+		if = {
+			limit = { se_is_database = yes }
+			save_global_event_target_as = se_hidden_current_scope_database
+		}
+		else = {
+			se_get_database = { bound_to = this }
+			if = {
+				limit = { exists = event_target:se_return_value }
+				event_target:se_return_value = { save_global_event_target_as = se_hidden_current_scope_database }
+				se_clear_return_target = yes
+			}
+		}
+		if = {
+			limit = { exists = event_target:se_hidden_current_scope_database }
+			event_target:se_hidden_current_scope_database = {
+				random_owned_leader = {
+					limit = {
+						se_is_list_header = yes
+						has_leader_flag = $identifier$
+					}
+					save_global_event_target_as = se_hidden_list_header_object
+				}
+				if = {
+					limit = { exists = event_target:se_hidden_list_header_object }
+					if = {
+						limit = {
+							OR = {
+								always = $first|no$
+								always = $last|no$
+							}
+						}
+						every_owned_leader = {
+							limit = {
+								se_is_list_item = yes
+								has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
+								[[limiter]$limiter$ = yes]
+							}
+							if = {
+								limit = {
+									always = $first|no$
+									NOT = { exists = event_target:se_return_value }
+								}
+								save_global_event_target_as = se_return_value
+							}
+							else_if = {
+								limit = { always = $last|no$ }
+								se_save_as_global_event_target = { event_target_name = se_return_value }
+							}
+						}
+					}
+					else = {
+						random_owned_leader = {
+							limit = {
+								se_is_list_item = yes
+								has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
+								[[index]
+									check_variable = {
+										which = se_list_index
+										value = $index$
+									}
+								]
+								[[limiter]$limiter$ = yes]
+							}
+							se_save_as_global_event_target = { event_target_name = se_return_value }
+						}
+					}
+					clear_global_event_target = se_hidden_list_header_object
+				}
+			}
+			clear_global_event_target = se_hidden_current_scope_database
+		}
+		else = { log_error = "se_get_list_entry: Scope 'this' is not a database and does not have an obviously accessable database" }
+	}
+}
+
+### Internal use, do not use outside of code within this mod
+se_internal_reindex_list = {
+	event_target:se_event_country = {
+		set_variable = {
+			which = se_current_index_value
+			value = 0
+		}
+		set_variable = {
+			which = se_new_index_value
+			value = 0
+		}
+	}
+	owner = {
+		every_owned_leader = {
+			limit = {
+				se_is_database_entry = yes
+				has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
+			}
+			random_owned_leader = {
+				limit = {
+					se_is_database_entry = yes
+					has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
+					check_variable = {
+						which = se_list_index
+						value = { scope = event_target:se_event_country variable = se_current_index_value }
+					}
+				}
+				save_global_event_target_as = se_hidden_selected_list_item
+			}
+			if = {
+				limit = {
+					exists = event_target:se_hidden_selected_list_item
+					event_target:se_hidden_selected_list_item = {
+						check_variable = {
+							which = se_list_index
+							value = { scope = event_target:se_event_country variable = se_new_index_value }
+						}
+					}
+				}
+				event_target:se_event_country = { se_increment = { variable = se_new_index_value } }
+			}
+			else_if = {
+				limit = { exists = event_target:se_hidden_selected_list_item }
+				event_target:se_hidden_selected_list_item = {
+					set_variable = {
+						which = se_list_index
+						value = { scope = event_target:se_event_country variable = se_new_index_value }
+					}
+				}
+				event_target:se_event_country = { se_increment = { variable = se_new_index_value } }
+			}
+			clear_global_event_target = se_hidden_selected_list_item
+			event_target:se_event_country = { se_increment = { variable = se_current_index_value } }
+		}
+		event_target:se_event_country = {
+			clear_variable = se_current_index_value
+			clear_variable = se_new_index_value
+		}
+	}
+}
+### Internal use, do not use outside of code within this mod
+se_internal_convert_list_to_entry = {
+	se_add_database_entry_flag = { flag = se_database_entry }
+	se_remove_database_entry_flag = { flag = se_item_in_list }
+	se_remove_database_entry_flag = { flag = se_list_item_of_@event_target:se_hidden_current_scope_list }
+	owner = { se_increment = { variable = se_database_entry_count }}
+	clear_variable = se_list_index
+}
+### Internal use, do not use outside of code within this mod
+se_internal_convert_entry_to_list = {
+	se_set_database_entry_flag = { flag = se_item_in_list }
+	se_set_database_entry_flag = { flag = se_list_item_of_@event_target:se_hidden_list_header_object }
+	se_remove_database_entry = { flag = se_database_entry }
+	owner = { se_decrement = { variable = se_database_entry_count } }
+	set_variable = {
+		which = se_list_index
+		value = { scope = event_target:se_hidden_list_header_object variable = se_list_item_count }
+	}
+	event_target:se_hidden_list_header_object = { se_increment = { variable = se_list_item_count } }
+}
+
+### Creates a list enumerator for a given list
+### Parameters
+# identifier - The list's identifier
+se_get_enumerator = {
+	se_clear_return_target = yes
+	if = {
+		limit = { se_is_database = yes }
+		save_global_event_target_as = se_hidden_current_scope_database
+	}
+	else = {
+		se_get_database = { bound_to = this }
+		if = {
+			limit = { exists = event_target:se_return_value }
+			event_target:se_return_value = { save_global_event_target_as = se_hidden_current_scope_database }
+			se_clear_return_target = yes
+		}
+	}
+	if = {
+		limit = { exists = event_target:se_hidden_current_scope_database }
+		event_target:se_hidden_current_scope_database = {
+			random_owned_leader = {
+				limit = {
+					se_is_list_header = yes
+					has_leader_flag = $identifier$
+				}
+				save_global_event_target_as = se_hidden_current_scope_list
+			}
+			if = {
+				limit = { exists = event_target:se_hidden_current_scope_list }
+				random_owned_leader = {
+					limit = {
+						se_is_list_enumerator = yes
+						has_leader_flag = se_enumerator_of_@event_target:se_hidden_current_scope_list
+					}
+					se_save_as_global_event_target = { event_target_name = se_return_value }
+				}
+			}
+			else = { log_error = "se_get_enumerator: No list with the given identifier exists" }
+		}
+		clear_global_event_target = se_hidden_current_scope_database
+	}
+	else = { log_error = "se_get_enumerator: Scope 'this' is not a database and does not have an obviously accessable database" }
+}
+
+### Iterates and returns to the next entry on a list
+### Requires to be in the scope of an enumerator(use se_get_enumerator to get the enumerator reference)
+se_enumerator_move_next = {
+	if = {
+		limit = { se_is_list_enumerator = yes }
+		se_increment = { variable = se_current_index }
+		se_enumerator_return_current = yes
+	}
+	else = { log_error = "se_move_next_item: The provided scope is not a valid list enumerator" }
+}
+
+### Iterates and returns to the previous entry on a list
+### Requires to be in the scope of an enumerator(use se_get_enumerator to get the enumerator reference)
+se_enumerator_move_previous = {
+	if = {
+		limit = { se_is_list_enumerator = yes }
+		se_decrement = { variable = se_current_index }
+		se_enumerator_return_current = yes
+	}
+	else = { log_error = "se_move_next_item: The provided scope is not a valid list enumerator" }
+}
+
+### Returns the current list entry the enumerator is iterating on of the given list
+### Requires to be in the scope of an enumerator(use se_get_enumerator to get the enumerator reference)
+se_enumerator_return_current = {
+	se_clear_return_target = yes
+	if = {
+		limit = { se_is_list_enumerator = yes }
+		if = {
+			limit = {
+				OR = {
+					NOT = { exists = event_target:se_hidden_current_scope_list }
+					NOT = { has_leader_flag = se_points_to_list_@event_target:se_hidden_current_scope_list }
+				}
+			}
+			if = {
+				limit = { exists = event_target:se_hidden_current_scope_list }
+				clear_global_event_target = se_hidden_current_scope_list
+			}
+			owner = {
+				random_owned_leader = {
+					limit = {
+						se_is_list_header = yes
+						prevprev = { has_leader_flag = se_points_to_list_@prev }
+					}
+					save_global_event_target_as = se_hidden_current_scope_list
+				}
+			}
+		}
+		if = {
+			limit = { exists = event_target:se_hidden_current_scope_list }
+			owner = {
+				random_owned_leader = {
+					limit = {
+						se_is_list_item = yes
+						has_leader_flag = se_list_item_of_@event_target:se_hidden_current_scope_list
+						check_variable = {
+							which = se_list_index
+							value = { scope = prev variable = se_current_index }
+						}
+					}
+					se_save_as_global_event_target = { event_target_name = se_return_value }
+				}
+			}
+			if = {
+				limit = { NOT = { exists = event_target:se_return_value } }
+				log_error = "se_enumerator_return_current: The enumerator's index is out of range"
+			}
+		}
+		else = {
+			se_internal_delete_database_entry = yes
+			log_error = "se_enumerator_return_current: The current enumerator is old and points to a non existant list"
+		}
+	}
+	else = { log_error = "se_enumerator_return_current: The provided scope is not a valid list enumerator" }
+}
+
+### Resets a list enumerator to the start of a list
+### Requires to be in the scope of an enumerator(use se_get_enumerator to get the enumerator reference)
+### Parameters
+# index(Optional) - The index to reset the enumerator to
+se_reset_enumerator = {
+	if = {
+		limit = { se_is_list_enumerator = yes }
+		set_variable = {
+			which = se_current_index
+			value = $index|0$
+		}
+	}
+	else = { log_error = "se_reset_enumerator: The provided scope is not a valid list enumerator" }
+}
+
+### TODO, numeric sort functions(less than, greater than)
+### TODO, boolean sorters(bool value A indexed lower than bool value B)
+se_sort_list_by_trigger_value = {
+
+}

@@ -1,0 +1,70 @@
+namespace = se_keyboard
+
+### Root = Country using the keyboard
+### From = The scope being renamed
+country_event = {
+	id = se_keyboard.0
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = {
+		NOT = { has_country_flag = se_keyboard_active }
+		from = {
+			se_scope_can_be_named = yes
+			NOT = { se_keyboard_object_locked = yes }
+		}
+	}
+	immediate = {
+		se_get_database = { bound_to = this }
+		if = {
+			limit = { NOT = { exists = event_target:se_return_value } }
+			se_create_database = { bind_to_scope = this }
+		}
+		event_target:se_return_value = { save_event_target_as = database }
+		event_target:database = {
+			se_create_list = {
+				identifier = se_keyboard_name_list
+				overwrite = yes
+			}
+			se_create_list_entry = { identifier = se_keyboard_name_list }
+			event_target:se_return_value = { set_name = "[from.GetName]" }
+			se_get_enumerator = { identifier = se_keyboard_name_list }
+			event_target:se_return_value = { save_event_target_as = enumerator }
+		}
+		from = { save_event_target_as = keyboard_current_object }
+		country_event = { id = se_keyboard.1 }
+	}
+}
+country_event = {
+	id = se_keyboard.1
+	is_triggered_only = yes
+	hide_window = no
+	trigger = { NOT = { has_country_flag = se_keyboard_active } }
+	immediate = {
+		set_country_flag = se_keyboard_active
+	}
+	# option per key
+	# each option creates a new list item with the given letter
+	# colour insertions
+	#	colour key at point
+	# 	wrapping entire name
+	# backspace reverts to last list item
+	# enter finishes the naming process
+	after = {
+
+	}
+}
+### Keyboard Feature
+# Lock the current object from other keyboard overwrites
+# Save object as an event target for referencing later
+# Create a new empty leader with flag pointing to this scope
+# Init letter count to 0
+# On add key:
+#  Create a new leader with the previous leader name plus the new leader
+#  Lock with the same flag
+#  Assign letter count
+#  Mark as current
+# On backspace:
+#  Decrease the count
+#  Kill current
+#  Find leader linked to same scope with same count
+#  Set to current
