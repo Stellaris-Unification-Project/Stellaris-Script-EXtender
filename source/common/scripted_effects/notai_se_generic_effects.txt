@@ -6,38 +6,41 @@
 # Bracket commands in log statements within scripted effects/triggers require a \\ prefix to ensure the bracket command works
 
 
-
+ ###############
+### Mod Setup ###
+ ###############
 
 ### Creates a unique event country for the specific id
 ### Parameters
 # identifier - the unique id of the country
-# overwrite(Optional) - boolean indicating whether any existing event countries with that identifier should be deleted, if it will not be deleted it will return a matching country instead.
+# name(optional) - The name of the event country
+# overwrite(optional) - boolean indicating whether any existing event countries with that identifier should be deleted, if it will not be deleted it will return a matching country instead.
 se_create_event_country = {
 	random_country = {
 		limit = {
-			is_country_type = se_event_country
+			is_country_type = se_country_event
 			has_country_flag = $identifier$
 		}
 		if = {
 			limit = { always = $overwrite|no$ }
 			destroy_country = yes
 		}
-		else = { se_save_as_global_event_target = { event_target_name = se_discovered_event_country } }
+		else = { se_save_global_event_target_as = { event_target_name = se_discovered_event_country } }
 	}
 	if = {
 		limit = { NOT = { exists = event_target:se_discovered_event_country } }
 		create_country = {
-			name = $identifier$
-			type = se_event_country
+			name = $name|se_country_event$
+			type = se_country_event
 			effect = {
 				set_country_flag = $identifier$
-				se_save_as_global_event_target = { event_target_name = se_discovered_event_country }
+				se_save_global_event_target_as = { event_target_name = se_discovered_event_country }
 			}
 		}
 	}
 	event_target:se_discovered_event_country = {
-		se_save_as_global_event_target = { event_target_name = se_last_created_event_country }
-		se_save_as_global_event_target = { event_target_name = se_return_value }
+		se_save_global_event_target_as = { event_target_name = se_last_created_event_country }
+		se_save_global_event_target_as = { event_target_name = se_return_value }
 	}
 	if = {
 		limit = { exists = event_target:se_discovered_event_country }
@@ -51,64 +54,26 @@ se_create_event_country = {
 se_get_event_country = {
 	random_country = {
 		limit = {
-			is_country_type = se_event_country
+			is_country_type = se_country_event
 			has_country_flag = $identifier$
 		}
-		se_save_as_global_event_target = { event_target_name = se_return_value }
+		se_set_return_target = yes
 	}
 }
+
+ ###############################
+### Generic Scripting Effects ###
+ ###############################
 
 ### Creates a new global event target, clearing the value if it existed beforehand
 ### Parameters
 # event_target_name - The name of the event target
-se_save_as_global_event_target = {
+se_save_global_event_target_as = {
 	if = {
 		limit = { exists = event_target:$event_target_name$ }
 		clear_global_event_target = $event_target_name$
 	}
 	save_global_event_target_as = $event_target_name$
-}
-
-### Checks to see if the variable is set and if it is not, sets it.
-### Parameters
-# variable - The name of the variable to check for
-# value(Optional) - the value the variable is set to, if not set will assign 0
-se_ensure_variable_is_set = {
-	if = {
-		limit = { NOT = { is_variable_set = $variable$ } }
-		set_variable = {
-			which = $variable$
-			value = $value|0$
-		}
-	}
-}
-
-### Increases the value of the variable by 1
-### Parameters
-# variable - The name of the variable to increment
-se_increment = {
-	change_variable = {
-		which = $variable$
-		value = 1
-	}
-}
-
-### Decreases the value of the variable by 1
-### Parameters
-# variable - The name of the variable to decrement
-se_decrement = {
-	subtract_variable = {
-		which = $variable$
-		value = 1
-	}
-}
-
-### Clears the event target se_return_value if it exists
-se_clear_return_target = {
-	if = {
-		limit = { exists = event_target:se_return_value }
-		clear_global_event_target = se_return_value
-	}
 }
 
 ### Forces an executed on unsupported scope error, dumping a complete log of existing scopes and their types + scope chains
@@ -124,6 +89,29 @@ se_dump_scopes_effect = {
 se_log_scopes_effect = {
 	log = "This = \\[This.GetScopeType] | \\[This.GetName]"
 }
+
+### Clears the event target se_return_value if it exists
+### Used internally in se effects, but also useful when requiring multiple return values.
+se_clear_return_target = {
+	if = {
+		limit = { exists = event_target:se_return_value }
+		clear_global_event_target = se_return_value
+	}
+}
+
+### Sets the event target 'se_return_target' to the calling scope
+### Internal use only
+se_set_return_target = {
+	if = {
+		limit = { exists = event_target:se_return_target }
+		clear_global_event_target = se_return_target
+	}
+	save_global_event_target_as = se_return_target
+}
+
+ ###########################
+### Variable/Math effects ###
+ ###########################
 
 ### Creates a random number and places it in the given variable
 ### Parameters
@@ -144,7 +132,7 @@ se_random_variable = {
 		which = se_rng_decimal_places
 		value = $decimals|-1$
 	}
-	event_target:se_event_country = {
+	event_target:se_country_event = {
 		### Grab the number of decimal places for the random variable(less than 0 means use max/min)
 		set_variable = {
 			which = se_rng_decimal_places
@@ -457,7 +445,7 @@ se_random_variable = {
 				which = se_rng_column_value
 				value = 0
 			}
-			fire_on_action = { on_action = on_random_number_create_digit } # Create a random value for the column
+			fire_on_action = { on_action = on_se_random_number_create_digit } # Create a random value for the column
 			### If the value is less than the max, disable max checks
 			if = {
 				limit = {
@@ -503,14 +491,15 @@ se_random_variable = {
 				value = se_rng_min
 			}
 		}
+		log_error = "Random variables: Max = \\[This.se_rng_max_current_column], Min = \\[This.se_rng_min_current_column], Current = \\[This.se_rng_column_value]"
 		clear_variable = se_rng_max
 		clear_variable = se_rng_min
 		clear_variable = se_rng_max_current_column
 		clear_variable = se_rng_min_current_column
+		clear_variable = se_rng_column_value
 		clear_variable = se_rng_max_mult
 		clear_variable = se_rng_min_mult
 		clear_variable = se_rng_current_mult
-		clear_variable = se_rng_column_value
 		remove_country_flag = se_rng_disable_max_checks
 		remove_country_flag = se_rng_disable_min_checks
 	}
@@ -519,7 +508,41 @@ se_random_variable = {
 	clear_variable = se_rng_decimal_places
 	set_variable = {
 		which = $variable$
-		value = { scope = event_target:se_event_country variable = se_rng_number }
+		value = { scope = event_target:se_country_event variable = se_rng_number }
+	}
+}
+
+### Checks to see if the variable is set and if it is not, sets it.
+### Parameters
+# variable - The name of the variable to check for
+# value(Optional) - the value the variable is set to, if not set will assign 0
+se_ensure_variable_is_set = {
+	if = {
+		limit = { NOT = { is_variable_set = $variable$ } }
+		set_variable = {
+			which = $variable$
+			value = $value|0$
+		}
+	}
+}
+
+### Increases the value of the variable by 1
+### Parameters
+# variable - The name of the variable to increment
+se_increment = {
+	change_variable = {
+		which = $variable$
+		value = 1
+	}
+}
+
+### Decreases the value of the variable by 1
+### Parameters
+# variable - The name of the variable to decrement
+se_decrement = {
+	subtract_variable = {
+		which = $variable$
+		value = 1
 	}
 }
 

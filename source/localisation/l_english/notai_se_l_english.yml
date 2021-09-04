@@ -1,11 +1,8 @@
 ﻿l_english:
+ ### Internal defined strings
  se_database_unbound_name: "Global Database [se_global_database.se_global_database_count]"
  se_database_bound_name: "[se_hidden_db_owner.GetName] Database"
- se_list_enumerator_name: "$identifier$ Enumerator"
- se_list_name: "$identifier$ List"
- se_keyboard_blank: ""
- se_content_with_input: "[This.GetName]$input$"
- 
+
  ### Scope Names
  se_scope_name_ambient_object: "ambient_object"
  se_scope_name_archaeological_site: "archaeological_site"

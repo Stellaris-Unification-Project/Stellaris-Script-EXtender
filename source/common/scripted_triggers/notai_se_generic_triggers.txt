@@ -1,6 +1,6 @@
 se_is_database = {
 	is_scope_type = country
-	is_country_type = se_database_country
+	is_country_type = se_country_database
 }
 se_is_database_entry = {
 	is_scope_type = leader
@@ -26,7 +26,7 @@ se_is_list_enumerator = {
 	owner = { is_scope_type = country }
 	has_leader_flag = se_database_list_enumerator
 }
-### Forces an executed on unsupported scope error, dumping a complete log of existing scopes and their types + scope chains
+### Forces an executed on unsupported scope error, dumping a complete log of existing scopes and their types + call chains
 se_dump_scopes_trigger = {
 	if = {
 		limit = { is_scope_type = country }

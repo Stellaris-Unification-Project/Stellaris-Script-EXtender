@@ -1,3 +1,9 @@
+### Enables one or more of the se added pulses
+### Parameters
+# scopeless_daily(Optional) - if yes enables global scopeless daily pulses
+# daily_country(Optional) - if yes, enables country specific daily pulses
+# scopeless_weekly(Optional) - if yes, enables global scopeless weekly pulses
+# weekly_country(Optional) - if yes, enables country specific weekly pulses
 se_enable_pulse = {
 	[[scopeless_daily]
 	if = {
@@ -23,4 +29,19 @@ se_enable_pulse = {
 		set_global_flag = se_active_weekly_pulse_country
 	}
 	]
+}
+
+### Enables script extender's auto update detector feature
+### Triggering this will result in an intake of all mod's update registrations
+se_enable_mod_update_detector = {
+	if = {
+		limit = { NOT = { has_global_flag = se_mod_update_enabled } }
+		set_global_flag = se_mod_update_enabled
+	}
+}
+
+### Register your current mod version to the mod update detector
+### Parameters
+se_register_mod_version = {
+
 }

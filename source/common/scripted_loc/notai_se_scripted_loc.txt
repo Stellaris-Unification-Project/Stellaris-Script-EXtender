@@ -1,3 +1,4 @@
+### Gets the name of the scope type
 defined_text = {
 	name = GetScopeType
 	text = {
@@ -86,6 +87,7 @@ defined_text = {
 	}
 	text = { localization_key = se_scope_unknown }
 }
+### Gets the name of the scope or the name of the scope type if no name is available
 defined_text = {
 	name = GetNameOrFallback
 	text = {

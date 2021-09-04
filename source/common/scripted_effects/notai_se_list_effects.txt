@@ -1,80 +1,8 @@
-### Adds a given entry to a list
-### Requires to be in the scope of a database entry(use se_get_database_entry to get the reference)
-### Parameters
-# identifier - A database unique id of the list
-se_add_to_list = {
-	if = {
-		limit = { se_is_database_entry = yes }
-		owner = {
-			random_owned_leader ={
-				limit = {
-					se_is_list_header = yes
-					has_leader_flag = $identifier$
-				}
-				save_global_event_target_as = se_hidden_list_header_object
-			}
-		}
-		if = {
-			limit = { se_is_list_item = yes }
-			log_error = "se_add_to_list: Database entry already belongs to a list, it cannot belong to multiple at once"
-		}
-		else_if = {
-			limit = { exists = event_target:se_hidden_list_header_object }
-			se_internal_convert_entry_to_list = yes
-			clear_global_event_target = se_hidden_list_header_object
-		}
-		else = { log_error = "se_add_to_list: No list with given identifier exists" }
-	}
-	else = { log_error = "se_add_to_list: Calling scope is not a valid database entry" }
-}
-
-### Removes a given database entry from a list
-### Requires to be in the scope of a database entry(use se_get_database_entry to get the reference)
-### Parameters
-# identifier - A database unique id for the list
-# delete_item(Optional) - Whether the database item should be deleted or just removed from the list, defaults to yes
-# new_identifier(Optional) - A database unique id for the entry if removed
-se_remove_from_list = {
-	if = {
-		limit = { se_is_list_item = yes }
-		owner = {
-			random_owned_leader = {
-				limit = {
-					se_is_list_header = yes
-					has_leader_flag = $identifier$
-				}
-				save_global_event_target_as = se_hidden_list_header_object
-			}
-		}
-		if = {
-			limit = { exists = event_target:se_hidden_list_header_object }
-			if = {
-				limit = { always = $delete_item|yes$ }
-				se_internal_remove_database_entry = yes
-			}
-			else = {
-				se_internal_convert_list_to_entry = yes
-				[[new_identifier]
-					set_leader_flag = $identifier$
-					set_name = $identifier$
-				]
-			}
-			event_target:se_hidden_list_header_object = {
-				se_decrement = { variable = se_list_item_count }
-				se_internal_reindex_list = yes
-			}
-			clear_global_event_target = se_hidden_list_header_object
-		}
-		else = { log_error = "se_remove_from_list: No list with the given identifier exists" }
-	}
-	else = { log_error = "se_remove_from_list: Calling scope is not a valid list item" }
-}
-
 ### Creates a new list to the database
 ### Requires to be in the scope of a database(use se_get_database to get the database reference)
 ### Parameters
 # identifier - A database unique id for the list
-# overwrite(Optional) - Determines whether to delete any existing list with the same identifier, defaults to no
+# overwrite(optional) - Determines whether to delete any existing list with the same identifier, default value is no
 se_create_list = {
 	se_clear_return_target = yes
 	if = {
@@ -82,7 +10,7 @@ se_create_list = {
 		save_global_event_target_as = se_hidden_current_scope_database
 	}
 	else = {
-		se_get_database { bound_to = this }
+		se_get_database = { bound_to = this }
 		if = {
 			limit = { exists = event_target:se_return_value }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_current_scope_database }
@@ -113,7 +41,7 @@ se_create_list = {
 				}
 				se_internal_remove_database_entry = yes
 			}
-			else = { se_save_as_global_event_target = { event_target_name = se_return_value } }
+			else = { se_set_return_target = yes }
 		}
 		if = { 
 			limit = { NOT = { exists = event_target:se_return_value } }
@@ -129,7 +57,7 @@ se_create_list = {
 						which = se_list_item_count
 						value = 0
 					}
-					se_save_as_global_event_target = { event_target_name = se_return_value }
+					se_set_return_target = yes
 				}
 			}
 			create_leader = {
@@ -156,7 +84,7 @@ se_create_list = {
 ### Deletes a list
 ### Parameters
 # identifier - A database unique id for the list
-# delete_item(Optional) - Determines if the list items should be deleted or converted to database entries, defaults to yes
+# delete_item(optional) - Determines if the list items should be deleted or converted to database entries, default value is yes
 se_delete_list = {
 	se_clear_return_target = yes
 	if = {
@@ -164,7 +92,7 @@ se_delete_list = {
 		save_global_event_target_as = se_hidden_current_scope_database
 	}
 	else = {
-		se_get_database { bound_to = this }
+		se_get_database = { bound_to = this }
 		if = {
 			limit = { exists = event_target:se_return_value }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_current_scope_database }
@@ -179,11 +107,11 @@ se_delete_list = {
 					se_is_list_header = yes
 					has_leader_flag = $identifier$
 				}
-				se_save_as_global_event_target = { event_target_name = se_hidden_current_scope_list }
+				save_global_event_target_as = se_hidden_current_scope_list
 				se_internal_remove_database_entry = yes
 			}
 			if = {
-				limit = { exists = @event_target:se_hidden_current_scope_list }
+				limit = { exists = event_target:se_hidden_current_scope_list }
 				random_owned_leader = {
 					limit = {
 						se_is_list_enumerator = yes
@@ -213,8 +141,15 @@ se_delete_list = {
 ### Creates and adds a list entry to a database
 ### Parameters
 # identifier - A database unique id for the list
+# index(optional) - The index for where to add the given list entry on the list, default value is count - 1
 se_create_list_entry = {
 	se_clear_return_target = yes
+	[[index]
+	set_variable = {
+		which = se_append_index
+		value = $index$
+	}
+	]
 	if = {
 		limit = { se_is_database = yes }
 		save_global_event_target_as = se_hidden_current_scope_database
@@ -230,6 +165,12 @@ se_create_list_entry = {
 	if = {
 		limit = { exists = event_target:se_hidden_current_scope_database }
 		event_target:se_hidden_current_scope_database = {
+			[[index]
+			set_variable = {
+				which = se_append_index
+				value = prev
+			}
+			]
 			random_owned_leader = {
 				limit = {
 					se_is_database_entry = yes
@@ -240,6 +181,22 @@ se_create_list_entry = {
 			}
 			if = {
 				limit = { exists = event_target:se_hidden_list_header_object }
+				[[index]
+					every_owned_leader = {
+						limit = {
+							se_is_list_item = yes
+							has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
+							check_variable = {
+								which = se_list_index
+								value >= se_append_index
+							}
+						}
+						change_variable = {
+							which = se_list_index
+							value = 1
+						}
+					}
+				]
 				create_leader = {
 					name = se_database_entry_name
 					class = governor
@@ -252,24 +209,37 @@ se_create_list_entry = {
 							which = se_list_index
 							value = { scope = event_target:se_hidden_list_header_object variable = se_list_item_count }
 						}
-						event_target:se_hidden_list_header_object = { se_increment = { variable = se_list_item_count } }
-						se_save_as_global_event_target = { event_target_name = se_return_value }
+						[[index]
+						set_variable = {
+							which = se_list_index
+							value = { scope = prev variable = se_append_index }
+						}
+						]
+						event_target:se_hidden_list_header_object = {
+							change_variable = {
+								which = se_list_item_count
+								value = 1
+							}
+						}
+						se_set_return_target = yes
 					}
 				}
 				clear_global_event_target = se_hidden_list_header_object			
 			}
 			else = { log_error = "se_create_list_entry: No list with the given identifier exists" }
+			[[index]clear_variable = se_append_index ]
 		}
 		clear_global_event_target = se_hidden_current_scope_database
 	}
 	else = { log_error = "se_create_list_entry: Scope 'this' is not a database and does not have an obviously accessable database" }
+	[[index]clear_variable = se_append_index ]
 }
 
 ### Creates and adds a list entry to a database
 ### Parameters
 # identifier - The database unique id of the list
 # index - The index of the entry in the list
-# delete_item(Optional) - Whether to completely delete the item in question or just remove it from the given list
+# delete_item(optional) - Whether to completely delete the item in question or just remove it from the given list
 se_remove_list_entry = {
 	se_clear_return_target = yes
 	if = {
@@ -324,14 +294,117 @@ se_remove_list_entry = {
 	}
 	else = { log_error = "se_remove_list_entry: Scope 'this' is not a database and does not have an obviously accessable database" }
 }
+### Adds a given entry to a list
+### Requires to be in the scope of a database entry(use se_get_database_entry to get the reference)
+### Parameters
+# identifier - A database unique id of the list
+# index(optional) - The index for where to add the given list entry on the list, default value is count - 1
+se_add_entry_to_list = {
+	[[index]
+	set_variable = {
+		which = se_append_index
+		value = $index$
+	}
+	]
+	if = {
+		limit = { se_is_database_entry = yes }
+		owner = {
+			random_owned_leader ={
+				limit = {
+					se_is_list_header = yes
+					has_leader_flag = $identifier$
+				}
+				save_global_event_target_as = se_hidden_list_header_object
+			}
+		}
+		if = {
+			limit = { se_is_list_item = yes }
+			log_error = "se_add_to_list: Database entry already belongs to a list, it cannot belong to multiple at once"
+		}
+		else_if = {
+			limit = { exists = event_target:se_hidden_list_header_object }
+			[[index]
+			owner = {
+				every_owned_leader = {
+					limit = {
+						se_is_list_item = yes
+						has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
+						check_variable = {
+							which = se_list_index
+							value = {
+								scope = prevprev
+								variable >= se_append_index
+							}
+						}
+					}
+					change_variable = {
+						which = se_list_index
+						value = 1
+					}
+				}
+			}
+			set_variable = {
+				which = se_list_index
+				value = se_append_index
+			}
+			]
+			se_internal_convert_entry_to_list = yes
+			clear_global_event_target = se_hidden_list_header_object
+		}
+		else = { log_error = "se_add_to_list: No list with given identifier exists" }
+	}
+	else = { log_error = "se_add_to_list: Calling scope is not a valid database entry" }
+}
+
+### Removes a given database entry from a list
+### Requires to be in the scope of a database entry(use se_get_database_entry to get the reference)
+### Parameters
+# identifier - A database unique id for the list
+# delete_item(optional) - Whether the database item should be deleted or just removed from the list, default value is yes
+# new_identifier(optional) - A database unique id for the entry if removed
+se_remove_entry_from_list = {
+	if = {
+		limit = { se_is_list_item = yes }
+		owner = {
+			random_owned_leader = {
+				limit = {
+					se_is_list_header = yes
+					has_leader_flag = $identifier$
+				}
+				save_global_event_target_as = se_hidden_list_header_object
+			}
+		}
+		if = {
+			limit = { exists = event_target:se_hidden_list_header_object }
+			if = {
+				limit = { always = $delete_item|yes$ }
+				se_internal_remove_database_entry = yes
+			}
+			else = {
+				se_internal_convert_list_to_entry = yes
+				[[new_identifier]
+					set_leader_flag = $new_identifier$
+					set_name = $new_identifier$
+				]
+			}
+			event_target:se_hidden_list_header_object = {
+				se_decrement = { variable = se_list_item_count }
+				se_internal_reindex_list = yes
+			}
+			clear_global_event_target = se_hidden_list_header_object
+		}
+		else = { log_error = "se_remove_from_list: No list with the given identifier exists" }
+	}
+	else = { log_error = "se_remove_from_list: Calling scope is not a valid list item" }
+}
 
 ### Retrieves a list entry from a list
 ### Parameters
 # identifier - The database unique id of the list
-# index(Optional) - The index of the list item
-# limiter(Optional) - A simple scripted_trigger accepting yes or no values(example: my_trigger = yes), effect will input yes for this trigger
-# first(Optional) - Exclusive with Last, if limiter parameter is filled will take the first item found
-# last(Optional) - Exclusive with first, if limiter parameter is filled will take the last item found
+# index(optional) - The index of the list item
+# limiter(optional) - A simple scripted_trigger accepting yes or no values(example: my_trigger = yes), effect will input yes for this trigger
+# first(optional) - Exclusive with Last, if limiter parameter is filled will take the first item found
+# last(optional) - Exclusive with first, if limiter parameter is filled will take the last item found
 # if neither first or last are specified the effect will select a random value
 se_get_list_entry = {
 	if = {
@@ -399,7 +472,7 @@ se_get_list_entry = {
 							}
 							else_if = {
 								limit = { always = $last|no$ }
-								se_save_as_global_event_target = { event_target_name = se_return_value }
+								se_set_return_target = yes
 							}
 						}
 					}
@@ -416,7 +489,7 @@ se_get_list_entry = {
 								]
 								[[limiter]$limiter$ = yes]
 							}
-							se_save_as_global_event_target = { event_target_name = se_return_value }
+							se_set_return_target = yes
 						}
 					}
 					clear_global_event_target = se_hidden_list_header_object
@@ -424,7 +497,7 @@ se_get_list_entry = {
 			}
 			clear_global_event_target = se_hidden_current_scope_database
 		}
-		else = { log_error = "se_get_list_entry: Scope 'this' is not a database and does not have an obviously accessable database" }
+		else = { log_error = "se_get_list_entry: $se_unable_to_access_database_error$" }
 	}
 }
 
@@ -490,7 +563,7 @@ se_internal_reindex_list = {
 }
 ### Internal use, do not use outside of code within this mod
 se_internal_convert_list_to_entry = {
-	se_add_database_entry_flag = { flag = se_database_entry }
+	se_set_database_entry_flag = { flag = se_database_entry }
 	se_remove_database_entry_flag = { flag = se_item_in_list }
 	se_remove_database_entry_flag = { flag = se_list_item_of_@event_target:se_hidden_current_scope_list }
 	owner = { se_increment = { variable = se_database_entry_count }}
@@ -502,9 +575,12 @@ se_internal_convert_entry_to_list = {
 	se_set_database_entry_flag = { flag = se_list_item_of_@event_target:se_hidden_list_header_object }
 	se_remove_database_entry = { flag = se_database_entry }
 	owner = { se_decrement = { variable = se_database_entry_count } }
-	set_variable = {
-		which = se_list_index
-		value = { scope = event_target:se_hidden_list_header_object variable = se_list_item_count }
+	if = {
+		limit = { NOT = { is_variable_set = se_list_index } }
+		set_variable = {
+			which = se_list_index
+			value = { scope = event_target:se_hidden_list_header_object variable = se_list_item_count }
+		}
 	}
 	event_target:se_hidden_list_header_object = { se_increment = { variable = se_list_item_count } }
 }
@@ -543,7 +619,7 @@ se_get_enumerator = {
 						se_is_list_enumerator = yes
 						has_leader_flag = se_enumerator_of_@event_target:se_hidden_current_scope_list
 					}
-					se_save_as_global_event_target = { event_target_name = se_return_value }
+					se_set_return_target = yes
 				}
 			}
 			else = { log_error = "se_get_enumerator: No list with the given identifier exists" }
@@ -614,7 +690,7 @@ se_enumerator_return_current = {
 							value = { scope = prev variable = se_current_index }
 						}
 					}
-					se_save_as_global_event_target = { event_target_name = se_return_value }
+					se_set_return_target = yes
 				}
 			}
 			if = {
@@ -623,7 +699,7 @@ se_enumerator_return_current = {
 			}
 		}
 		else = {
-			se_internal_delete_database_entry = yes
+			se_internal_remove_database_entry = yes
 			log_error = "se_enumerator_return_current: The current enumerator is old and points to a non existant list"
 		}
 	}
@@ -633,7 +709,7 @@ se_enumerator_return_current = {
 ### Resets a list enumerator to the start of a list
 ### Requires to be in the scope of an enumerator(use se_get_enumerator to get the enumerator reference)
 ### Parameters
-# index(Optional) - The index to reset the enumerator to
+# index(optional) - The index to reset the enumerator to
 se_reset_enumerator = {
 	if = {
 		limit = { se_is_list_enumerator = yes }
@@ -646,7 +722,6 @@ se_reset_enumerator = {
 }
 
 ### TODO, numeric sort functions(less than, greater than)
-### TODO, boolean sorters(bool value A indexed lower than bool value B)
 se_sort_list_by_trigger_value = {
 
 }

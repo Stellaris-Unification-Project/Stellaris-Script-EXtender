@@ -1,4 +1,4 @@
-se_database_country = {
+se_country_database = {
 	share_communications = no
 	observable = no
 	default_ships = no
@@ -16,7 +16,7 @@ se_database_country = {
 	}
 	ai = { enabled = no }
 }
-se_event_country = {
+se_country_event = {
 	share_communications = no
 	observable = no
 	default_ships = no

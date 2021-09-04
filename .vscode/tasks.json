@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Test Stellaris",
+            "type": "process",
+            "command": "${config:cwtools.cache.stellaris}\\stellaris.exe",
+            "args": ["-gdpr-compliant", "-dx11", "-logprefix se_debug_", "-debugtooltip", "-logall", "-mod \"P:/Stellaris Mods/Script Extensions/source\"", "-mod \"P:/Stellaris Mods/Script Extensions/test\""]
+        }
+    ]
+}

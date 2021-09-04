@@ -1,0 +1,329 @@
+### Clears the name of the current named object to a blank string
+se_clear_string = {
+	if = {
+		limit = { se_scope_can_be_named = yes }
+		set_name = ""
+	}
+	else = { log_error = "se_clear_string: $se_set_name_unsupported$" }
+}
+
+### String effects in Script Extender should be assumed to take 3 positions for the nested parameter stack.
+
+### Creates a new string object and links it to the given scope
+### Parameters
+# identifier - A unique identifier for the given string
+# text(optional) - Creates the string with this text at the base, text must be non spaced
+# bind_to_scope(optional) - Binds the string to the set object, default value is this
+# overwrite(optional) - Determines whether or not to delete any existing string with the same identifier, default value is no
+se_new_string = {
+	[[bind_to_scope]
+	if = {
+		limit = { is_scope_set = $bind_to_scope$ }
+		$bind_to_scope$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$bind_to_scope$ }
+		event_target:$bind_to_scope$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else = { log_error = "se_new_string: $se_invalid_scope_error$ 'bind_to_scope'." }
+	event_target:se_hidden_string_owner_scope = {
+	]
+	if = {
+		limit = { se_scope_can_be_named = yes }
+		se_clear_return_target = yes
+		se_get_database = { bound_to = this }
+		if = {
+			limit = { exists = event_target:se_return_value }
+			event_target:se_return_value = { save_global_event_target_as = se_database_target }
+		}
+		else = {
+			se_clear_return_target = yes
+			se_create_database = { bind_to_scope = $bind_to_scope$ }
+			event_target:se_return_value = { save_global_event_target_as = se_database_target }
+
+		}
+		se_clear_return_target = yes
+		event_target:se_database_target = {
+			se_create_list = {
+				identifier = $identifier$
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			se_set_database_entry_flag = { flag = se_string_of_@prev }
+			[[text]set_name = $text$]
+		}
+	}
+	else = { log_error = "se_append_stringbuilder: $se_set_name_unsupported$" }
+	[[bind_to_scope]
+	}
+	clear_global_event_target = se_hidden_string_owner_scope
+	]
+}
+
+### Appends a string of non space values to an existing string
+### Parameters
+# identifier - A unique identifier for the given string
+# text - Creates the string with this text at the base, text must be non spaced
+# bind_to_scope(optional) - Binds the string to the set object, default value is this
+# index(optional) - The index in the string to append this text, default value is current count - 1
+se_append_to_string = {
+	[[index]
+	set_variable = {
+		which = se_append_index
+		value = $index$
+	}
+	]
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else = { log_error = "se_new_string: $se_invalid_scope_error$ 'bound_to'." }
+	event_target:se_hidden_string_owner_scope = {
+	]
+	se_clear_return_target = yes
+	se_get_database = { bound_to = this }
+	if = {
+		limit = { exists = event_target:se_return_value }
+		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
+	}
+	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_database } }
+	event_target:se_hidden_scoped_database = {
+		[[index]
+		set_variable = {
+			which = se_temp_append_index
+			value = {
+				scope = prev[[bound_to].prev]
+				value = se_append_index
+			}
+		}
+		]
+		se_create_list_entry = {
+			identifier = $identifier$
+			[[index]index = se_temp_append_index]
+		}
+		event_target:se_return_value = { set_name = $text$ }
+		se_clear_return_target = yes
+		[[index]clear_variable = se_temp_append_index]
+	}
+	clear_global_event_target = se_hidden_scoped_database
+	[[bound_to]
+	}
+	clear_global_event_target = se_hidden_string_owner_scope
+	]
+	[[index]clear_variable = se_append_index]
+}
+
+### Appends a number of spaces to the string
+### Parameters
+# identifier - A unique identifier for the given string
+# count(optional) - The number of spaces to append to the given string value, default to 1
+# bind_to_scope(optional) - Binds the string to the set object, default value is this
+# index(optional) - The index in the string to append these spaces, default value is current count - 1
+se_append_space = {
+	set_variable = {
+		which = se_space_count
+		value = $count|1$
+	}
+	[[index]
+	set_variable = {
+		which = se_append_index
+		value = $index$
+	}
+	]
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else = { log_error = "se_new_string: $se_invalid_scope_error$ 'bound_to'." }
+	event_target:se_hidden_string_owner_scope = {
+	]
+	se_clear_return_target = yes
+	se_get_database = { bound_to = this }
+	if = {
+		limit = { exists = event_target:se_return_value }
+		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
+	}
+	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_database } }
+	event_target:se_hidden_scoped_database = {
+		[[index]
+		set_variable = {
+			which = se_temp_append_index
+			value = {
+				scope = prev[[bound_to].prev]
+				value = se_append_index
+			}
+		}
+		]
+		se_create_list_entry = {
+			identifier = $identifier$
+			[[index]index = se_temp_append_index]
+		}
+		set_variable = {
+			which = se_space_count
+			value = prev[[bound_to].prev]
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = se_space_count
+					value > 2
+				}
+			}
+			set_variable = {
+				which = se_tri_space_count
+				value = se_space_count
+			}
+			divide_variable = {
+				which = se_tri_space_count
+				value = 3
+			}
+			floor_variable = se_tri_space_count
+			modulo_variable = {
+				which = se_space_count
+				value = 3
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = se_space_count
+					value > 1
+				}
+			}
+			set_variable = {
+				which = se_pair_space_count
+				value = se_space_count
+			}
+			divide_variable = {
+				which = se_pair_space_count
+				value = 2
+			}
+			floor_variable = se_pair_space_count
+			modulo_variable = {
+				which = se_space_count
+				value = 2
+			}
+		}
+		event_target:se_return_value = {
+			if = {
+				limit = { is_variable_set = se_tri_space_count }
+				while = {
+					count < se_tri_space_count
+					set_name = "[This.GetName]   "
+				}
+			}
+			if = {
+				limit = { is_variable_set = se_pair_space_count }
+				while = {
+					count < se_pair_space_count
+					set_name = "[This.GetName]  "
+				}
+			}
+			while = {
+				count < se_space_count
+				set_name = "[This.GetName] "
+			}
+		}
+		se_clear_return_target = yes
+		# Do some modulus and divison to chunk into 3s, 2s and singular space groups
+		[[index]clear_variable = se_temp_append_index]
+	}
+	clear_global_event_target = se_hidden_scoped_database
+	[[bound_to]
+	}
+	clear_global_event_target = se_hidden_string_owner_scope
+	]
+	[[index]clear_variable = se_append_index]
+	clear_variable = se_space_count
+}
+
+### Returns the full string value
+# identifier - A unique identifier for the given string
+# bound_to(optional) - The scope that the associated string is stored to
+# return_target(optional) - The scope to return the string as, will return in the name property, default value is this
+# destroy_string(optional) - If yes destroys the string after returning the value, default value is no
+se_return_string = {
+	[[return_target]
+	if = {
+		limit = { is_scope_set = $return_target$ }
+		$return_target$ = { save_global_event_target_as = se_hidden_return_scope }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$return_target$ }
+		event_target:$return_target$ = { save_global_event_target_as = se_hidden_return_scope }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'return_target'."
+		break = yes
+	}
+	]
+	save_global_event_target_as = se_hidden_return_scope
+	event_target:se_hidden_return_scope = {
+		if = {
+			limit = { se_scope_can_be_named = yes }
+			save_global_event_target_as = se_hidden_return_scope
+			set_name = ""
+		}
+		else = {
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+	}
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else = { log_error = "se_return_string: $se_invalid_scope_error$ 'bound_to'." }
+	event_target:se_hidden_string_owner_scope = {
+	]
+	se_clear_return_target = yes
+	se_get_database = { bound_to = this }
+	if = {
+		limit = { exists = event_target:se_return_value }
+		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
+	}
+	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_database } }
+	event_target:se_hidden_scoped_database = {
+		se_clear_return_target = yes
+		se_get_enumerator = { identifier = $identifier$ }
+		event_target:se_return_value = {
+			se_reset_enumerator = yes
+			save_global_event_target_as = se_hidden_current_enumerator
+		}
+		event_target:se_hidden_current_enumerator = {
+			se_enumerator_return_current = yes
+			while = {
+				limit = { exists = event_target:se_return_value }
+				event_target:se_return_value = {
+					if = {
+						limit = { NOT = { has_leader_flag = se_name_return_value } }
+						event_target:se_hidden_return_scope = { set_name = "\\[This.GetName]\\[se_return_value.GetName]" }
+					}
+				}
+				se_enumerator_move_next = yes
+			}
+		}
+	}
+	clear_global_event_target = se_hidden_scoped_database
+	clear_global_event_target = se_hidden_return_scope
+	[[bound_to]
+	}
+	clear_global_event_target = se_hidden_string_owner_scope
+	]
+}

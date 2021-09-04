@@ -18,6 +18,8 @@ event = {
 		save_global_event_target_as = se_point_to_scope
 		save_global_event_target_as = se_point_from_scope
 		save_global_event_target_as = se_scoped_event_target_owner_database
+		save_global_event_target_as = se_global_database
+		save_global_event_target_as = se_hidden_db_owner
 		# Feature flags
 		set_global_flag = se_active_daily_pulse
 		set_global_flag = se_active_weekly_pulse

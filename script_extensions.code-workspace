@@ -1,0 +1,31 @@
+{
+	"folders": [
+		{
+			"name": "SE Source",
+			"path": "source"
+		},
+		{
+			"name": "SE Test",
+			"path": "test"
+		},
+		{
+			"name": "Vanilla Test",
+			"path": "../Stellaris Testing"
+		},
+		{
+			"name": "VSCode",
+			"path": "."
+			
+		}
+	],
+	"settings": {
+		"cwtools.errors.ignore": [
+			262,
+			264
+		],
+		"files.exclude": {
+			"**/source": true,
+			"**/test": true
+		}
+	}
+}

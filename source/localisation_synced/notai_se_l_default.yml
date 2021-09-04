@@ -1,4 +1,12 @@
 ﻿l_default:
+ ### Setup
  se_database_species_name: "Database Entry"
- se_database_entry_name: "Database Entry"
  se_database_backup_name: "Global Database"
+ se_private_event_country: "se_global_event_country"
+ ### Datastructures
+ se_country_event: "Event Country"                        # Event Country
+ se_country_database: "Database"                          # Database
+ se_country_string_builder: "String Builder"              # String Builder
+ se_database_entry_name: "Database Entry"                 # Database Entry
+ se_list_enumerator_name: "List Enumerator"               # List Enumerator
+ se_list_name: "List"                                     # List Header

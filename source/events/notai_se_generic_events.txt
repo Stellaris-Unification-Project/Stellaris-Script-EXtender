@@ -4,28 +4,8 @@ namespace = se_setup
 ##### Library Setup #####
  #######################
 
-event = {
+ event = {
 	id = se_setup.0
-	is_triggered_only = yes
-	hide_window = yes
-	immediate = {
-		set_global_flag = script_extender_enabled						# Generic mod installed key
-		set_global_flag = se_pulse_engine_available						# Specifies that the pulse engine is available
-		fire_on_action = { on_action = on_game_start_begin }
-		# Done for compatibility with vanilla
-		if = {
-			limit = { exists = event_target:global_event_country }
-			clear_global_event_target = global_event_country
-		}
-		every_country = {
-			limit = { is_country_type = global_event }
-			destroy_country = yes
-		}
-	}
-}
-
-event = {
-	id = se_setup.1
 	is_triggered_only = yes
 	hide_window = yes
 	trigger = { NOT = { exists = event_target:se_global_event_database } }
@@ -42,11 +22,53 @@ event = {
 				which = se_global_database_count
 				value = 1
 			}
+			se_set_database_flag = { flag = se_global_database }
 			se_save_as_global_event_target = { event_target_name = se_global_database }
 		}
 		se_create_event_country = { identifier = se_private_event_country }
 		event_target:se_return_value = { se_save_as_global_event_target = { event_target_name = se_event_country } }
 		se_clear_return_target = yes
+	}
+}
+
+event = {
+	id = se_setup.1
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		set_global_flag = script_extender_enabled						# Generic mod installed key
+		fire_on_action = { on_action = on_game_start_begin }
+		# Done for compatibility with vanilla
+		if = {
+			limit = { exists = event_target:global_event_country }
+			clear_global_event_target = global_event_country
+		}
+		every_country = {
+			limit = { is_country_type = global_event }
+			destroy_country = yes
+		}
+	}
+}
+
+ ######################
+##### Mod Updating #####
+ ######################
+
+namespace = se_mod_auto_update
+
+### On game loaded, register mod version
+# if mod version doesn't already exist
+# fire on_mod_self_update with that version number and the last number it had found
+# else do nothing
+
+# Initial register event
+event = {
+	id = se_mod_auto_update.0
+	is_triggered_only = yes
+	hide_window = yes
+	trigger = { has_global_flag = se_mod_update_enabled }
+	immediate = {
+		fire_on_action = { on_action = on_se_register_mod_version }
 	}
 }
 
@@ -57,9 +79,10 @@ event = {
 namespace = se_pagination
 
 
- ########################
-##### Random Numbers #####
- ########################
+
+ ######################
+##### Rand Num Gen #####
+ ######################
 
 namespace = se_rng
 

@@ -10,12 +10,6 @@ on_monthly_pulse_country = {
 		se_pulse_engine.11 	# Fires on_weekly_pulse_country
 	}
 }
-# This = Nothing
-### NOTE: THIS IS CALLED BEFORE ANY VANILLA INIT IS DONE
-### event_target:global_event_country DOES NOT EXIST YET AND WILL BE OVERWRITTEN AFTER THIS CALL TO KEEP THE GAME FUNCTIONAL
-on_game_start_begin = {
-	events = { }
-}
 on_daily_pulse = {
 	events = { }
 }
