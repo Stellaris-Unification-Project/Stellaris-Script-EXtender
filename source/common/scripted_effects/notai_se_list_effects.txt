@@ -407,12 +407,19 @@ se_remove_entry_from_list = {
 # last(optional) - Exclusive with first, if limiter parameter is filled will take the last item found
 # if neither first or last are specified the effect will select a random value
 se_get_list_entry = {
+	[[index]
+	set_variable = {
+		which = se_select_index
+		value = $index$
+	}
+	]
 	if = {
 		limit = {
 			always = $first|no$
 			always = $last|no$
 		}
 		log_error = "se_get_list_entry: Cannot select both parameters 'first' and 'last'"
+		break = yes
 	}
 	else_if = {
 		limit = {
@@ -423,6 +430,7 @@ se_get_list_entry = {
 			}
 		}
 		log_error = "se_get_list_entry: Cannot select both parameters 'first' or 'last' with parameter 'index'"
+		break = yes
 	}
 	else = {
 		se_clear_return_target = yes
@@ -484,7 +492,7 @@ se_get_list_entry = {
 								[[index]
 									check_variable = {
 										which = se_list_index
-										value = $index$
+										value = { scope = prev.prev variable = se_select_index }
 									}
 								]
 								[[limiter]$limiter$ = yes]
@@ -626,7 +634,7 @@ se_get_enumerator = {
 		}
 		clear_global_event_target = se_hidden_current_scope_database
 	}
-	else = { log_error = "se_get_enumerator: Scope 'this' is not a database and does not have an obviously accessable database" }
+	else = { log_error = "se_get_enumerator: $se_unable_to_access_database_error$" }
 }
 
 ### Iterates and returns to the next entry on a list

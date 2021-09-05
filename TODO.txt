@@ -1,14 +1,8 @@
-Page based event boilerplate
-- Simple select values event
-- Advanced execute code on choice
-
 List Functions:
 - Export list to event targets
 - Export script list to list of pointers(no trigger)
 - Sort by variable
 - Sort by trigger value
-
-In parameters requiring identifiers for searching allow for reference equality checks
 
 Strings:
 - String values are substrings with indexes going lowest index as leftmost
@@ -17,12 +11,15 @@ Strings:
 - Remove at end of index
 - Remove at index
 - String pattern completion
+- Comparable string type
 
 Events/Constructs:
 - Usable keyboard
-- Easy paginated event
 
-Move global database entries to an event target's data when creating a new database
+Global Code:
+- Allow equality checks on identifier gets
+- Dynamically move data in global databse belonging to one database to the entry's database when created
+- On object deletes purge event target pointers
 
 Error Handling:
 - Retrofit all error messages to their own error strings/messages

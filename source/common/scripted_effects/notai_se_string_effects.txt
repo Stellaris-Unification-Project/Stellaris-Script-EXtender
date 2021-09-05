@@ -248,13 +248,440 @@ se_append_space = {
 	clear_variable = se_space_count
 }
 
+### Appends a parameter to be filled in at string return
+### Parameters
+# identifier 				- A unique identifier for the given string
+# param_index 				- The index of the parameter, used when calling the same parameter multiple times
+# bind_to_scope(optional) 	- Binds the string to the set object, default value is this
+# index(optional) 			- The index in the string to append this text, default value is current count - 1
+se_append_parameter = {
+	[[index]
+	set_variable = {
+		which = se_append_index
+		value = $index$
+	}
+	]
+	set_variable = {
+		which = se_param_index
+		value = $param_index$
+	}
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else = { log_error = "se_new_string: $se_invalid_scope_error$ 'bound_to'." }
+	event_target:se_hidden_string_owner_scope = {
+	]
+	se_clear_return_target = yes
+	se_get_database = { bound_to = this }
+	if = {
+		limit = { exists = event_target:se_return_value }
+		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
+	}
+	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_database } }
+	event_target:se_hidden_scoped_database = {
+		[[index]
+		set_variable = {
+			which = se_temp_append_index
+			value = {
+				scope = prev[[bound_to].prev]
+				value = se_append_index
+			}
+		}
+		]
+		se_create_list_entry = {
+			identifier = $identifier$
+			[[index]index = se_temp_append_index]
+		}
+		event_target:se_return_value = {
+			se_set_database_entry_flag = { flag = se_string_parameter }
+			set_variable = {
+				which = se_param_index
+				value = prev.prev[[bound_to].prev]
+			}
+		}
+		se_clear_return_target = yes
+		[[index]clear_variable = se_temp_append_index]
+	}
+	clear_global_event_target = se_hidden_scoped_database
+	[[bound_to]
+	}
+	clear_global_event_target = se_hidden_string_owner_scope
+	]
+	clear_variable = se_param_index
+	[[index]clear_variable = se_append_index]
+}
+
 ### Returns the full string value
-# identifier - A unique identifier for the given string
-# bound_to(optional) - The scope that the associated string is stored to
-# return_target(optional) - The scope to return the string as, will return in the name property, default value is this
-# destroy_string(optional) - If yes destroys the string after returning the value, default value is no
+### Parameters
+# identifier				- A unique identifier for the given string
+# bound_to(optional) 		- The scope that the associated string is stored to
+# return_target(optional) 	- The scope to return the string as, will return in the name property, default value is this
+# destroy_string(optional) 	- If yes destroys the string after returning the value, default value is no
+# param_one(optional) 		- The first parameter scope in a parameterized string
+# param_two(optional)		- The second parameter scope in a parameterized string
+# param_three(optional)		- The third parameter scope in a parameterized string
+# param_four(optional)		- The fourth parameter scope in a parameterized string
+# param_five(optional)		- The fifth parameter scope in a parameterized string
+# param_six(optional) 		- The sixth parameter scope in a parameterized string
+# param_seventh(optional)	- The seventh parameter scope in a parameterized string
+# param_eight(optional)		- The eighth parameter scope in a parameterized string
+# param_nine(optional)		- The ninth parameter scope in a parameterized string
+# param_ten(optional)		- The tenth parameter scope in a parameterized string
+# param_list(optional)		- An identifier for a list in the same scope to draw parameters for (disables above param_one through param_ten)
 se_return_string = {
+	[[param_list]
+	if = { 
+		limit = { always = no }
+	]
+	[[param_one]
+	if = {
+		limit = { is_scope_set = $param_one$ }
+		$param_one$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_one$ }
+		event_target:$param_one$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_one'"
+		break = yes
+	}
+	owner = {
+		se_create_list = {
+			identifier = se_param_list
+			overwrite = yes
+		}
+	}
+	event_target:se_hidden_string_param_one = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_one
+				overwrite = yes
+			}
+
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_two]
+	if = {
+		limit = { is_scope_set = $param_two$ }
+		$param_two$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_two$ }
+		event_target:$param_two$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_two'"
+		break = yes
+	}
+	event_target:se_hidden_string_param_two = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_two
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_three]
+	if = {
+		limit = { is_scope_set = $param_three$ }
+		$param_three$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_three$ }
+		event_target:$param_three$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_three'"
+		break = yes
+	}
+	event_target:se_hidden_string_param_three = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_three
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_four]
+	if = {
+		limit = { is_scope_set = $param_four$ }
+		$param_four$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_four$ }
+		event_target:$param_four$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_four'"
+		break = yes
+	}
+	event_target:se_hidden_string_param_four = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_four
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_five]
+	if = {
+		limit = { is_scope_set = $param_five$ }
+		$param_five$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_five$ }
+		event_target:$param_five$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_five'"
+		break = yes
+	}
+	event_target:se_hidden_string_param_five = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_five
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_six]
+	if = {
+		limit = { is_scope_set = $param_six$ }
+		$param_six$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_six$ }
+		event_target:$param_six$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_six'"
+		break = yes
+	}
+	event_target:se_hidden_string_param_six = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_six
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_seven]
+	if = {
+		limit = { is_scope_set = $param_seven$ }
+		$param_seven$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_seven$ }
+		event_target:$param_seven$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_seven'"
+		break = yes
+	}
+	event_target:se_hidden_string_param_seven = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_seven
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_eight]
+	if = {
+		limit = { is_scope_set = $param_eight$ }
+		$param_eight$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_eight$ }
+		event_target:$param_eight$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_eight'"
+		break = yes
+	}
+	event_target:se_hidden_string_param_eight = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_eight
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_nine]
+	if = {
+		limit = { is_scope_set = $param_nine$ }
+		$param_nine$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_nine$ }
+		event_target:$param_nine$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_nine'"
+		break = yes
+	}
+	event_target:se_hidden_string_param_nine = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_nine
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_ten]
+	if = {
+		limit = { is_scope_set = $param_ten$ }
+		$param_ten$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$param_ten$ }
+		event_target:$param_ten$ = { save_global_event_target_as = se_hidden_string_param }
+	}
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'param_ten'"
+		break = yes
+	}
+	event_target:se_hidden_string_param_ten = {
+		if = {
+			limit = { NOT = { se_scope_can_be_named = yes } }
+			log_error = "se_return_string: $se_set_name_unsupported$"
+			break = yes
+		}
+		prev.owner = {
+			se_create_database_entry = {
+				identifier = se_temp_param_ten
+				overwrite = yes
+			}
+		}
+		event_target:se_return_value = {
+			set_name = "[Prev.GetName]"
+			se_add_entry_to_list = { identifier = se_param_list }
+		}
+	}
+	clear_global_event_target = se_hidden_string_param
+	se_clear_return_target = yes
+	]
+	[[param_list]
+	}
+	]
+	save_global_event_target_as = se_hidden_return_scope
 	[[return_target]
+	clear_global_event_target = se_hidden_return_scope
 	if = {
 		limit = { is_scope_set = $return_target$ }
 		$return_target$ = { save_global_event_target_as = se_hidden_return_scope }
@@ -268,11 +695,9 @@ se_return_string = {
 		break = yes
 	}
 	]
-	save_global_event_target_as = se_hidden_return_scope
 	event_target:se_hidden_return_scope = {
 		if = {
 			limit = { se_scope_can_be_named = yes }
-			save_global_event_target_as = se_hidden_return_scope
 			set_name = ""
 		}
 		else = {
@@ -289,7 +714,10 @@ se_return_string = {
 		limit = { is_scope_set = event_target:$bound_to$ }
 		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
 	}
-	else = { log_error = "se_return_string: $se_invalid_scope_error$ 'bound_to'." }
+	else = {
+		log_error = "se_return_string: $se_invalid_scope_error$ 'bound_to'."
+		break = yes
+	}
 	event_target:se_hidden_string_owner_scope = {
 	]
 	se_clear_return_target = yes
@@ -310,11 +738,27 @@ se_return_string = {
 			se_enumerator_return_current = yes
 			while = {
 				limit = { exists = event_target:se_return_value }
-				event_target:se_return_value = {
+				event_target:se_return_value = { save_global_event_target_as = se_substring }
+				se_clear_return_target = yes
+				event_target:se_substring = {
+					if = {
+						limit = { has_leader_flag = se_string_parameter }
+						se_get_list_entry = {
+							identifier = $param_list|se_param_list$
+							index = se_param_index
+						}
+						set_name = "[se_return_value.GetName]"
+					}
 					if = {
 						limit = { NOT = { has_leader_flag = se_name_return_value } }
 						event_target:se_hidden_return_scope = { set_name = "\\[This.GetName]\\[se_return_value.GetName]" }
 					}
+					[[destroy_string]
+					if = {
+						limit = { always = $destroy_string$ }
+						se_remove_entry_from_list = { identifier = $identifier$ }
+					}
+					]
 				}
 				se_enumerator_move_next = yes
 			}
