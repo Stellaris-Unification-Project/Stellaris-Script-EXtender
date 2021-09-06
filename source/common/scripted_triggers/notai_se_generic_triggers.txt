@@ -1,25 +1,30 @@
+### Determines if the executing scope is a database scope
 se_is_database = {
 	is_scope_type = country
 	is_country_type = se_country_database
 }
+### Determines if the executing scope is a database entry
 se_is_database_entry = {
 	is_scope_type = leader
 	exists = owner
 	owner = { is_scope_type = country }
 	has_leader_flag = se_database_entry
 }
+### Determines if the executing scope is a list header
 se_is_list_header = {
 	is_scope_type = leader
 	exists = owner
 	owner = { is_scope_type = country }
 	has_leader_flag = se_list_header
 }
+### Determines if the executing scope is a list item
 se_is_list_item = {
 	is_scope_type = leader
 	exists = owner
 	owner = { is_scope_type = country }
 	has_leader_flag = se_item_in_list
 }
+### Determines if the executing scope is a list enumerator
 se_is_list_enumerator = {
 	is_scope_type = leader
 	exists = owner
@@ -34,7 +39,12 @@ se_dump_scopes_trigger = {
 	}
 	else = { has_country_flag = dump_scopes }
 }
-
+### Incomplete do not use
 se_log_scopes_trigger = {
 	
+}
+
+### Returns the result of the last comparison as a trigger yes no
+se_check_comparison = {
+	has_global_flag = se_hidden_comparison_success
 }

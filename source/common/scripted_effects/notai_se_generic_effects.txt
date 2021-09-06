@@ -1,20 +1,15 @@
-##### Reference
-# Variables can display up to 10^14 integer places
-# Variables only have 10^-5 in decimal places (0.00000)
-# Variable division only works up to values around the range of 10^9
-# Variable multiplication only works up to values around the range of 10^6
-# Bracket commands in log statements within scripted effects/triggers require a \\ prefix to ensure the bracket command works
-
-
- ###############
-### Mod Setup ###
- ###############
+ ##########################
+##### Mod Setup Events #####
+ ##########################
+ # Mod setup events should be assumed to take 1 effect on the effect call stack
+ # Mod setup events are minor scripts useful when speeding up the initial requirements for creating your mods
 
 ### Creates a unique event country for the specific id
 ### Parameters
 # identifier - the unique id of the country
 # name(optional) - The name of the event country
 # overwrite(optional) - boolean indicating whether any existing event countries with that identifier should be deleted, if it will not be deleted it will return a matching country instead.
+### Access return value by scope event_target:se_return_value
 se_create_event_country = {
 	random_country = {
 		limit = {
@@ -25,26 +20,39 @@ se_create_event_country = {
 			limit = { always = $overwrite|no$ }
 			destroy_country = yes
 		}
-		else = { se_save_global_event_target_as = { event_target_name = se_discovered_event_country } }
+		else = {
+			if = {
+				limit = { exists = event_target:se_hidden_discovered_event_country }
+				clear_global_event_target = se_hidden_discovered_event_country
+			}
+			save_global_event_target_as = se_hidden_discovered_event_country
+		}
 	}
 	if = {
-		limit = { NOT = { exists = event_target:se_discovered_event_country } }
+		limit = { NOT = { exists = event_target:se_hidden_discovered_event_country } }
 		create_country = {
 			name = $name|se_country_event$
 			type = se_country_event
 			effect = {
 				set_country_flag = $identifier$
-				se_save_global_event_target_as = { event_target_name = se_discovered_event_country }
+				if = {
+					limit = { exists = event_target:se_hidden_discovered_event_country }
+					clear_global_event_target = se_hidden_discovered_event_country
+				}
+				save_global_event_target_as = se_hidden_discovered_event_country
 			}
 		}
 	}
-	event_target:se_discovered_event_country = {
-		se_save_global_event_target_as = { event_target_name = se_last_created_event_country }
-		se_save_global_event_target_as = { event_target_name = se_return_value }
+	event_target:se_hidden_discovered_event_country = {
+		if = {
+			limit = { exists = event_target:se_return_value }
+			clear_global_event_target = se_return_value
+		}
+		save_global_event_target_as = se_return_value
 	}
 	if = {
-		limit = { exists = event_target:se_discovered_event_country }
-		clear_global_event_target = se_discovered_event_country
+		limit = { exists = event_target:se_hidden_discovered_event_country }
+		clear_global_event_target = se_hidden_discovered_event_country
 	}
 }
 
@@ -57,13 +65,20 @@ se_get_event_country = {
 			is_country_type = se_country_event
 			has_country_flag = $identifier$
 		}
-		se_set_return_target = yes
+		if = {
+			limit = { exists = event_target:se_return_value }
+			clear_global_event_target = se_return_value
+		}
+		save_global_event_target_as = se_return_value
 	}
 }
 
- ###############################
-### Generic Scripting Effects ###
- ###############################
+ ###################################
+##### Generic Scripting Effects #####
+ ###################################
+ # Generic Scripting effects should be assumed to take 1 effect on the effect call stack
+ # Generic scripting effects are for minor script automation when creating your mod scripts
+ # Many of them are for convinence and do not necessarily facilitate any important features or changes to the library
 
 ### Creates a new global event target, clearing the value if it existed beforehand
 ### Parameters
@@ -90,28 +105,9 @@ se_log_scopes_effect = {
 	log = "This = \\[This.GetScopeType] | \\[This.GetName]"
 }
 
-### Clears the event target se_return_value if it exists
-### Used internally in se effects, but also useful when requiring multiple return values.
-se_clear_return_target = {
-	if = {
-		limit = { exists = event_target:se_return_value }
-		clear_global_event_target = se_return_value
-	}
-}
-
-### Sets the event target 'se_return_target' to the calling scope
-### Internal use only
-se_set_return_target = {
-	if = {
-		limit = { exists = event_target:se_return_target }
-		clear_global_event_target = se_return_target
-	}
-	save_global_event_target_as = se_return_target
-}
-
- ###########################
-### Variable/Math effects ###
- ###########################
+ #####					   #####
+##### Variable/Math effects #####
+ #####					   #####
 
 ### Creates a random number and places it in the given variable
 ### Parameters
@@ -546,4 +542,37 @@ se_decrement = {
 	}
 }
 
-### Todo, math effects, rapid logarithms and exponents
+
+### Clears the current return value, useful when invoking an effect that returns a value
+### Often unnecessary as most returning effects do invoke this effect before returning anything
+se_clear_return_target = {
+	if = {
+		limit = { exists = event_target:se_return_value }
+		clear_global_event_target = se_return_value
+	}
+}
+### Internal use, do not use outside of code within this mod
+se_set_return_target = {
+	if = {
+		limit = { exists = event_target:se_return_target }
+		clear_global_event_target = se_return_target
+	}
+	save_global_event_target_as = se_return_target
+}
+
+ #####					#####
+##### Comparison effects #####
+ #####					#####
+
+### Internal use, do not use outside of code within this mod
+se_internal_set_comparison_false = {
+	remove_global_flag = se_hidden_comparison_success
+}
+### Internal use, do not use outside of code within this mod
+se_internal_set_comparison_true = {
+	set_global_flag = se_hidden_comparison_success
+}
+### Internal use, do not use outside of code within this mod
+se_internal_reset_comparison = {
+	remove_global_flag = se_hidden_comparison_success
+}

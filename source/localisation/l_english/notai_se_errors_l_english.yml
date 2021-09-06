@@ -7,3 +7,4 @@
  se_unable_to_access_database_error: "Scope 'this' is not a database and does not have an obviously accessable database."
  ### String Errors
  se_set_name_unsupported: "Scope \\[This.GetNameOrFallback] cannot be renamed as it does not support an implementation of the set_name effect."
+ se_invalid_comparable_token: "The string character \\[This.GetNameOrFallback] is not a valid comparable token and cannot be compared."
