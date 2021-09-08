@@ -5,6 +5,10 @@
 			"path": "source"
 		},
 		{
+			"name": "SE Keyboard",
+			"path": "keyboard"
+		},
+		{
 			"name": "SE Test",
 			"path": "test"
 		},
@@ -25,7 +29,11 @@
 		],
 		"files.exclude": {
 			"**/source": true,
-			"**/test": true
+			"**/test": true,
+			"**/keyboard": true
+		},
+		"files.associations": {
+			"TODO.txt": "[plaintext]"
 		}
 	}
 }

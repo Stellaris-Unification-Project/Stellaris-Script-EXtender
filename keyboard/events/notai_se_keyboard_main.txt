@@ -1,0 +1,1149 @@
+namespace = se_keyboard
+
+country_event = {
+	id = se_keyboard.0
+	is_triggered_only = yes
+	hide_window = no
+	title = se_keyboard_title
+	desc = se_keyboard_desc
+	trigger = {
+		is_ai = no
+		se_is_keyboard_active_trigger = yes
+	}
+	# Setting up necessary values and ensuring functionality for the keyboard
+	immediate = {
+		set_country_flag = se_keyboard_enabled
+		se_get_or_create_database = { bound_to = this }
+		event_target:se_return_value = { save_event_target_as = se_player_database }
+		se_clear_return_target = yes
+		se_new_comparable_string = {
+			identifier = se_player_input
+			overwrite = yes
+		}
+		event_target:se_return_value = { save_event_target_as = se_keyboard_desc_string }
+		se_get_list_header = { identifier = se_player_input }
+		event_target:se_return_value = { save_event_target_as = se_keyboard_input_metadata }
+		event_target:se_player_database = {
+			se_create_database_entry = {
+				identifier = se_player_input_final
+				overwrite = no
+			}
+			event_target:se_return_value = {
+				set_name = ""
+				save_event_target_as = se_keyboard_input
+			}
+		}
+		set_variable = {
+			which = se_keyboard_current_index
+			value = 0
+		}
+	}
+	### Keyboard options
+	# Letters
+	option = {
+		name = se_key_a
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = ca
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = a
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_b
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cb
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = b
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_c
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cc
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = c
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_d
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cd
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = d
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_e
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = ce
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = e
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_f
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cf
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = f
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_g
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cg
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = g
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_h
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = ch
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = h
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_i
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = ci
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = i
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_j
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cj
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = j
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_k
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = ck
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = k
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_l
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cl
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = l
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_m
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cm
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = m
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_n
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cn
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = n
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_o
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = co
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = o
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_p
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cp
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = p
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_q
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cq
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = q
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_r
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cr
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = r
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_s
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cs
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = s
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_t
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = ct
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = t
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_u
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cu
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = u
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_v
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cv
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = v
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_w
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cw
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = w
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_x
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cx
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = x
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_y
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cy
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = y
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_z
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			if = {
+				limit = { se_keyboard_is_capitals_enabled_trigger = yes }
+				se_append_char = {
+					identifier = se_player_input
+					char = cz
+					index = se_keyboard_current_index
+				}
+			}
+			else = {
+				se_append_char = {
+					identifier = se_player_input
+					char = z
+					index = se_keyboard_current_index
+				}
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	### Number Keys
+	option = {
+		name = se_key_zero
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 0
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_one
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 1
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_two
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 2
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_three
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 3
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_four
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 4
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_five
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 5
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_six
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 6
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_seven
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 7
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_eight
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 8
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_nine
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		trigger = { NOT = { has_country_flag = se_shift_enabled } }
+		hidden_effect = {
+			se_append_char = {
+				identifier = se_player_input
+				char = 9
+				index = se_keyboard_current_index
+			}
+			se_keyboard_disable_shift = yes
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	# Special keys
+	option = {
+		name = se_key_exit
+		#custom_gui = ""
+		default_hide_option = yes
+		hidden_effect = {
+			event_target:se_player_database = { se_remove_database_entry = { identifier = se_player_input_final } }
+
+		}
+	}
+	option = {
+		name = se_key_caps
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = { se_keyboard_toggle_caps = yes }
+	}
+	option = {
+		name = se_key_shift
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = { se_keyboard_toggle_shift = yes }
+	}
+	option = {
+		name = se_key_enter
+		#custom_gui = ""
+		hidden_effect = { country_event = { id = se_keyboard.1 } }
+	}
+	option = {
+		name = se_key_space
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			se_append_space = {
+				identifier = se_player_input
+				index = se_keyboard_current_index
+			}
+			se_increment = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_backspace
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			se_remove_char = {
+				identifier = se_player_input
+				index = se_keyboard_current_index
+			}
+			se_decrement = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_delete
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			set_variable = {
+				which = se_keyboard_delete_index
+				value = se_keyboard_current_index
+			}
+			change_variable = {
+				which = se_keyboard_delete_index
+				value = 1
+			}
+			se_remove_char = {
+				identifier = se_player_input
+				index = se_keyboard_delete_index
+			}
+			se_decrement = { variable = se_keyboard_current_index }
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+			}
+		}
+	}
+	option = {
+		name = se_key_left_arrow
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = { se_increment = { variable = se_keyboard_current_index } }
+	}
+	option = {
+		name = se_key_right_arrow
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = { se_increment = { variable = se_keyboard_current_index } }
+	}
+	option = {
+		name = se_key_up_arrow
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			set_variable = {
+				which = se_keyboard_current_index
+				value = {
+					scope = event_target:se_keyboard_input_metadata
+					variable = se_list_item_count
+				}
+			}
+		}
+	}
+	option = {
+		name = se_key_down_arrow
+		#custom_gui = ""
+		is_dialog_only = yes
+		response_text = se_keyboard_desc
+		hidden_effect = {
+			set_variable = {
+				which = se_keyboard_current_index
+				value = 0
+			}
+		}
+	}
+	
+}
+country_event = {
+	id = se_keyboard.1
+	is_triggered_only = yes
+	hide_window = no
+	title = se_keyboard_confirm_title
+	desc = se_keyboard_confirm_desc
+	trigger = { NOT = { has_active_event = { se_keyboard.1 } } }
+	option = {
+		name = se_keyboard_option_accept
+		hidden_effect = {
+			se_return_string = {
+				identifier = se_player_input
+				return_target = event_target:se_keyboard_input
+				destroy_string = yes
+			}
+			clear_variable = se_keyboard_current_index
+			remove_country_flag = se_keyboard_enabled
+		}
+	}
+	option = { name = se_keyboard_option_reject }
+}

@@ -12,10 +12,6 @@
 # bind_to_scope(optional)	- A scope object to lock database access to, default value is this
 ### Access return value by scope - event_target:se_last_created_database or event_target:se_return_value
 se_create_database = {
-	if = {
-		limit = { exists = event_target:se_return_value }
-		clear_global_event_target = se_return_value
-	}
 	[[bind_to_scope]
 	if = {
 		limit = { is_scope_set = event_target:$bind_to_scope$ }
@@ -26,7 +22,7 @@ se_create_database = {
 		$bind_to_scope$ = { save_global_event_target_as = se_hidden_db_owner }
 	}
 	else = {
-		log_error = "se_create_database: $se_invalid_scope_error$ 'bind_to_scope'"
+		log_error = "se_create_database: Invalid scope reference passed by argument: bind_to_scope"
 		break = yes
 	}
 	if = {
@@ -51,13 +47,17 @@ se_create_database = {
 					which = se_database_entry_count
 					value = 0
 				}
+				set_country_flag = se_country_database
 				if = {
 					limit = { exists = event_target:se_last_created_database }
 					clear_global_event_target = se_last_created_database
 				}
-				set_country_flag = se_country_database
 				save_global_event_target_as = se_last_created_database
-				save_global_event_target_as = se_return_target
+				if = {
+					limit = { exists = event_target:se_return_value }
+					clear_global_event_target = se_return_value
+				}
+				save_global_event_target_as = se_return_value
 			}
 		}
 		[[bind_to_scope]
@@ -84,7 +84,7 @@ se_delete_database = {
 		limit = { is_scope_set = event_target:$database$ }
 		event_target:$database$ = { save_global_event_target_as = se_database_to_delete }
 	}
-	else = { log_error = "se_delete_database: $se_invalid_database_reference$ 'database'" }
+	else = { log_error = "se_delete_database: The provided scope is not a database entry: database" }
 	if = {
 		limit = { exists = event_target:se_database_to_delete }
 		event_target:se_database_to_delete = {
@@ -103,7 +103,7 @@ se_delete_database = {
 				destroy_country = yes
 				set_global_flag = se_delete_performed
 			}
-			else = { log_error = "se_delete_database: $se_invalid_database_reference$ 'database'" }
+			else = { log_error = "se_delete_database: The provided scope is not a database entry: database" }
 		}
 	}
 	]
@@ -118,7 +118,7 @@ se_delete_database = {
 			limit = { exists = event_target:$bound_to$ }
 			event_target:$bound_to$ = { save_global_event_target_as = se_hidden_database_to_delete_owner }
 		}
-		else = { log_error = "se_delete_database: $se_invalid_scope_error$ 'bound_to'" }
+		else = { log_error = "se_delete_database: Invalid scope reference passed by argument: bound_to" }
 		if = {
 			limit = { exists = event_target:se_hidden_database_to_delete_owner }
 			random_country = {
@@ -225,11 +225,15 @@ se_get_database = {
 				]
 				[[identifier]has_country_flag = $identifier$]
 			}
-			save_global_event_target_as = se_return_target
+			if = {
+				limit = { exists = event_target:se_return_value }
+				clear_global_event_target = se_return_value
+			}
+			save_global_event_target_as = se_return_value
 		}
 		remove_global_flag = se_optional_parameter_set
 	}
-	else = { log_error = "se_get_database: $se_require_parameter_error$ one of the parameters 'bound_to' or 'identifier' are required to be inputed." }
+	else = { log_error = "se_get_database: A parameter was required but not given, to properly function  one of the parameters bound_to or identifier are required to be inputed." }
 	[[bound_to]
 		if = {
 			limit = { exists = event_target:se_hidden_db_target }
@@ -305,7 +309,7 @@ se_set_database_flag = {
 		}
 		else = { set_country_flag = $flag$ }
 	}
-	else = { log_error = "se_set_database_flag: $se_invalid_database_reference$" }
+	else = { log_error = "se_set_database_flag: The provided scope is not a database entry:" }
 }
 
 ### Removes a flag to a database(accessed by se_get_database)
@@ -319,7 +323,7 @@ se_remove_database_flag = {
 		}
 		remove_country_flag = $flag$
 	}
-	else = { log_error = "se_remove_database_flag: $se_invalid_database_reference$" }
+	else = { log_error = "se_remove_database_flag: The provided scope is not a database entry:" }
 }
 
 ### Creates a new database entry
@@ -386,7 +390,7 @@ se_create_database_entry = {
 			}
 		}
 	}
-	else = { log_error = "se_create_database_entry: $se_invalid_database_reference$" }
+	else = { log_error = "se_create_database_entry: The provided scope is not a database entry:" }
 }
 
 ### Removes an entry from the database
@@ -414,7 +418,7 @@ se_remove_database_entry = {
 			}
 		}
 	}
-	else = { log_error = "se_remove_database_entry: $se_invalid_database_reference$" }
+	else = { log_error = "se_remove_database_entry: The provided scope is not a database entry:" }
 }
 
 ### Retrieves an entry from a database
@@ -439,7 +443,7 @@ se_get_database_entry = {
 			se_set_return_target = yes
 		}
 	}
-	else = { log_error = "se_get_database_entry: $se_invalid_database_reference$" }
+	else = { log_error = "se_get_database_entry: The provided scope is not a database entry:" }
 }
 
 ### Adds a flag to a database entry
@@ -513,7 +517,7 @@ se_set_database_entry_flag = {
 		else = { set_leader_flag = $flag$ }
 		
 	}
-	else = { log_error = "se_add_database_entry_flag: $se_invalid_database_reference$" }
+	else = { log_error = "se_add_database_entry_flag: The provided scope is not a database entry:" }
 }
 
 ### Removes a flag to a database entry
@@ -530,7 +534,7 @@ se_remove_database_entry_flag = {
 		}
 		remove_leader_flag = $flag$
 	}
-	else = { log_error = "se_remove_database_entry_flag: $se_invalid_database_reference$" }
+	else = { log_error = "se_remove_database_entry_flag: The provided scope is not a database entry:" }
 }
 
  #####							#####
@@ -565,7 +569,7 @@ se_get_or_create_database = {
 				has_global_flag = se_param_two_activated
 			}
 		}
-		log_error = "se_get_or_create_database: Neither parameters 'identifier' or 'bound_to' are fulfilled, a database lacking both parameters cannot be managed or found once all scopes point away from it."
+		log_error = "se_get_or_create_database: Neither parameters identifier or bound_to are fulfilled, a database lacking both parameters cannot be managed or found once all scopes point away from it."
 		break = yes
 	}
 	else = {
@@ -582,7 +586,7 @@ se_get_or_create_database = {
 			save_global_event_target_as = se_hidden_database_owner_scope
 		}
 		else = {
-			log_error = "se_get_or_create_database: $se_invalid_scope_error$ 'bound_to'"
+			log_error = "se_get_or_create_database: Invalid scope reference passed by argument: bound_to"
 			break = yes
 		}
 	]
@@ -617,7 +621,7 @@ se_overwrite_database = {
 				has_global_flag = se_param_two_activated
 			}
 		}
-		log_error = "se_get_or_create_database: Neither parameters 'identifier' or 'bound_to' are fulfilled, a database lacking both parameters cannot be managed or found once all scopes point away from it."
+		log_error = "se_get_or_create_database: Neither parameters identifier or bound_to are fulfilled, a database lacking both parameters cannot be managed or found once all scopes point away from it."
 		break = yes
 	}
 	else = {
@@ -634,7 +638,7 @@ se_overwrite_database = {
 			save_global_event_target_as = se_hidden_database_owner_scope
 		}
 		else = {
-			log_error = "se_get_or_create_database: $se_invalid_scope_error$ 'bound_to'"
+			log_error = "se_get_or_create_database: Invalid scope reference passed by argument: bound_to"
 			break = yes
 		}
 	]

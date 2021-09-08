@@ -41,7 +41,7 @@ se_return_string = {
 		event_target:$return_target$ = { save_global_event_target_as = se_hidden_return_scope }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'return_target'."
+		log_error = "se_return_string: Invalid scope reference passed by argument: return_target."
 		break = yes
 	}
 	]
@@ -51,7 +51,7 @@ se_return_string = {
 			set_name = ""
 		}
 		else = {
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope return_target cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 	}
@@ -69,7 +69,7 @@ se_return_string = {
 		event_target:$param_one$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_one'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_one"
 		break = yes
 	}
 	owner = {
@@ -81,7 +81,7 @@ se_return_string = {
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_one cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -109,13 +109,13 @@ se_return_string = {
 		event_target:$param_two$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_two'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_two"
 		break = yes
 	}
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_two cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -142,13 +142,13 @@ se_return_string = {
 		event_target:$param_three$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_three'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_three"
 		break = yes
 	}
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_three cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -175,13 +175,13 @@ se_return_string = {
 		event_target:$param_four$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_four'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_four"
 		break = yes
 	}
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_four cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -208,13 +208,13 @@ se_return_string = {
 		event_target:$param_five$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_five'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_five"
 		break = yes
 	}
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_five cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -241,13 +241,13 @@ se_return_string = {
 		event_target:$param_six$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_six'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_six"
 		break = yes
 	}
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_six cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -274,13 +274,13 @@ se_return_string = {
 		event_target:$param_seven$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_seven'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_seven"
 		break = yes
 	}
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_seven cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -307,13 +307,13 @@ se_return_string = {
 		event_target:$param_eight$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_eight'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_eight"
 		break = yes
 	}
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_eight cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -340,13 +340,13 @@ se_return_string = {
 		event_target:$param_nine$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_nine'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_nine"
 		break = yes
 	}
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_nine cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -373,13 +373,13 @@ se_return_string = {
 		event_target:$param_ten$ = { save_global_event_target_as = se_hidden_string_param }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'param_ten'"
+		log_error = "se_return_string: Invalid scope reference passed by argument: param_ten"
 		break = yes
 	}
 	event_target:se_hidden_string_param = {
 		if = {
 			limit = { NOT = { se_scope_can_be_named = yes } }
-			log_error = "se_return_string: $se_set_name_unsupported$"
+			log_error = "se_return_string: Scope param_ten cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
 		prev.owner = {
@@ -409,7 +409,7 @@ se_return_string = {
 		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
 	}
 	else = {
-		log_error = "se_return_string: $se_invalid_scope_error$ 'bound_to'."
+		log_error = "se_return_string: Invalid scope reference passed by argument: bound_to."
 		break = yes
 	}
 	event_target:se_hidden_string_owner_scope = {
@@ -418,11 +418,11 @@ se_return_string = {
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
-		log_error = "se_return_string: $se_unable_to_access_database_error$"
+		log_error = "se_return_string: Scope this is not a database and does not have an obviously accessable database."
 		break = yes
 	}
-	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
-	event_target:se_hidden_scoped_database = {
+	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
+	event_target:se_hidden_scoped_string_database = {
 		se_clear_return_target = yes
 		se_get_enumerator = { identifier = $identifier$ }
 		event_target:se_return_value = {
@@ -459,7 +459,7 @@ se_return_string = {
 			}
 		}
 	}
-	clear_global_event_target = se_hidden_scoped_database
+	clear_global_event_target = se_hidden_scoped_string_database
 	clear_global_event_target = se_hidden_return_scope
 	[[bound_to]
 	}
@@ -494,7 +494,7 @@ se_append_space = {
 		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
 	}
 	else = {
-		log_error = "se_new_string: $se_invalid_scope_error$ 'bound_to'."
+		log_error = "se_new_string: Invalid scope reference passed by argument: bound_to."
 		break = yes
 	}
 	event_target:se_hidden_string_owner_scope = {
@@ -503,10 +503,10 @@ se_append_space = {
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { exists = event_target:se_return_value }
-		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
+		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
 	}
-	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_database } }
-	event_target:se_hidden_scoped_database = {
+	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_string_database } }
+	event_target:se_hidden_scoped_string_database = {
 		[[index]
 		set_variable = {
 			which = se_temp_append_index
@@ -625,7 +625,7 @@ se_append_space = {
 		# Do some modulus and divison to chunk into 3s, 2s and singular space groups
 		[[index]clear_variable = se_temp_append_index]
 	}
-	clear_global_event_target = se_hidden_scoped_database
+	clear_global_event_target = se_hidden_scoped_string_database
 	[[bound_to]
 	}
 	clear_global_event_target = se_hidden_string_owner_scope
@@ -658,7 +658,7 @@ se_new_string = {
 		event_target:$bind_to_scope$ = { save_global_event_target_as = se_hidden_string_owner_scope }
 	}
 	else = {
-		log_error = "se_new_string: $se_invalid_scope_error$ 'bind_to_scope'."
+		log_error = "se_new_string: Invalid scope reference passed by argument: bind_to_scope."
 		break = yes
 	}
 	event_target:se_hidden_string_owner_scope = {
@@ -667,9 +667,9 @@ se_new_string = {
 		limit = { se_scope_can_be_named = yes }
 		se_clear_return_target = yes
 		se_get_or_create_database = { bound_to = this }
-		event_target:se_return_value = { save_global_event_target_as = se_database_target }
+		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
 		se_clear_return_target = yes
-		event_target:se_database_target = {
+		event_target:se_hidden_scoped_string_database = {
 			se_create_list = {
 				identifier = $identifier$
 				overwrite = yes
@@ -677,10 +677,10 @@ se_new_string = {
 		}
 		event_target:se_return_value = {
 			se_set_database_entry_flag = { flag = se_string_of_@prev }
-			[[text]set_name = $text$]
+			[[text]set_name = "."text$]
 		}
 	}
-	else = { log_error = "se_append_stringbuilder: $se_set_name_unsupported$" }
+	else = { log_error = "se_append_stringbuilder: Scope bind_to_scope cannot be renamed as it does not support an implementation of the set_name effect." }
 	[[bind_to_scope]
 	}
 	clear_global_event_target = se_hidden_string_owner_scope
@@ -710,7 +710,7 @@ se_append_text = {
 		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
 	}
 	else = {
-		log_error = "se_append_text: $se_invalid_scope_error$ 'bound_to'."
+		log_error = "se_append_text: Invalid scope reference passed by argument: bound_to."
 		break = yes
 	}
 	event_target:se_hidden_string_owner_scope = {
@@ -719,12 +719,12 @@ se_append_text = {
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
-		log_error = "se_append_text: $se_unable_to_access_database_error$"
+		log_error = "se_append_text: Scope this is not a database and does not have an obviously accessable database."
 		break = yes
 	}
-	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
+	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
 	se_clear_return_target = yes
-	event_target:se_hidden_scoped_database = {
+	event_target:se_hidden_scoped_string_database = {
 		[[index]
 		set_variable = {
 			which = se_temp_append_index
@@ -754,10 +754,10 @@ se_append_text = {
 			identifier = $identifier$
 			[[index]index = se_temp_append_index]
 		}
-		event_target:se_return_value = { set_name = $text$ }
+		event_target:se_return_value = { set_name = "."text$ }
 		[[index]clear_variable = se_temp_append_index]
 	}
-	clear_global_event_target = se_hidden_scoped_database
+	clear_global_event_target = se_hidden_scoped_string_database
 	[[bound_to]
 	}
 	clear_global_event_target = se_hidden_string_owner_scope
@@ -792,17 +792,17 @@ se_append_parameter = {
 		limit = { is_scope_set = event_target:$bound_to$ }
 		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
 	}
-	else = { log_error = "se_new_string: $se_invalid_scope_error$ 'bound_to'." }
+	else = { log_error = "se_new_string: Invalid scope reference passed by argument: bound_to." }
 	event_target:se_hidden_string_owner_scope = {
 	]
 	se_clear_return_target = yes
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { exists = event_target:se_return_value }
-		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
+		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
 	}
-	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_database } }
-	event_target:se_hidden_scoped_database = {
+	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_string_database } }
+	event_target:se_hidden_scoped_string_database = {
 		[[index]
 		set_variable = {
 			which = se_temp_append_index
@@ -826,7 +826,7 @@ se_append_parameter = {
 		se_clear_return_target = yes
 		[[index]clear_variable = se_temp_append_index]
 	}
-	clear_global_event_target = se_hidden_scoped_database
+	clear_global_event_target = se_hidden_scoped_string_database
 	[[bound_to]
 	}
 	clear_global_event_target = se_hidden_string_owner_scope
@@ -845,7 +845,7 @@ se_append_parameter = {
 ### Creates a new string which is capable of being compared to another string
 ### Parameters
 # identifier 				- A database unique identifier for the given string
-# char(optional)			- The root character in the string, NOTE that a char is a single ascii character, such as 'a', '1', or '!'
+# char(optional)			- The root character in the string, NOTE that a char is a single ascii character, such as a, 1, or !
 # bind_to_scope(optional) 	- Binds the string to the set object, default value is this
 # overwrite(optional) 		- Determines whether or not to delete any existing string with the same identifier, default value is no
 se_new_comparable_string = {
@@ -858,32 +858,37 @@ se_new_comparable_string = {
 		limit = { is_scope_set = event_target:$bind_to_scope$ }
 		event_target:$bind_to_scope$ = { save_global_event_target_as = se_hidden_string_owner_scope }
 	}
-	else = { log_error = "se_new_string: $se_invalid_scope_error$ 'bind_to_scope'." }
+	else = { log_error = "se_new_comparable_string: Invalid scope reference passed by argument: bind_to_scope." }
 	event_target:se_hidden_string_owner_scope = {
 	]
 	if = {
 		limit = { se_scope_can_be_named = yes }
 		se_ensure_string_dictionary_exists = yes
 		se_clear_return_target = yes
-		se_create_database = {
-			bind_to_scope = $bind_to_scope$
-			overwrite = no
+		se_get_database = { bound_to = this }
+		if = {
+			limit = { exists = event_target:se_return_value }
+			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
 		}
-		event_target:se_return_value = { save_global_event_target_as = se_database_target }
+		else = {
+			se_create_database = { bind_to_scope = this }
+			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
+		}
 		se_clear_return_target = yes
-		event_target:se_database_target = {
+		event_target:se_hidden_scoped_string_database = {
 			se_create_list = {
 				identifier = $identifier$
 				overwrite = yes
 			}
 		}
+		clear_global_event_target = se_hidden_scoped_string_database
 		event_target:se_return_value = {
 			se_set_database_entry_flag = { flag = se_string_of_@prev }
 			se_set_database_entry_flag = { flag = se_comparable_string }
-			[[char]set_name = $char$]
+			[[char]set_name = "."char$]
 		}
 	}
-	else = { log_error = "se_append_stringbuilder: $se_set_name_unsupported$" }
+	else = { log_error = "se_new_comparable_string: Scope bind_to_scope cannot be renamed as it does not support an implementation of the set_name effect." }
 	[[bind_to_scope]
 	}
 	clear_global_event_target = se_hidden_string_owner_scope
@@ -893,7 +898,7 @@ se_new_comparable_string = {
 ### Appends a new character in a method that it can be compared vs other strings
 ### Parameters
 # identifier 			- A unique identifier for the given string
-# char					- The character to add to the string, NOTE that a char is a single ascii character, such as 'a', '1', or '!'
+# char					- The character to add to the string, NOTE that a char is a single ascii character, such as a, 1, or !
 # bound_to(optional) 	- The scope that the associated string is stored to
 # index(optional) 		- The index in the string to append this text, default value is current count - 1
 se_append_char = {
@@ -925,26 +930,25 @@ se_append_char = {
 		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
 	}
 	else = {
-		log_error = "se_append_char: $se_invalid_scope_error$ 'bound_to'."
+		log_error = "se_append_char: Invalid scope reference passed by argument: bound_to."
 		break = yes
 	}
 	event_target:se_hidden_string_owner_scope = {
 	]
-	se_clear_return_target = yes
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
-		log_error = "se_append_char: $se_unable_to_access_database_error$"
+		log_error = "se_append_char: Scope this is not a database and does not have an obviously accessable database."
 		break = yes
 	}
-	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
-	event_target:se_hidden_scoped_database = {
+	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
+	event_target:se_hidden_scoped_string_database = {
 		[[index]
 		set_variable = {
 			which = se_temp_append_index
 			value = {
 				scope = prev[[bound_to].prev]
-				value = se_append_index
+				variable = se_append_index
 			}
 		}
 		]
@@ -972,639 +976,568 @@ se_append_char = {
 	se_clear_return_target = yes
 }
 
+### Removes a character from the comparable string
+### Parameters
+# identifier			- A unique identifier for the given string
+# index					- The index of which character to remove
+# bound_to(optional)	- The scope that the associated string is stored to
+se_remove_char = {
+	set_variable = {
+		which = se_hidden_remove_index
+		value = $index$
+	}
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
+	}
+	else = {
+		log_error = "se_remove_char: Invalid scope reference passed by argument: bound_to."
+		break = yes
+	}
+	event_target:se_hidden_string_owner_scope = {
+	]
+	se_get_database = { bound_to = this }
+	if = {
+		limit = { NOT = { exists = event_target:se_return_value } }
+		log_error = "se_remove_char: Scope this is not a database and does not have an obviously accessable database."
+		break = yes
+	}
+	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
+	event_target:se_hidden_scoped_string_database = {
+		set_variable = {
+			which = se_hidden_remove_index
+			value = prev[[bound_to].prev]
+		}
+		se_remove_list_entry = {
+			identifier = $identifier$
+			index = se_hidden_remove_index
+			delete = yes
+		}
+		clear_variable = se_hidden_remove_index
+	}
+	clear_global_event_target = se_hidden_scoped_string_database
+	[[bound_to]
+	}
+	clear_global_event_target = se_hidden_string_owner_scope
+	]
+	clear_variable = se_hidden_remove_index
+}
+
 ### Internal use, do not use outside of code within this mod
 se_ensure_string_dictionary_exists = {
-	se_clear_return_target = yes
 	if = {
 		limit = { NOT = { exists = event_target:se_char_dictionary } }
-		se_create_database = {
-			identifier = se_internal_string_dictionary
-			overwrite = no
+		se_get_database = { identifier = se_internal_string_dictionary }
+		if = {
+			limit = { NOT = { exists = event_target:se_return_value } }
+			se_create_database = { identifier = se_internal_string_dictionary }
 		}
-		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database }
-		event_target:se_hidden_scoped_database = {
+		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
+		se_clear_return_target = yes
+		event_target:se_hidden_scoped_string_database = {
 			# Lowercase Letters
-			se_create_database_entry = {
-				identifier = se_char_a
-				name = a
-			}
+			se_create_database_entry = { identifier = se_char_a }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 0
 				}
+				set_name = "a"
 			}
-			se_create_database_entry = {
-				identifier = se_char_b
-				name = b
-			}
+			se_create_database_entry = { identifier = se_char_b }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 1
 				}
+				set_name = "b"
 			}
-			se_create_database_entry = {
-				identifier = se_char_c
-				name = c
-			}
+			se_create_database_entry = { identifier = se_char_c }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 2
 				}
+				set_name = "c"
 			}
-			se_create_database_entry = {
-				identifier = se_char_d
-				name = d
-			}
+			se_create_database_entry = { identifier = se_char_d }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 3
 				}
+				set_name = "d"
 			}
-			se_create_database_entry = {
-				identifier = se_char_e
-				name = e
-			}
+			se_create_database_entry = { identifier = se_char_e }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 4
 				}
+				set_name = "e"
 			}
-			se_create_database_entry = {
-				identifier = se_char_f
-				name = f
-			}
+			se_create_database_entry = { identifier = se_char_f }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 5
 				}
+				set_name = "f"
 			}
-			se_create_database_entry = {
-				identifier = se_char_g
-				name = g
-			}
+			se_create_database_entry = { identifier = se_char_g }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 6
 				}
+				set_name = "g"
 			}
-			se_create_database_entry = {
-				identifier = se_char_h
-				name = h
-			}
+			se_create_database_entry = { identifier = se_char_h }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 7
 				}
+				set_name = "h"
 			}
-			se_create_database_entry = {
-				identifier = se_char_i
-				name = i
-			}
+			se_create_database_entry = { identifier = se_char_i }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 8
 				}
+				set_name = "i"
 			}
-			se_create_database_entry = {
-				identifier = se_char_j
-				name = j
-			}
+			se_create_database_entry = { identifier = se_char_j }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 9
 				}
+				set_name = "j"
 			}
-			se_create_database_entry = {
-				identifier = se_char_k
-				name = k
-			}
+			se_create_database_entry = { identifier = se_char_k }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 10
 				}
+				set_name = "k"
 			}
-			se_create_database_entry = {
-				identifier = se_char_l
-				name = l
-			}
+			se_create_database_entry = { identifier = se_char_l }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 11
 				}
+				set_name = "l"
 			}
-			se_create_database_entry = {
-				identifier = se_char_m
-				name = m
-			}
+			se_create_database_entry = { identifier = se_char_m }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 12
 				}
+				set_name = "m"
 			}
-			se_create_database_entry = {
-				identifier = se_char_n
-				name = n
-			}
+			se_create_database_entry = { identifier = se_char_n }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 13
 				}
+				set_name = "n"
 			}
-			se_create_database_entry = {
-				identifier = se_char_o
-				name = o
-			}
+			se_create_database_entry = { identifier = se_char_o }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 14
 				}
+				set_name = "o"
 			}
-			se_create_database_entry = {
-				identifier = se_char_p
-				name = p
-			}
+			se_create_database_entry = { identifier = se_char_p }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 15
 				}
+				set_name = "p"
 			}
-			se_create_database_entry = {
-				identifier = se_char_q
-				name = q
-			}
+			se_create_database_entry = { identifier = se_char_q }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 16
 				}
+				set_name = "q"
 			}
-			se_create_database_entry = {
-				identifier = se_char_r
-				name = r
-			}
+			se_create_database_entry = { identifier = se_char_r }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 17
 				}
+				set_name = "r"
 			}
-			se_create_database_entry = {
-				identifier = se_char_s
-				name = s
-			}
+			se_create_database_entry = { identifier = se_char_s }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 18
 				}
+				set_name = "s"
 			}
-			se_create_database_entry = {
-				identifier = se_char_t
-				name = t
-			}
+			se_create_database_entry = { identifier = se_char_t }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 19
 				}
+				set_name = "t"
 			}
-			se_create_database_entry = {
-				identifier = se_char_u
-				name = u
-			}
+			se_create_database_entry = { identifier = se_char_u }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 20
 				}
+				set_name = "u"
 			}
-			se_create_database_entry = {
-				identifier = se_char_v
-				name = v
-			}
+			se_create_database_entry = { identifier = se_char_v }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 21
 				}
+				set_name = "v"
 			}
-			se_create_database_entry = {
-				identifier = se_char_w
-				name = w
-			}
+			se_create_database_entry = { identifier = se_char_w }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 22
 				}
+				set_name = "w"
 			}
-			se_create_database_entry = {
-				identifier = se_char_x
-				name = x
-			}
+			se_create_database_entry = { identifier = se_char_x }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 23
 				}
+				set_name = "x"
 			}
-			se_create_database_entry = {
-				identifier = se_char_y
-				name = y
-			}
+			se_create_database_entry = { identifier = se_char_y }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 24
 				}
+				set_name = "y"
 			}
-			se_create_database_entry = {
-				identifier = se_char_z
-				name = z
-			}
+			se_create_database_entry = { identifier = se_char_z }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 25
 				}
+				set_name = "z"
 			}
 			# Capital Letters
-			se_create_database_entry = {
-				identifier = se_char_A
-				name = A
-			}
+			se_create_database_entry = { identifier = se_char_ca }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 26
 				}
+				set_name = "A"
 			}
-			se_create_database_entry = {
-				identifier = se_char_B
-				name = B
-			}
+			se_create_database_entry = { identifier = se_char_cb }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 27
 				}
+				set_name = "B"
 			}
-			se_create_database_entry = {
-				identifier = se_char_C
-				name = C
-			}
+			se_create_database_entry = { identifier = se_char_cc }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 28
 				}
+				set_name = "C"
 			}
-			se_create_database_entry = {
-				identifier = se_char_D
-				name = D
-			}
+			se_create_database_entry = { identifier = se_char_cd }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 29
 				}
+				set_name = "D"
 			}
-			se_create_database_entry = {
-				identifier = se_char_E
-				name = E
-			}
+			se_create_database_entry = { identifier = se_char_ce }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 30
 				}
+				set_name = "E"
 			}
-			se_create_database_entry = {
-				identifier = se_char_F
-				name = F
-			}
+			se_create_database_entry = { identifier = se_char_cf }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 31
 				}
+				set_name = "F"
 			}
-			se_create_database_entry = {
-				identifier = se_char_G
-				name = G
-			}
+			se_create_database_entry = { identifier = se_char_cg }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 32
 				}
+				set_name = "G"
 			}
-			se_create_database_entry = {
-				identifier = se_char_H
-				name = H
-			}
+			se_create_database_entry = { identifier = se_char_ch }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 33
 				}
+				set_name = "H"
 			}
-			se_create_database_entry = {
-				identifier = se_char_I
-				name = I
-			}
+			se_create_database_entry = { identifier = se_char_ci }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 34
 				}
+				set_name = "I"
 			}
-			se_create_database_entry = {
-				identifier = se_char_J
-				name = J
-			}
+			se_create_database_entry = { identifier = se_char_cj }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 35
 				}
+				set_name = "J"
 			}
-			se_create_database_entry = {
-				identifier = se_char_K
-				name = K
-			}
+			se_create_database_entry = { identifier = se_char_ck }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 36
 				}
+				set_name = "K"
 			}
-			se_create_database_entry = {
-				identifier = se_char_L
-				name = L
-			}
+			se_create_database_entry = { identifier = se_char_cl }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 37
 				}
+				set_name = "L"
 			}
-			se_create_database_entry = {
-				identifier = se_char_M
-				name = M
-			}
+			se_create_database_entry = { identifier = se_char_cm }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 38
 				}
+				set_name = "M"
 			}
-			se_create_database_entry = {
-				identifier = se_char_N
-				name = N
-			}
+			se_create_database_entry = { identifier = se_char_cn }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 39
 				}
+				set_name = "N"
 			}
-			se_create_database_entry = {
-				identifier = se_char_O
-				name = O
-			}
+			se_create_database_entry = { identifier = se_char_co }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 40
 				}
+				set_name = "O"
 			}
-			se_create_database_entry = {
-				identifier = se_char_P
-				name = P
-			}
+			se_create_database_entry = { identifier = se_char_cp }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 41
 				}
+				set_name = "P"
 			}
-			se_create_database_entry = {
-				identifier = se_char_Q
-				name = Q
-			}
+			se_create_database_entry = { identifier = se_char_cq }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 42
 				}
+				set_name = "Q"
 			}
-			se_create_database_entry = {
-				identifier = se_char_R
-				name = R
-			}
+			se_create_database_entry = { identifier = se_char_cr }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 43
 				}
+				set_name = "R"
 			}
-			se_create_database_entry = {
-				identifier = se_char_S
-				name = S
-			}
+			se_create_database_entry = { identifier = se_char_cs }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 44
 				}
+				set_name = "S"
 			}
-			se_create_database_entry = {
-				identifier = se_char_T
-				name = T
-			}
+			se_create_database_entry = { identifier = se_char_ct }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 45
 				}
+				set_name = "T"
 			}
-			se_create_database_entry = {
-				identifier = se_char_U
-				name = U
-			}
+			se_create_database_entry = { identifier = se_char_cu }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 46
 				}
+				set_name = "U"
 			}
-			se_create_database_entry = {
-				identifier = se_char_V
-				name = V
-			}
+			se_create_database_entry = { identifier = se_char_cv }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 47
 				}
+				set_name = "V"
 			}
-			se_create_database_entry = {
-				identifier = se_char_W
-				name = W
-			}
+			se_create_database_entry = { identifier = se_char_cw }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 48
 				}
+				set_name = "W"
 			}
-			se_create_database_entry = {
-				identifier = se_char_X
-				name = X
-			}
+			se_create_database_entry = { identifier = se_char_cx }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 49
 				}
+				set_name = "X"
 			}
-			se_create_database_entry = {
-				identifier = se_char_Y
-				name = Y
-			}
+			se_create_database_entry = { identifier = se_char_cy }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 50
 				}
+				set_name = "Y"
 			}
-			se_create_database_entry = {
-				identifier = se_char_Z
-				name = Z
-			}
+			se_create_database_entry = { identifier = se_char_cz }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 51
 				}
+				set_name = "Z"
 			}
 			# Number Chars
-			se_create_database_entry = {
-				identifier = se_char_0
-				name = 0
-			}
+			se_create_database_entry = { identifier = se_char_0 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 52
 				}
+				set_name = "0"
 			}
-			se_create_database_entry = {
-				identifier = se_char_1
-				name = 1
-			}
+			se_create_database_entry = { identifier = se_char_1 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 53
 				}
+				set_name = "1"
 			}
-			se_create_database_entry = {
-				identifier = se_char_2
-				name = 2
-			}
+			se_create_database_entry = { identifier = se_char_2 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 54
 				}
+				set_name = "2"
 			}
-			se_create_database_entry = {
-				identifier = se_char_3
-				name = 3
-			}
+			se_create_database_entry = { identifier = se_char_3 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 55
 				}
+				set_name = "3"
 			}
-			se_create_database_entry = {
-				identifier = se_char_4
-				name = 4
-			}
+			se_create_database_entry = { identifier = se_char_4 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 56
 				}
+				set_name = "4"
 			}
-			se_create_database_entry = {
-				identifier = se_char_5
-				name = 5
-			}
+			se_create_database_entry = { identifier = se_char_5 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 57
 				}
+				set_name = "5"
 			}
-			se_create_database_entry = {
-				identifier = se_char_6
-				name = 6
-			}
+			se_create_database_entry = { identifier = se_char_6 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 58
 				}
+				set_name = "6"
 			}
-			se_create_database_entry = {
-				identifier = se_char_7
-				name = 7
-			}
+			se_create_database_entry = { identifier = se_char_7 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 59
 				}
+				set_name = "7"
 			}
-			se_create_database_entry = {
-				identifier = se_char_8
-				name = 8
-			}
+			se_create_database_entry = { identifier = se_char_8 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 60
 				}
+				set_name = "8"
 			}
-			se_create_database_entry = {
-				identifier = se_char_9
-				name = 9
-			}
+			se_create_database_entry = { identifier = se_char_9 }
 			event_target:se_return_value = {
 				set_variable = {
 					which = se_character_value
 					value = 61
 				}
+				set_name = "9"
 			}
 			# Special Chars
 			se_create_database_entry = { identifier = se_char_space }
@@ -1616,8 +1549,8 @@ se_ensure_string_dictionary_exists = {
 				set_name = " "
 			}
 			save_global_event_target_as = se_char_dictionary
-			}
-		clear_global_event_target = se_hidden_scoped_database
+		}
+		clear_global_event_target = se_hidden_scoped_string_database
 	}
 }
 
@@ -1640,7 +1573,7 @@ se_compare_string = {
 		event_target:$compare_database$ = { save_global_event_target_as = se_hidden_compare_database }
 	}
 	else = {
-		log_error = "se_compare_string: $se_invalid_database_reference$ 'compare_database'"
+		log_error = "se_compare_string: The provided scope is not a database entry: compare_database"
 		break = yes
 	}
 	]
@@ -1656,7 +1589,7 @@ se_compare_string = {
 			event_target:$compare_database$ = { save_global_event_target_as = se_hidden_compare_owner }
 		}
 		else = {
-			log_error = "se_compare_string: $se_invalid_database_reference$ 'compare_database'"
+			log_error = "se_compare_string: The provided scope is not a database entry: compare_database"
 			break = yes
 		}
 		event_target:se_hidden_compare_owner = {
@@ -1666,7 +1599,7 @@ se_compare_string = {
 		if = {
 			limit = { NOT = { exists = event_target:se_return_value } }
 			clear_global_event_target = se_hidden_compare_owner
-			log_error = "se_compare_string: $se_invalid_scope_error$ 'compare_owner'"
+			log_error = "se_compare_string: Invalid scope reference passed by argument: compare_owner"
 			break = yes
 		}
 		event_target:se_return_value = { save_global_event_target_as = se_hidden_compare_database }
@@ -1683,7 +1616,7 @@ se_compare_string = {
 		event_target:$bound_to$ = { save_global_event_target_as = se_hidden_string_owner_scope }
 	}
 	else = {
-		log_error = "se_compare_string: $se_invalid_scope_error$ 'bound_to'."
+		log_error = "se_compare_string: Invalid scope reference passed by argument: bound_to."
 		break = yes
 	}
 	event_target:se_hidden_string_owner_scope = {
@@ -1692,27 +1625,27 @@ se_compare_string = {
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
-		log_error = "se_compare_string: $se_unable_to_access_database_error$"
+		log_error = "se_compare_string: Scope this is not a database and does not have an obviously accessable database."
 		break = yes
 	}
 	event_target:se_return_value = {
-		save_global_event_target_as = se_hidden_scoped_database
+		save_global_event_target_as = se_hidden_scoped_string_database
 		if = {
 			limit = { NOT = { exists = event_target:se_hidden_compare_database } }
 			save_global_event_target_as = se_hidden_compare_database
 		}
 	}
-	event_target:se_hidden_scoped_database = {
+	event_target:se_hidden_scoped_string_database = {
 		se_clear_return_target = yes
 		se_get_enumerator = { identifier = $identifier$ }]
 		if = {
 			limit = { NOT = { exists = event_target:se_return_value } }
-			log_error = "se_compare_string: $se_unable_to_access_database_error$"
+			log_error = "se_compare_string: Scope this is not a database and does not have an obviously accessable database."
 			break = yes
 		}
-		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_database_enumerator }
+		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database_enumerator }
 		se_clear_return_target = yes
-		event_target:se_hidden_scoped_database_enumerator = {
+		event_target:se_hidden_scoped_string_database_enumerator = {
 			se_enumerator_return_current = yes
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_char_value }
 			se_clear_return_target = yes
@@ -1752,14 +1685,14 @@ se_compare_string = {
 								}
 								else = {
 									se_internal_set_comparison_false = yes
-									log_error = "se_compare_string: $se_invalid_comparable_token$"
+									log_error = "se_compare_string: The string character is not a valid comparable token and cannot be compared."
 									break = yes
 								}
 							}
 						}
 					}
 					else = {
-						log_error = "se_compare_string: $se_invalid_comparable_token$"
+						log_error = "se_compare_string: The string character is not a valid comparable token and cannot be compared."
 						break = yes
 					}
 				}
@@ -1771,7 +1704,7 @@ se_compare_string = {
 			}
 		}
 	}
-	clear_global_event_target = se_hidden_scoped_database
+	clear_global_event_target = se_hidden_scoped_string_database
 	clear_global_event_target = se_hidden_compare_database
 	[[bound_to]
 	}

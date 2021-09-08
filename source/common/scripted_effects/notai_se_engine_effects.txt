@@ -31,8 +31,8 @@ se_enable_pulse = {
 	]
 }
 
-### Enables script extender's auto update detector feature
-### Triggering this will result in an intake of all mod's update registrations
+### Enables script extenders auto update detector feature
+### Triggering this will result in an intake of all mods update registrations
 se_enable_mod_update_detector = {
 	if = {
 		limit = { NOT = { has_global_flag = se_mod_update_enabled } }

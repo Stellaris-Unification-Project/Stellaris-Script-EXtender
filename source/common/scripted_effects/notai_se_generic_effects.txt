@@ -145,7 +145,7 @@ se_random_variable = {
 			clear_variable = se_rng_decimal_places
 		}
 		[[decimals]
-			### Decimals on variables can only go as low as five places (0.00000), any lower is not supported so we won't bother calculating it
+			### Decimals on variables can only go as low as five places (0.00000), any lower is not supported so we wont bother calculating it
 			else_if = {
 				limit = {
 					check_variable = {
@@ -364,7 +364,7 @@ se_random_variable = {
 				clear_variable = se_rng_min_temp
 			}
 		]
-		### If decimal places still haven't been assigned we assume 0
+		### If decimal places still havent been assigned we assume 0
 		set_variable = {
 			which = se_rng_number
 			value = 0

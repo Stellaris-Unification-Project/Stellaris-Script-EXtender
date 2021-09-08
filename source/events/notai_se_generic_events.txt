@@ -14,7 +14,7 @@ namespace = se_setup
 			name = se_database_species_name
 			class = MACHINE
 			traits = {}
-			effect = { se_save_as_global_event_target = { event_target_name = se_database_entry_species } }
+			effect = { se_save_global_event_target_as = { event_target_name = se_database_entry_species } }
 		}
 		se_create_database = yes
 		event_target:se_last_created_database = {
@@ -23,10 +23,10 @@ namespace = se_setup
 				value = 1
 			}
 			se_set_database_flag = { flag = se_global_database }
-			se_save_as_global_event_target = { event_target_name = se_global_database }
+			se_save_global_event_target_as = { event_target_name = se_global_database }
 		}
 		se_create_event_country = { identifier = se_private_event_country }
-		event_target:se_return_value = { se_save_as_global_event_target = { event_target_name = se_event_country } }
+		event_target:se_return_value = { se_save_global_event_target_as = { event_target_name = se_event_country } }
 		se_clear_return_target = yes
 	}
 }
@@ -57,7 +57,7 @@ event = {
 namespace = se_mod_auto_update
 
 ### On game loaded, register mod version
-# if mod version doesn't already exist
+# if mod version doesnt already exist
 # fire on_mod_self_update with that version number and the last number it had found
 # else do nothing
 

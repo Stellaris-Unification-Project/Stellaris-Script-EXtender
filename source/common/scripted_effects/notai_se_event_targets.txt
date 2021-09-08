@@ -35,7 +35,7 @@ se_save_scoped_event_target = {
 		}
 	}
 	else = {
-		log_error = "se_save_scoped_event_target: $se_invalid_scope_error$ 'target_owner'"
+		log_error = "se_save_scoped_event_target: Invalid scope reference passed by argument: target_owner"
 		break = yes
 	}
 	se_clear_return_target = yes
@@ -300,10 +300,10 @@ se_get_scoped_event_target_value = {
 				}
 				else = { event_target:se_hidden_database_target = { se_remove_database_entry = { identifier = $event_target_name$ } } }
 			}
-			else = { log_error = "se_get_scoped_event_target_value: Scope 'this' does not have a valid event target with the given identifier." }
+			else = { log_error = "se_get_scoped_event_target_value: Scope this does not have a valid event target with the given identifier." }
 		}
 	}
-	else = { log_error = "se_get_scoped_event_target_value: $se_unable_to_access_database_error$" }
+	else = { log_error = "se_get_scoped_event_target_value: Scope this is not a database and does not have an obviously accessable database." }
 	if = {
 		limit = { exists = event_target:se_hidden_database_target }
 		clear_global_event_target = se_hidden_database_target
@@ -679,7 +679,7 @@ se_delete_scoped_event_target = {
 			}
 			se_clear_return_target = yes
 		}
-		else = { log_error = "se_delete_scoped_event_target: Scope 'this' is not a database and does not have an obviously accessable database" }
+		else = { log_error = "se_delete_scoped_event_target: Scope this is not a database and does not have an obviously accessable database" }
 	}
 	event_target:se_hidden_database_target = { se_remove_database_entry = { identifier = $event_target_name$ } }
 	se_clear_return_target = yes

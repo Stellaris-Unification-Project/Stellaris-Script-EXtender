@@ -1,10 +1,2 @@
 ﻿l_english:
- ### Generic Errors
- se_invalid_scope_error: "Invalid scope reference passed by argument:"
- se_require_parameter_error: "A parameter was required but not given, to properly function "
- ### Database Errors
- se_invalid_database_reference: "The provided scope is not a database entry: "
- se_unable_to_access_database_error: "Scope 'this' is not a database and does not have an obviously accessable database."
- ### String Errors
- se_set_name_unsupported: "Scope \\[This.GetNameOrFallback] cannot be renamed as it does not support an implementation of the set_name effect."
- se_invalid_comparable_token: "The string character \\[This.GetNameOrFallback] is not a valid comparable token and cannot be compared."
+ 

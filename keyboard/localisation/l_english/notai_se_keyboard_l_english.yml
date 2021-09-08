@@ -1,0 +1,127 @@
+﻿l_english:
+ 
+  #####             #####
+ ##### Main Keyboard #####
+  #####             #####
+
+ ### Primary Text
+ se_keyboard_title:			"Script Extender Keyboard"			# Event title
+ se_keyboard_empty_text:	"§gUse your keyboard to fill§!"		# Empty filler text
+ se_keyboard_user_text:		"[se_final_input_field.GetName]"	# Currently filled text
+ se_keyboard_desc:			"[This.GetInputOrDefault]"			# Event description/input field
+ ### Letter Keys
+ se_key_a: "[This.GetLetterA]"
+ se_key_b: "[This.GetLetterB]"
+ se_key_c: "[This.GetLetterC]"
+ se_key_d: "[This.GetLetterD]"
+ se_key_e: "[This.GetLetterE]"
+ se_key_f: "[This.GetLetterF]"
+ se_key_g: "[This.GetLetterG]"
+ se_key_h: "[This.GetLetterH]"
+ se_key_i: "[This.GetLetterI]"
+ se_key_j: "[This.GetLetterJ]"
+ se_key_k: "[This.GetLetterK]"
+ se_key_l: "[This.GetLetterL]"
+ se_key_m: "[This.GetLetterM]"
+ se_key_n: "[This.GetLetterN]"
+ se_key_o: "[This.GetLetterO]"
+ se_key_p: "[This.GetLetterP]"
+ se_key_q: "[This.GetLetterQ]"
+ se_key_r: "[This.GetLetterR]"
+ se_key_s: "[This.GetLetterS]"
+ se_key_t: "[This.GetLetterT]"
+ se_key_u: "[This.GetLetterU]"
+ se_key_v: "[This.GetLetterV]"
+ se_key_w: "[This.GetLetterW]"
+ se_key_x: "[This.GetLetterX]"
+ se_key_y: "[This.GetLetterY]"
+ se_key_z: "[This.GetLetterZ]"
+ ### Number Keys
+ se_key_zero:			"0"
+ se_key_one:			"1"
+ se_key_two:			"2"
+ se_key_three:			"3"
+ se_key_four:			"4"
+ se_key_five:			"5"
+ se_key_six:			"6"
+ se_key_seven:			"7"
+ se_key_eight:			"8"
+ se_key_nine:			"9"
+ ### Special Key Loc
+ se_key_caps:			"Caps-Lock"
+ se_key_shift:			"Shift"
+ se_key_enter:			"Enter"
+ se_key_exit:			"X"
+ se_key_space:			"Space"
+ se_key_backspace:		"Backspace"
+ se_key_delete:			"Delete"
+ # Enable selection?
+ se_key_left_arrow:		"<-"
+ se_key_right_arrow:	"->"
+ ### Colour Code Keys
+
+ 
+  #####                #####
+ ##### Confirmation Box #####
+  #####                #####
+
+ se_keyboard_confirm_title: "Confirm Submission"
+ se_keyboard_confirm_desc: "Are you sure you want to finish the current keyboard input?"
+ se_keyboard_option_accept: "Yes"
+ se_keyboard_option_reject: "No"
+
+  #####                #####
+ ##### Letters/Alphabet #####
+  #####                #####
+ se_letter_cap_a: "A"
+ se_letter_low_a: "a"
+ se_letter_cap_b: "B"
+ se_letter_low_b: "b"
+ se_letter_cap_c: "C"
+ se_letter_low_c: "c"
+ se_letter_cap_d: "D"
+ se_letter_low_d: "d"
+ se_letter_cap_e: "E"
+ se_letter_low_e: "e"
+ se_letter_cap_f: "F"
+ se_letter_low_f: "f"
+ se_letter_cap_g: "G"
+ se_letter_low_g: "g"
+ se_letter_cap_h: "H"
+ se_letter_low_h: "h"
+ se_letter_cap_i: "I"
+ se_letter_low_i: "i"
+ se_letter_cap_j: "J"
+ se_letter_low_j: "j"
+ se_letter_cap_k: "K"
+ se_letter_low_k: "k"
+ se_letter_cap_l: "L"
+ se_letter_low_l: "l"
+ se_letter_cap_m: "M"
+ se_letter_low_m: "m"
+ se_letter_cap_n: "N"
+ se_letter_low_n: "n"
+ se_letter_cap_o: "O"
+ se_letter_low_o: "o"
+ se_letter_cap_p: "P"
+ se_letter_low_p: "p"
+ se_letter_cap_q: "Q"
+ se_letter_low_q: "q"
+ se_letter_cap_r: "R"
+ se_letter_low_r: "r"
+ se_letter_cap_s: "S"
+ se_letter_low_s: "s"
+ se_letter_cap_t: "T"
+ se_letter_low_t: "t"
+ se_letter_cap_u: "U"
+ se_letter_low_u: "u"
+ se_letter_cap_v: "V"
+ se_letter_low_v: "v"
+ se_letter_cap_w: "W"
+ se_letter_low_w: "w"
+ se_letter_cap_x: "X"
+ se_letter_low_x: "x"
+ se_letter_cap_y: "Y"
+ se_letter_low_y: "y"
+ se_letter_cap_z: "Z"
+ se_letter_low_z: "z"

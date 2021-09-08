@@ -1,4 +1,4 @@
-### Determines if the executing scope supports the 'GetName' loc command
+### Determines if the executing scope supports the GetName loc command
 se_scope_has_name = {
 	hidden_trigger = {
 		OR = {
@@ -25,7 +25,7 @@ se_scope_has_name = {
 		}
 	}
 }
-### Determines if the executing scope supports the 'set_name' effect
+### Determines if the executing scope supports the set_name effect
 se_scope_can_be_named = {
 	hidden_trigger = {
 		OR = {
