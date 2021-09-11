@@ -38,7 +38,7 @@ se_save_scoped_event_target = {
 		log_error = "se_save_scoped_event_target: Invalid scope reference passed by argument: target_owner"
 		break = yes
 	}
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	se_get_database = { bound_to = se_point_from_scope }
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
@@ -59,7 +59,7 @@ se_save_scoped_event_target = {
 			}
 			save_global_event_target_as = se_point_from_scope
 		}
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 	}
 	event_target:se_scoped_event_target_owner_database = {
 		se_create_database_entry = {
@@ -241,10 +241,10 @@ se_save_scoped_event_target = {
 # event_target_name - unique event target name
 ### Effect takes 3 effect calls on the effect call stack
 se_get_scoped_event_target_value = {
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	if = {
 		limit = { se_is_database = yes }
-		se_set_return_target = yes
+		se_set_return_value = yes
 	}
 	else = { se_get_database = { bound_to = this } }
 	if = {
@@ -256,7 +256,7 @@ se_get_scoped_event_target_value = {
 			}
 			save_global_event_target_as = se_hidden_database_target
 		}
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		event_target:se_hidden_database_target = {
 			se_get_database_entry = { identifier = $event_target_name$ }
 			if = {
@@ -271,7 +271,7 @@ se_get_scoped_event_target_value = {
 					}
 					save_global_event_target_as = se_hidden_scope_pointer
 				}
-				se_clear_return_target = yes
+				se_clear_return_value = yes
 				event_target:se_hidden_scope_pointer = {
 					if = {
 						limit = { has_leader_flag = se_requires_initial_search }
@@ -296,7 +296,7 @@ se_get_scoped_event_target_value = {
 				if = {
 					limit = { exists = event_target:se_return_value }
 					event_target:se_return_value = { save_event_target_as = $event_target_name$ }
-					se_clear_return_target = yes
+					se_clear_return_value = yes
 				}
 				else = { event_target:se_hidden_database_target = { se_remove_database_entry = { identifier = $event_target_name$ } } }
 			}
@@ -657,7 +657,7 @@ se_internal_grab_event_target_scope = {
 ### Parameters
 # event_target_name - unique event target name
 se_delete_scoped_event_target = {
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	if = {
 		limit = { se_is_database = yes }
 		if = {
@@ -677,10 +677,10 @@ se_delete_scoped_event_target = {
 				}
 				save_global_event_target_as = se_hidden_database_target
 			}
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 		}
 		else = { log_error = "se_delete_scoped_event_target: Scope this is not a database and does not have an obviously accessable database" }
 	}
 	event_target:se_hidden_database_target = { se_remove_database_entry = { identifier = $event_target_name$ } }
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 }

@@ -15,7 +15,7 @@ country_event = {
 		set_country_flag = se_keyboard_enabled
 		se_get_or_create_database = { bound_to = this }
 		event_target:se_return_value = { save_event_target_as = se_player_database }
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		se_new_comparable_string = {
 			identifier = se_player_input
 			overwrite = yes
@@ -1146,4 +1146,40 @@ country_event = {
 		}
 	}
 	option = { name = se_keyboard_option_reject }
+}
+
+country_event = {
+	id = se_keyboard.2
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		se_get_database = { bound_to = this }
+		event_target:se_return_value = { save_event_target_as = se_database }
+		se_new_string = { identifier = se_test_string }
+		se_append_text = {
+			identifier = se_test_string
+			text = test
+		}
+		se_append_parameter = { identifier = se_test_string }
+		event_target:se_database = {
+			se_create_database_entry = { identifier = se_test_rename_leader }
+			event_target:se_return_value = {
+				set_name = "Test Name"
+				save_event_target_as = se_param_one
+			}
+			se_clear_return_value = yes
+			se_create_database_entry = { identifer = se_test_name_return }
+			event_target:se_return_value = {
+				set_name = ""
+				save_event_target_as = se_return_value_param
+			}
+			se_clear_return_value = yes
+		}
+		se_return_string = {
+			identifier = se_test_string
+			param_one = event_target:se_param_one
+			return_target = event_target:se_return_value_param
+		}
+		event_target:se_return_value_param = { set_owner = root }
+	}
 }

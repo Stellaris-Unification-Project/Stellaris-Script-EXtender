@@ -199,11 +199,39 @@ se_get_database = {
 		set_global_flag = se_optional_parameter_set
 		if = {
 			limit = { is_scope_set = $bound_to$ }
-			$bound_to$ = { save_global_event_target_as = se_hidden_db_target }
+			$bound_to$ = {
+				if = {
+					limit = {
+						is_scope_type = country
+						is_country_type = se_country_database
+					}
+					if = {
+						limit = { exists = event_target:se_return_value }
+						clear_global_event_target = se_return_value
+					}
+					save_global_event_target_as = se_return_value
+					break = yes
+				}
+				else = { save_global_event_target_as = se_hidden_db_target }
+			}
 		}
 		else_if = {
 			limit = { is_scope_set = event_target:$bound_to$ }
-			event_target:$bound_to$ = { save_global_event_target_as = se_hidden_db_target }
+			event_target:$bound_to$ = {
+				if = {
+					limit = {
+						is_scope_type = country
+						is_country_type = se_country_database
+					}
+					if = {
+						limit = { exists = event_target:se_return_value }
+						clear_global_event_target = se_return_value
+					}
+					save_global_event_target_as = se_return_value
+					break = yes
+				}
+				else = { save_global_event_target_as = se_hidden_db_target }
+			}
 		}
 	]
 	[[identifier]set_global_flag = se_optional_parameter_set]
@@ -217,13 +245,16 @@ se_get_database = {
 			limit = {
 				is_scope_type = country
 				is_country_type = se_country_database
-				[[bound_to]
-				AND = {
-					exists = event_target:se_hidden_db_target
-					has_country_flag = se_bound_to_object_@event_target:se_hidden_db_target
+				OR = {
+					[[bound_to]
+					AND = {
+						exists = event_target:se_hidden_db_target
+						has_country_flag = se_bound_to_object_@event_target:se_hidden_db_target
+					}
+					]
+					[[identifier]has_country_flag = $identifier$]
 				}
-				]
-				[[identifier]has_country_flag = $identifier$]
+				
 			}
 			if = {
 				limit = { exists = event_target:se_return_value }
@@ -331,7 +362,7 @@ se_remove_database_flag = {
 ### Parameters
 # identifier - A unique identifier for the entry, will not create a new entry if an entry with this identifier already exists
 # name(optional) - The name of the database entry
-# overwrite(optional) - Whether to delete the existing database entry if it finds one
+# overwrite(optional) - Whether to delete the existing database entry if it finds one, default value is no
 ### Access return value by scope event_target:se_return_value
 se_create_database_entry = {
 	if = {
@@ -351,8 +382,14 @@ se_create_database_entry = {
 				has_leader_flag = se_database_entry
 				has_leader_flag = $identifier$
 			}
-			if ={
+			if = {
 				limit = { always = $overwrite|no$ }
+				prev = {
+					subtract_variable = {
+						which = se_database_entry_count
+						value = 1
+					}
+				}
 				kill_leader = {
 					fire = yes
 					show_notification = no
@@ -376,7 +413,7 @@ se_create_database_entry = {
 				name = $name|se_empty_database_entry$
 				class = governor
 				species = event_target:se_database_entry_species
-				traits = {}
+				traits = { }
 				immortal = yes
 				effect = {
 					set_leader_flag = $identifier$
@@ -440,7 +477,7 @@ se_get_database_entry = {
 				has_leader_flag = se_database_entry
 				has_leader_flag = $identifier$
 			}
-			se_set_return_target = yes
+			se_set_return_value = yes
 		}
 	}
 	else = { log_error = "se_get_database_entry: The provided scope is not a database entry:" }
@@ -546,7 +583,7 @@ se_remove_database_entry_flag = {
 ### Retrieves the database for the executing scope or returns the global database
 ### Access return value by scope event_target:se_return_value
 se_get_scope_or_global_database = {
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
@@ -590,10 +627,10 @@ se_get_or_create_database = {
 			break = yes
 		}
 	]
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	se_get_database = {
 		[[identifier]identifier = $identifier$]
-		[[bound_to] = event_target:se_hidden_database_owner_scope]
+		[[bound_to]bound_to = event_target:se_hidden_database_owner_scope]
 	}
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
@@ -642,10 +679,10 @@ se_overwrite_database = {
 			break = yes
 		}
 	]
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	se_get_database = {
 		[[identifier]identifier = $identifier$]
-		[[bound_to] = event_target:se_hidden_database_owner_scope]
+		[[bound_to]bound_to = event_target:se_hidden_database_owner_scope]
 	}
 	if = {
 		limit = { exists = event_target:se_return_value }

@@ -58,6 +58,8 @@
  # Enable selection?
  se_key_left_arrow:		"<-"
  se_key_right_arrow:	"->"
+ se_key_up_arrow:	"Up"
+ se_key_down_arrow:	"Down"
  ### Colour Code Keys
 
  

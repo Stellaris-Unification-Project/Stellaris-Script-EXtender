@@ -27,7 +27,7 @@ namespace = se_setup
 		}
 		se_create_event_country = { identifier = se_private_event_country }
 		event_target:se_return_value = { se_save_global_event_target_as = { event_target_name = se_event_country } }
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 	}
 }
 

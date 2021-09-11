@@ -18,17 +18,17 @@ se_create_list = {
 		save_global_event_target_as = se_hidden_scoped_list_database
 	}
 	else = {
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		se_get_database = { bound_to = this }
 		if = {
 			limit = { exists = event_target:se_return_value }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_list_database }
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 		}
 		else = {
 			se_create_database = { bind_to_scope = this }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_list_database }
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 		}
 	}
 	event_target:se_hidden_scoped_list_database = {
@@ -58,7 +58,7 @@ se_create_list = {
 					show_notification = no
 				}
 			}
-			else = { se_set_return_target = yes }
+			else = { se_set_return_value = yes }
 		}
 		if = { 
 			limit = { NOT = { exists = event_target:se_return_value } }
@@ -102,7 +102,7 @@ se_create_list = {
 # identifier - A database unique identifier for the list
 # delete(optional) - Determines if the list items should be deleted or converted to database entries, default value is yes
 se_delete_list = {
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	if = {
 		limit = { se_is_database = yes }
 		save_global_event_target_as = se_hidden_scoped_list_database
@@ -112,7 +112,7 @@ se_delete_list = {
 		if = {
 			limit = { exists = event_target:se_return_value }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_list_database }
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 		}
 	}
 	if = {
@@ -180,7 +180,7 @@ se_get_list_header = {
 		if = {
 			limit = { exists = event_target:se_return_value }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_list_database }
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 		}
 		else = {
 			log_error = "se_get_list: Scope this is not a database and does not have an obviously accessable database."
@@ -193,7 +193,7 @@ se_get_list_header = {
 				se_is_list_header = yes
 				has_leader_flag = $identifier$
 			}
-			se_set_return_target = yes
+			se_set_return_value = yes
 		}
 	}
 	clear_global_event_target = se_hidden_scoped_list_database
@@ -205,7 +205,7 @@ se_get_list_header = {
 # index(optional) - The index for where to add the given list entry on the list, default value is count - 1
 ### Access return value by scope - event_target:se_return_value
 se_create_list_entry = {
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	[[index]
 	set_variable = {
 		which = se_append_index
@@ -221,7 +221,7 @@ se_create_list_entry = {
 		if = {
 			limit = { exists = event_target:se_return_value }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_list_database }
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 		}
 	}
 	if = {
@@ -282,7 +282,7 @@ se_create_list_entry = {
 								value = 1
 							}
 						}
-						se_set_return_target = yes
+						se_set_return_value = yes
 					}
 				}
 				clear_global_event_target = se_hidden_list_header_object			
@@ -302,7 +302,7 @@ se_create_list_entry = {
 # index - The index of the entry in the list
 # delete(optional) - Whether to completely delete the item in question or just remove it from the given list, default value is no
 se_remove_list_entry = {
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	if = {
 		limit = { se_is_database = yes }
 		save_global_event_target_as = se_hidden_scoped_list_database
@@ -312,12 +312,17 @@ se_remove_list_entry = {
 		if = {
 			limit = { exists = event_target:se_return_value }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_list_database }
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 		}
+	}
+	set_variable = {
+		which = se_hidden_remove_index
+		value = $index$
 	}
 	if = {
 		limit = { exists = event_target:se_hidden_scoped_list_database }
 		event_target:se_hidden_scoped_list_database = {
+			log_error = "se_remove_list_entry: se_hidden_scoped_list_database = \\[This.GetScopeType]"
 			random_owned_leader = {
 				limit = {
 					se_is_database_entry = yes
@@ -335,7 +340,10 @@ se_remove_list_entry = {
 						has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
 						check_variable = {
 							which = se_list_index
-							value = $index$
+							value = {
+								scope = prev.prev
+								variable = se_hidden_remove_index
+							}
 						}
 					}
 					if = {
@@ -361,6 +369,7 @@ se_remove_list_entry = {
 		clear_global_event_target = se_hidden_scoped_list_database
 	}
 	else = { log_error = "se_remove_list_entry: Scope this is not a database and does not have an obviously accessable database" }
+	clear_variable = se_hidden_remove_index
 }
 
 ### Adds a given entry to a list
@@ -515,7 +524,7 @@ se_get_list_entry = {
 		break = yes
 	}
 	else = {
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		if = {
 			limit = { se_is_database = yes }
 			save_global_event_target_as = se_hidden_scoped_list_database
@@ -525,7 +534,7 @@ se_get_list_entry = {
 			if = {
 				limit = { exists = event_target:se_return_value }
 				event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_list_database }
-				se_clear_return_target = yes
+				se_clear_return_value = yes
 			}
 		}
 		if = {
@@ -558,11 +567,11 @@ se_get_list_entry = {
 									always = $first|no$
 									NOT = { exists = event_target:se_return_value }
 								}
-								se_set_return_target = yes
+								se_set_return_value = yes
 							}
 							else_if = {
 								limit = { always = $last|no$ }
-								se_set_return_target = yes
+								se_set_return_value = yes
 							}
 						}
 					}
@@ -579,7 +588,7 @@ se_get_list_entry = {
 								]
 								[[limiter]$limiter$ = yes]
 							}
-							se_set_return_target = yes
+							se_set_return_value = yes
 						}
 					}
 					clear_global_event_target = se_hidden_list_header_object
@@ -608,23 +617,24 @@ se_internal_reindex_list = {
 			limit = {
 				is_scope_type = leader
 				exists = owner
-				owner = { is_scope_type = country }
 				has_leader_flag = se_database_entry
 				has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
 			}
-			random_owned_leader = {
-				limit = {
-					is_scope_type = leader
-					exists = owner
-					owner = { is_scope_type = country }
-					has_leader_flag = se_database_entry
-					has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
-					check_variable = {
-						which = se_list_index
-						value = { scope = event_target:se_event_country variable = se_current_index_value }
+			prev = {
+				random_owned_leader = {
+					limit = {
+						is_scope_type = leader
+						exists = owner
+						owner = { is_scope_type = country }
+						has_leader_flag = se_database_entry
+						has_leader_flag = se_list_item_of_@event_target:se_hidden_list_header_object
+						check_variable = {
+							which = se_list_index
+							value = { scope = event_target:se_event_country variable = se_current_index_value }
+						}
 					}
+					save_global_event_target_as = se_hidden_selected_list_item
 				}
-				save_global_event_target_as = se_hidden_selected_list_item
 			}
 			if = {
 				limit = {
@@ -716,7 +726,7 @@ se_internal_convert_entry_to_list = {
 # identifier - The lists identifier
 ### Access return value by scope - event_target:se_return_value
 se_get_enumerator = {
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	if = {
 		limit = { se_is_database = yes }
 		save_global_event_target_as = se_hidden_scoped_list_database
@@ -726,7 +736,7 @@ se_get_enumerator = {
 		if = {
 			limit = { exists = event_target:se_return_value }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_list_database }
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 		}
 	}
 	if = {
@@ -746,7 +756,7 @@ se_get_enumerator = {
 						se_is_list_enumerator = yes
 						has_leader_flag = se_enumerator_of_@event_target:se_hidden_current_scope_list
 					}
-					se_set_return_target = yes
+					se_set_return_value = yes
 				}
 			}
 			else = { log_error = "se_get_enumerator: No list with the given identifier exists" }
@@ -790,7 +800,7 @@ se_enumerator_move_previous = {
 ### Requires to be in the scope of an enumerator(use se_get_enumerator to get the enumerator reference)
 ### Access list value by scope - event_target:se_return_value
 se_enumerator_return_current = {
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	if = {
 		limit = { se_is_list_enumerator = yes }
 		if = {
@@ -826,7 +836,7 @@ se_enumerator_return_current = {
 							value = { scope = prev variable = se_current_index }
 						}
 					}
-					se_set_return_target = yes
+					se_set_return_value = yes
 				}
 			}
 			if = {
@@ -858,7 +868,7 @@ se_reset_enumerator = {
 			which = se_current_index
 			value = $index|0$
 		}
-		se_set_return_target = yes
+		se_set_return_value = yes
 	}
 	else = { log_error = "se_reset_enumerator: The provided scope is not a validentifier list enumerator" }
 }

@@ -80,6 +80,44 @@ se_get_event_country = {
  # Generic scripting effects are for minor script automation when creating your mod scripts
  # Many of them are for convinence and do not necessarily facilitate any important features or changes to the library
 
+### Captures the value of scope and saves it as an event_target
+### Parameters
+# scope 	- The scope to convert to a new event target
+# output	- The scope to save the target as if a valid scope
+se_save_scope_as_event_target = {
+	if = {
+		limit = { is_scope_set = $scope$ }
+		$scope$ = { save_event_target_as = $output$ }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$scope$ }
+		event_target:$scope$ = { save_event_target_as = $output$ }
+	}
+	else = {
+		log_error = "se_save_scope_as_event_target: Invalid scope reference passed by argument: scope"
+		break = yes
+	}
+}
+
+### Captures the value of scope and saves it as a global_event_target
+### Parameters
+# scope 	- The scope to convert to a new event target
+# output	- The scope to save the target as if a valid scope
+se_save_scope_as_global_target = {
+	if = {
+		limit = { is_scope_set = $scope$ }
+		$scope$ = { save_global_event_target_as = $output$ }
+	}
+	else_if = {
+		limit = { is_scope_set = event_target:$scope$ }
+		event_target:$scope$ = { save_global_event_target_as = $output$ }
+	}
+	else = {
+		log_error = "se_save_scope_as_global_target: Invalid scope reference passed by argument: scope"
+		break = yes
+	}
+}
+
 ### Creates a new global event target, clearing the value if it existed beforehand
 ### Parameters
 # event_target_name - The name of the event target
@@ -545,19 +583,19 @@ se_decrement = {
 
 ### Clears the current return value, useful when invoking an effect that returns a value
 ### Often unnecessary as most returning effects do invoke this effect before returning anything
-se_clear_return_target = {
+se_clear_return_value = {
 	if = {
 		limit = { exists = event_target:se_return_value }
 		clear_global_event_target = se_return_value
 	}
 }
 ### Internal use, do not use outside of code within this mod
-se_set_return_target = {
+se_set_return_value = {
 	if = {
-		limit = { exists = event_target:se_return_target }
-		clear_global_event_target = se_return_target
+		limit = { exists = event_target:se_return_value }
+		clear_global_event_target = se_return_value
 	}
-	save_global_event_target_as = se_return_target
+	save_global_event_target_as = se_return_value
 }
 
  #####					#####

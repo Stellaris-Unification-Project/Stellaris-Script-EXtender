@@ -92,12 +92,12 @@ se_return_string = {
 
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_two]
 	if = {
@@ -125,12 +125,12 @@ se_return_string = {
 			}
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_three]
 	if = {
@@ -158,12 +158,12 @@ se_return_string = {
 			}
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_four]
 	if = {
@@ -191,12 +191,12 @@ se_return_string = {
 			}
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_five]
 	if = {
@@ -224,12 +224,12 @@ se_return_string = {
 			}
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_six]
 	if = {
@@ -257,12 +257,12 @@ se_return_string = {
 			}
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_seven]
 	if = {
@@ -290,12 +290,12 @@ se_return_string = {
 			}
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_eight]
 	if = {
@@ -323,12 +323,12 @@ se_return_string = {
 			}
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			#set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_nine]
 	if = {
@@ -356,12 +356,12 @@ se_return_string = {
 			}
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_ten]
 	if = {
@@ -389,12 +389,12 @@ se_return_string = {
 			}
 		}
 		event_target:se_return_value = {
-			set_name = "\\[Prev.GetName]"
+			set_name = \\[Prev.GetName]
 			se_add_entry_to_list = { identifier = se_param_list }
 		}
 	}
 	clear_global_event_target = se_hidden_string_param
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	]
 	[[param_list]
 	}
@@ -414,7 +414,7 @@ se_return_string = {
 	}
 	event_target:se_hidden_string_owner_scope = {
 	]
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
@@ -423,7 +423,7 @@ se_return_string = {
 	}
 	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
 	event_target:se_hidden_scoped_string_database = {
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		se_get_enumerator = { identifier = $identifier$ }
 		event_target:se_return_value = {
 			se_reset_enumerator = yes
@@ -434,7 +434,7 @@ se_return_string = {
 			while = {
 				limit = { exists = event_target:se_return_value }
 				event_target:se_return_value = { save_global_event_target_as = se_substring }
-				se_clear_return_target = yes
+				se_clear_return_value = yes
 				event_target:se_substring = {
 					if = {
 						limit = { has_leader_flag = se_string_parameter }
@@ -499,7 +499,7 @@ se_append_space = {
 	}
 	event_target:se_hidden_string_owner_scope = {
 	]
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { exists = event_target:se_return_value }
@@ -507,14 +507,21 @@ se_append_space = {
 	}
 	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_string_database } }
 	event_target:se_hidden_scoped_string_database = {
-		[[index]
-		set_variable = {
-			which = se_temp_append_index
-			value = {
-				scope = prev[[bound_to].prev]
-				value = se_append_index
+		prev[[bound_to].prev] = {
+			if = {
+				limit = { is_variable_set = se_append_index }
+				prev = {
+					set_variable = {
+						which = se_temp_append_index
+						value = {
+							scope = prev
+							variable = se_append_index
+						}
+					}
+				}
 			}
 		}
+		[[index]
 		]
 		se_get_list_header = { identifier = $identifier$ }
 		if = {
@@ -550,7 +557,7 @@ se_append_space = {
 			log_error = "se_append_to_string: Header for string not found in the current database."
 			break = yes
 		}
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		se_create_list_entry = {
 			identifier = $identifier$
 			[[index]index = se_temp_append_index]
@@ -621,7 +628,7 @@ se_append_space = {
 				set_name = "\\[This.GetName] "
 			}
 		}
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		# Do some modulus and divison to chunk into 3s, 2s and singular space groups
 		[[index]clear_variable = se_temp_append_index]
 	}
@@ -665,10 +672,10 @@ se_new_string = {
 	]
 	if = {
 		limit = { se_scope_can_be_named = yes }
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		se_get_or_create_database = { bound_to = this }
 		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		event_target:se_hidden_scoped_string_database = {
 			se_create_list = {
 				identifier = $identifier$
@@ -676,8 +683,8 @@ se_new_string = {
 			}
 		}
 		event_target:se_return_value = {
-			se_set_database_entry_flag = { flag = se_string_of_@prev }
-			[[text]set_name = "."text$]
+			set_leader_flag = se_string_of_@prev
+			[[text]set_name = $text$]
 		}
 	}
 	else = { log_error = "se_append_stringbuilder: Scope bind_to_scope cannot be renamed as it does not support an implementation of the set_name effect." }
@@ -715,7 +722,7 @@ se_append_text = {
 	}
 	event_target:se_hidden_string_owner_scope = {
 	]
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
@@ -723,17 +730,22 @@ se_append_text = {
 		break = yes
 	}
 	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	event_target:se_hidden_scoped_string_database = {
-		[[index]
-		set_variable = {
-			which = se_temp_append_index
-			value = {
-				scope = prev[[bound_to].prev]
-				value = se_append_index
+		prev[[bound_to].prev] = {
+			if = {
+				limit = { is_variable_set = se_append_index }
+				prev = {
+					set_variable = {
+						which = se_temp_append_index
+						value = {
+							scope = prev
+							variable = se_append_index
+						}
+					}
+				}
 			}
 		}
-		]
 		se_get_list_header = { identifier = $identifier$ }
 		if = {
 			limit = { exists = event_target:se_return_value }
@@ -749,12 +761,12 @@ se_append_text = {
 			log_error = "se_append_text: Header for string not found in the current database."
 			break = yes
 		}
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		se_create_list_entry = {
 			identifier = $identifier$
 			[[index]index = se_temp_append_index]
 		}
-		event_target:se_return_value = { set_name = "."text$ }
+		event_target:se_return_value = { set_name = $text$ }
 		[[index]clear_variable = se_temp_append_index]
 	}
 	clear_global_event_target = se_hidden_scoped_string_database
@@ -763,7 +775,7 @@ se_append_text = {
 	clear_global_event_target = se_hidden_string_owner_scope
 	]
 	[[index]clear_variable = se_append_index]
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 }
 
 ### Appends a parameter to be filled in at string return
@@ -795,7 +807,7 @@ se_append_parameter = {
 	else = { log_error = "se_new_string: Invalid scope reference passed by argument: bound_to." }
 	event_target:se_hidden_string_owner_scope = {
 	]
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { exists = event_target:se_return_value }
@@ -803,15 +815,16 @@ se_append_parameter = {
 	}
 	else = { event_target:se_global_database = { save_global_event_target_as = se_hidden_scoped_string_database } }
 	event_target:se_hidden_scoped_string_database = {
-		[[index]
-		set_variable = {
-			which = se_temp_append_index
-			value = {
-				scope = prev[[bound_to].prev]
-				value = se_append_index
+		if = {
+			limit = { prev[[bound_to].prev] = { is_variable_set = se_append_index } }
+			set_variable = {
+				which = se_temp_append_index
+				value = {
+					scope = prev[[bound_to].prev]
+					variable = se_append_index
+				}
 			}
 		}
-		]
 		se_create_list_entry = {
 			identifier = $identifier$
 			[[index]index = se_temp_append_index]
@@ -823,7 +836,7 @@ se_append_parameter = {
 				value = prev.prev[[bound_to].prev]
 			}
 		}
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		[[index]clear_variable = se_temp_append_index]
 	}
 	clear_global_event_target = se_hidden_scoped_string_database
@@ -864,7 +877,7 @@ se_new_comparable_string = {
 	if = {
 		limit = { se_scope_can_be_named = yes }
 		se_ensure_string_dictionary_exists = yes
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		se_get_database = { bound_to = this }
 		if = {
 			limit = { exists = event_target:se_return_value }
@@ -874,18 +887,18 @@ se_new_comparable_string = {
 			se_create_database = { bind_to_scope = this }
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
 		}
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		event_target:se_hidden_scoped_string_database = {
 			se_create_list = {
 				identifier = $identifier$
-				overwrite = yes
+				overwrite = $overwrite|no$
 			}
 		}
 		clear_global_event_target = se_hidden_scoped_string_database
 		event_target:se_return_value = {
 			se_set_database_entry_flag = { flag = se_string_of_@prev }
 			se_set_database_entry_flag = { flag = se_comparable_string }
-			[[char]set_name = "."char$]
+			[[char]set_name = $char$]
 		}
 	}
 	else = { log_error = "se_new_comparable_string: Scope bind_to_scope cannot be renamed as it does not support an implementation of the set_name effect." }
@@ -943,15 +956,20 @@ se_append_char = {
 	}
 	event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
 	event_target:se_hidden_scoped_string_database = {
-		[[index]
-		set_variable = {
-			which = se_temp_append_index
-			value = {
-				scope = prev[[bound_to].prev]
-				variable = se_append_index
+		prev[[bound_to].prev] = {
+			if = {
+				limit = { is_variable_set = se_append_index }
+				prev = {
+					set_variable = {
+						which = se_temp_append_index
+						value = {
+							scope = prev
+							variable = se_append_index
+						}
+					}
+				}
 			}
 		}
-		]
 		se_create_list_entry = {
 			identifier = $identifier$
 			[[index]index = se_temp_append_index]
@@ -962,7 +980,7 @@ se_append_char = {
 					which = se_character_value
 					value = prev
 				}
-				set_name = "\\[Prev.GetName]"
+				set_name = \\[Prev.GetName]
 			}
 		}
 		[[index]clear_variable = se_temp_append_index]
@@ -973,7 +991,7 @@ se_append_char = {
 	]
 	clear_global_event_target = se_hidden_char_value
 	[[index]clear_variable = se_append_index]
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 }
 
 ### Removes a character from the comparable string
@@ -1038,7 +1056,7 @@ se_ensure_string_dictionary_exists = {
 			se_create_database = { identifier = se_internal_string_dictionary }
 		}
 		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database }
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		event_target:se_hidden_scoped_string_database = {
 			# Lowercase Letters
 			se_create_database_entry = { identifier = se_char_a }
@@ -1593,7 +1611,7 @@ se_compare_string = {
 			break = yes
 		}
 		event_target:se_hidden_compare_owner = {
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 			se_get_database = { bound_to = this }
 		}
 		if = {
@@ -1621,7 +1639,7 @@ se_compare_string = {
 	}
 	event_target:se_hidden_string_owner_scope = {
 	]
-	se_clear_return_target = yes
+	se_clear_return_value = yes
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { NOT = { exists = event_target:se_return_value } }
@@ -1636,7 +1654,7 @@ se_compare_string = {
 		}
 	}
 	event_target:se_hidden_scoped_string_database = {
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		se_get_enumerator = { identifier = $identifier$ }]
 		if = {
 			limit = { NOT = { exists = event_target:se_return_value } }
@@ -1644,11 +1662,11 @@ se_compare_string = {
 			break = yes
 		}
 		event_target:se_return_value = { save_global_event_target_as = se_hidden_scoped_string_database_enumerator }
-		se_clear_return_target = yes
+		se_clear_return_value = yes
 		event_target:se_hidden_scoped_string_database_enumerator = {
 			se_enumerator_return_current = yes
 			event_target:se_return_value = { save_global_event_target_as = se_hidden_char_value }
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 			se_internal_set_comparison_true = yes
 			while = {
 				limit = { exists = event_target:se_hidden_char_value }
@@ -1697,7 +1715,7 @@ se_compare_string = {
 					}
 				}
 			}
-			se_clear_return_target = yes
+			se_clear_return_value = yes
 			if = {
 				limit = { exists = event_target:se_hidden_char_value }
 				clear_global_event_target = se_hidden_char_value
