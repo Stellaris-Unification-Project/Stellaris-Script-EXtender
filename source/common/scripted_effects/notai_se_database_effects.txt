@@ -378,7 +378,7 @@ se_create_database_entry = {
 			limit = {
 				is_scope_type = leader
 				exists = owner
-				owner = { is_scope_type = country }
+				owner = { is_country_type = se_country_database }
 				has_leader_flag = se_database_entry
 				has_leader_flag = $identifier$
 			}
@@ -413,7 +413,7 @@ se_create_database_entry = {
 				name = $name|se_empty_database_entry$
 				class = governor
 				species = event_target:se_database_entry_species
-				traits = { }
+				traits = {}
 				immortal = yes
 				effect = {
 					set_leader_flag = $identifier$
@@ -427,7 +427,7 @@ se_create_database_entry = {
 			}
 		}
 	}
-	else = { log_error = "se_create_database_entry: The provided scope is not a database entry:" }
+	else = { log_error = "se_create_database_entry: The provided scope is not a database entry: This" }
 }
 
 ### Removes an entry from the database
@@ -448,7 +448,12 @@ se_remove_database_entry = {
 				has_leader_flag = se_database_entry
 				has_leader_flag = $identifier$
 			}
-			owner = { se_decrement = { variable = se_database_entry_count } }
+			owner = {
+				subtract_variable = {
+					which = se_database_entry_count
+					value = 1
+				}
+			}
 			kill_leader = {
 				fire = yes
 				show_notification = no

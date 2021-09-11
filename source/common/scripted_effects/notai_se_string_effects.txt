@@ -782,7 +782,7 @@ se_append_text = {
 ### Parameters
 # identifier 			- A unique identifier for the given string
 # param_index 			- The index of the parameter, used when calling the same parameter multiple times
-# bound_to(optional) 	- The scope that the associated string is stored to
+# bound_to(optional) 	- The scope that the associated string is stored to, default value is this
 # index(optional) 		- The index in the string to append this text, default value is current count - 1
 se_append_parameter = {
 	[[index]
@@ -807,7 +807,6 @@ se_append_parameter = {
 	else = { log_error = "se_new_string: Invalid scope reference passed by argument: bound_to." }
 	event_target:se_hidden_string_owner_scope = {
 	]
-	se_clear_return_value = yes
 	se_get_database = { bound_to = this }
 	if = {
 		limit = { exists = event_target:se_return_value }
