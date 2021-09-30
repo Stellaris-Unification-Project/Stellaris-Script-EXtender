@@ -1,6 +1,6 @@
 # Called before vanilla setup values
 on_game_start_begin = {
 	events = {
-		se_keyboard_setup.0
+		ssex_keyboard_setup.0
 	}
 }

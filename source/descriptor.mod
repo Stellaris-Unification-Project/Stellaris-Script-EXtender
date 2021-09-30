@@ -5,6 +5,6 @@ tags={
 	"Script Extender"
 	"Script Extensions"
 }
-name="Script Extender"
-supported_version="3.0.*"
+name="Stellaris Script EXtender"
+supported_version="3.1.*"
 remote_file_id="2571848726"

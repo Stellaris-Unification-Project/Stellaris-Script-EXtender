@@ -1,0 +1,1735 @@
+
+ #####						 #####
+##### Script Extender Strings #####
+ #####						 #####
+ # All string effects should be assumed to take 3 calls on the effect stack
+ # Strings are used for dynamically creating and modifying names
+ # Strings are used for retrieving user inputted data and using said data on your game
+
+ #####						  #####
+##### Universal String Effects #####
+ #####						  #####
+ # Used in all types of strings for their specific reasons, note that performance may differ depending on the list type being operated on
+
+### Returns the full string value
+### Parameters
+# identifier				- A unique identifier for the given string
+# bound_to(optional) 		- The scope that the associated string is stored to
+# return_target(optional) 	- The scope to return the string as, will return in the name property, default value is this
+# destroy_string(optional) 	- If yes destroys the string after returning the value, default value is no
+# param_one(optional) 		- The first parameter scope in a parameterized string
+# param_two(optional)		- The second parameter scope in a parameterized string
+# param_three(optional)		- The third parameter scope in a parameterized string
+# param_four(optional)		- The fourth parameter scope in a parameterized string
+# param_five(optional)		- The fifth parameter scope in a parameterized string
+# param_six(optional) 		- The sixth parameter scope in a parameterized string
+# param_seventh(optional)	- The seventh parameter scope in a parameterized string
+# param_eight(optional)		- The eighth parameter scope in a parameterized string
+# param_nine(optional)		- The ninth parameter scope in a parameterized string
+# param_ten(optional)		- The tenth parameter scope in a parameterized string
+# param_list(optional)		- An identifier for a list in the same scope to draw parameters for (disables above param_one through param_ten)
+ssex_return_string = {
+	save_global_event_target_as = ssex_hidden_return_scope
+	[[return_target]
+	clear_global_event_target = ssex_hidden_return_scope
+	if = {
+		limit = { is_scope_set = $return_target$ }
+		$return_target$ = { save_global_event_target_as = ssex_hidden_return_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$return_target$ }
+		event_target:$return_target$ = { save_global_event_target_as = ssex_hidden_return_scope }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: return_target."
+		break = yes
+	}
+	]
+	event_target:ssex_hidden_return_scope = {
+		if = {
+			limit = { ssex_scope_can_be_named = yes }
+			set_name = ""
+		}
+		else = {
+			log_error = "ssex_return_string: Scope return_target cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+	}
+	[[param_list]
+	if = {
+		limit = { always = no }
+	]
+	[[param_one]
+	if = {
+		limit = { is_scope_set = $param_one$ }
+		$param_one$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_one$ }
+		event_target:$param_one$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_one"
+		break = yes
+	}
+	owner = {
+		ssex_create_list = {
+			identifier = ssex_param_list
+			overwrite = yes
+		}
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_one cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_one
+				overwrite = yes
+			}
+
+		}
+		event_target:ssex_return_value = {
+			set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_two]
+	if = {
+		limit = { is_scope_set = $param_two$ }
+		$param_two$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_two$ }
+		event_target:$param_two$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_two"
+		break = yes
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_two cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_two
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_three]
+	if = {
+		limit = { is_scope_set = $param_three$ }
+		$param_three$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_three$ }
+		event_target:$param_three$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_three"
+		break = yes
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_three cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_three
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_four]
+	if = {
+		limit = { is_scope_set = $param_four$ }
+		$param_four$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_four$ }
+		event_target:$param_four$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_four"
+		break = yes
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_four cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_four
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_five]
+	if = {
+		limit = { is_scope_set = $param_five$ }
+		$param_five$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_five$ }
+		event_target:$param_five$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_five"
+		break = yes
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_five cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_five
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_six]
+	if = {
+		limit = { is_scope_set = $param_six$ }
+		$param_six$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_six$ }
+		event_target:$param_six$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_six"
+		break = yes
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_six cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_six
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_seven]
+	if = {
+		limit = { is_scope_set = $param_seven$ }
+		$param_seven$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_seven$ }
+		event_target:$param_seven$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_seven"
+		break = yes
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_seven cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_seven
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_eight]
+	if = {
+		limit = { is_scope_set = $param_eight$ }
+		$param_eight$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_eight$ }
+		event_target:$param_eight$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_eight"
+		break = yes
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_eight cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_eight
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			#set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_nine]
+	if = {
+		limit = { is_scope_set = $param_nine$ }
+		$param_nine$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_nine$ }
+		event_target:$param_nine$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_nine"
+		break = yes
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_nine cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_nine
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_ten]
+	if = {
+		limit = { is_scope_set = $param_ten$ }
+		$param_ten$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$param_ten$ }
+		event_target:$param_ten$ = { save_global_event_target_as = ssex_hidden_string_param }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: param_ten"
+		break = yes
+	}
+	event_target:ssex_hidden_string_param = {
+		if = {
+			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			log_error = "ssex_return_string: Scope param_ten cannot be renamed as it does not support an implementation of the set_name effect."
+			break = yes
+		}
+		prev.owner = {
+			ssex_create_database_entry = {
+				identifier = ssex_temp_param_ten
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			set_name = \\[Prev.GetName]
+			ssex_add_entry_to_list = { identifier = ssex_param_list }
+		}
+	}
+	clear_global_event_target = ssex_hidden_string_param
+	ssex_clear_return_value = yes
+	]
+	[[param_list]
+	}
+	]
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	else = {
+		log_error = "ssex_return_string: Invalid scope reference passed by argument: bound_to."
+		break = yes
+	}
+	event_target:ssex_hidden_string_owner_scope = {
+	]
+	ssex_get_database = { bound_to = this }
+	if = {
+		limit = { NOT = { exists = event_target:ssex_return_value } }
+		log_error = "ssex_return_string: Scope this is not a database and does not have an obviously accessable database."
+		break = yes
+	}
+	event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+	event_target:ssex_hidden_scoped_string_database = {
+		ssex_clear_return_value = yes
+		ssex_get_enumerator = { identifier = $identifier$ }
+		event_target:ssex_return_value = {
+			ssex_reset_enumerator = yes
+			save_global_event_target_as = ssex_hidden_current_enumerator
+		}
+		event_target:ssex_hidden_current_enumerator = {
+			ssex_enumerator_return_current = yes
+			while = {
+				limit = { exists = event_target:ssex_return_value }
+				event_target:ssex_return_value = { save_global_event_target_as = ssex_substring }
+				ssex_clear_return_value = yes
+				event_target:ssex_substring = {
+					if = {
+						limit = { has_leader_flag = ssex_string_parameter }
+						ssex_get_list_entry = {
+							identifier = $param_list|ssex_param_list$
+							index = ssex_param_index
+						}
+						set_name = "\\[ssex_return_value.GetName]"
+					}
+					if = {
+						limit = { NOT = { has_leader_flag = ssex_name_return_value } }
+						event_target:ssex_hidden_return_scope = { set_name = "\\[This.GetName]\\[ssex_return_value.GetName]" }
+					}
+					[[destroy_string]
+					if = {
+						limit = { always = $destroy_string$ }
+						ssex_remove_entry_from_list = { identifier = $identifier$ }
+					}
+					]
+				}
+				ssex_enumerator_move_next = yes
+			}
+		}
+	}
+	clear_global_event_target = ssex_hidden_scoped_string_database
+	clear_global_event_target = ssex_hidden_return_scope
+	[[bound_to]
+	}
+	clear_global_event_target = ssex_hidden_string_owner_scope
+	]
+}
+
+### Appends a number of spaces to the string
+### Parameters
+# identifier			- A unique identifier for the given string
+# count(optional)		- The number of spaces to append to the given string value, default to 1
+# bound_to(optional) 	- The scope that the associated string is stored to
+# index(optional)		- The index in the string to append these spaces, default value is current count - 1
+ssex_append_space = {
+	set_variable = {
+		which = ssex_space_count
+		value = $count|1$
+	}
+	[[index]
+	set_variable = {
+		which = ssex_string_append_index
+		value = $index$
+	}
+	]
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	else = {
+		log_error = "ssex_new_string: Invalid scope reference passed by argument: bound_to."
+		break = yes
+	}
+	event_target:ssex_hidden_string_owner_scope = {
+	]
+	ssex_clear_return_value = yes
+	ssex_get_database = { bound_to = this }
+	if = {
+		limit = { exists = event_target:ssex_return_value }
+		event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+	}
+	else = { event_target:ssex_global_database = { save_global_event_target_as = ssex_hidden_scoped_string_database } }
+	event_target:ssex_hidden_scoped_string_database = {
+		prev[[bound_to].prev] = {
+			if = {
+				limit = { is_variable_set = ssex_string_append_index }
+				prev = {
+					set_variable = {
+						which = ssex_temp_append_index
+						value = {
+							scope = prev
+							variable = ssex_string_append_index
+						}
+					}
+				}
+			}
+		}
+		[[index]
+		]
+		ssex_get_list_header = { identifier = $identifier$ }
+		if = {
+			limit = { exists = event_target:ssex_return_value }
+			event_target:ssex_return_value = {
+				if = {
+					limit = { has_leader_flag = ssex_comparable_string }
+					set_variable = {
+						which = ssex_temp_append_index
+						value = prev
+					}
+					while = {
+						limit = {
+							check_variable = {
+								which = ssex_temp_append_index
+								value != 0
+							}
+						}
+						ssex_append_char = {
+							identifier = $identifier$
+							char = space
+						}
+						subtract_variable = {
+							which = ssex_temp_append_index
+							value = 1
+						}
+					}
+					break = yes
+				}
+			}
+		}
+		else = {
+			log_error = "ssex_append_to_string: Header for string not found in the current database."
+			break = yes
+		}
+		ssex_clear_return_value = yes
+		ssex_create_list_entry = {
+			identifier = $identifier$
+			[[index]index = ssex_temp_append_index]
+		}
+		set_variable = {
+			which = ssex_space_count
+			value = prev[[bound_to].prev]
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = ssex_space_count
+					value > 2
+				}
+			}
+			set_variable = {
+				which = ssex_tri_space_count
+				value = ssex_space_count
+			}
+			divide_variable = {
+				which = ssex_tri_space_count
+				value = 3
+			}
+			floor_variable = ssex_tri_space_count
+			modulo_variable = {
+				which = ssex_space_count
+				value = 3
+			}
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = ssex_space_count
+					value > 1
+				}
+			}
+			set_variable = {
+				which = ssex_pair_space_count
+				value = ssex_space_count
+			}
+			divide_variable = {
+				which = ssex_pair_space_count
+				value = 2
+			}
+			floor_variable = ssex_pair_space_count
+			modulo_variable = {
+				which = ssex_space_count
+				value = 2
+			}
+		}
+		event_target:ssex_return_value = {
+			if = {
+				limit = { is_variable_set = ssex_tri_space_count }
+				while = {
+					count < ssex_tri_space_count
+					set_name = "\\[This.GetName]   "
+				}
+			}
+			if = {
+				limit = { is_variable_set = ssex_pair_space_count }
+				while = {
+					count < ssex_pair_space_count
+					set_name = "\\[This.GetName]  "
+				}
+			}
+			while = {
+				count < ssex_space_count
+				set_name = "\\[This.GetName] "
+			}
+		}
+		ssex_clear_return_value = yes
+		# Do some modulus and divison to chunk into 3s, 2s and singular space groups
+		[[index]clear_variable = ssex_temp_append_index]
+	}
+	clear_global_event_target = ssex_hidden_scoped_string_database
+	[[bound_to]
+	}
+	clear_global_event_target = ssex_hidden_string_owner_scope
+	]
+	[[index]clear_variable = ssex_string_append_index]
+	clear_variable = ssex_space_count
+}
+
+ #####						#####
+##### Uncomparable strings #####
+ #####						#####
+ # Non-Comparable strings are easier to build strings and are recommended for creating dynamically named objects
+ # These strings are also able to accept other objects as parameters for building a final string value.
+ # It is recommended to use these strings when you only need to create a new string and destroy it upon build.
+
+### Creates a new non-comparable string object and links it to the given scope
+### Parameters
+# identifier 				- A unique identifier for the given string
+# text(optional) 			- Creates the string with this text at the base, text must be non spaced
+# bound_to(optional) 	- Binds the string to the set object, default value is this
+# overwrite(optional) 		- Determines whether or not to delete any existing string with the same identifier, default value is no
+ssex_new_string = {
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	else = {
+		log_error = "ssex_new_string: Invalid scope reference passed by argument: bound_to."
+		break = yes
+	}
+	event_target:ssex_hidden_string_owner_scope = {
+	]
+	if = {
+		limit = { ssex_scope_can_be_named = yes }
+		ssex_clear_return_value = yes
+		ssex_get_or_create_database = { bound_to = this }
+		event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+		ssex_clear_return_value = yes
+		event_target:ssex_hidden_scoped_string_database = {
+			ssex_create_list = {
+				identifier = $identifier$
+				overwrite = yes
+			}
+		}
+		event_target:ssex_return_value = {
+			set_leader_flag = ssex_string_of_@prev
+			[[text]set_name = $text$]
+		}
+	}
+	else = { log_error = "ssex_append_stringbuilder: Scope bound_to cannot be renamed as it does not support an implementation of the set_name effect." }
+	[[bound_to]
+	}
+	clear_global_event_target = ssex_hidden_string_owner_scope
+	]
+}
+
+### Appends a string of non space values to an existing string
+### Parameters
+# identifier 			- A unique identifier for the given string
+# text 					- Creates the string with this text at the base, text must be non spaced
+# bound_to(optional) 	- The scope that the associated string is stored to
+# index(optional) 		- The index in the string to append this text, default value is current count - 1
+ssex_append_text = {
+	[[index]
+	set_variable = {
+		which = ssex_string_append_index
+		value = $index$
+	}
+	]
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	else = {
+		log_error = "ssex_append_text: Invalid scope reference passed by argument: bound_to."
+		break = yes
+	}
+	event_target:ssex_hidden_string_owner_scope = {
+	]
+	ssex_clear_return_value = yes
+	ssex_get_database = { bound_to = this }
+	if = {
+		limit = { NOT = { exists = event_target:ssex_return_value } }
+		log_error = "ssex_append_text: Scope this is not a database and does not have an obviously accessable database."
+		break = yes
+	}
+	event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+	ssex_clear_return_value = yes
+	event_target:ssex_hidden_scoped_string_database = {
+		prev[[bound_to].prev] = {
+			if = {
+				limit = { is_variable_set = ssex_string_append_index }
+				prev = {
+					set_variable = {
+						which = ssex_temp_append_index
+						value = {
+							scope = prev
+							variable = ssex_string_append_index
+						}
+					}
+				}
+			}
+		}
+		ssex_get_list_header = { identifier = $identifier$ }
+		if = {
+			limit = { exists = event_target:ssex_return_value }
+			event_target:ssex_return_value = {
+				if = {
+					limit = { has_leader_flag = ssex_comparable_string }
+					log_error = "ssex_append_text: Attempting to add text to a comparable string, use ssex_append_char for this string"
+					break = yes
+				}
+			}
+		}
+		else = {
+			log_error = "ssex_append_text: Header for string not found in the current database."
+			break = yes
+		}
+		ssex_clear_return_value = yes
+		ssex_create_list_entry = {
+			identifier = $identifier$
+			[[index]index = ssex_temp_append_index]
+		}
+		event_target:ssex_return_value = { set_name = $text$ }
+		[[index]clear_variable = ssex_temp_append_index]
+	}
+	clear_global_event_target = ssex_hidden_scoped_string_database
+	[[bound_to]
+	}
+	clear_global_event_target = ssex_hidden_string_owner_scope
+	]
+	[[index]clear_variable = ssex_string_append_index]
+	ssex_clear_return_value = yes
+}
+
+### Appends a parameter to be filled in at string return
+### Parameters
+# identifier 			- A unique identifier for the given string
+# param_index 			- The index of the parameter, used when calling the same parameter multiple times
+# bound_to(optional) 	- The scope that the associated string is stored to, default value is this
+# index(optional) 		- The index in the string to append this text, default value is current count - 1
+ssex_append_parameter = {
+	[[index]
+	set_variable = {
+		which = ssex_string_append_index
+		value = $index$
+	}
+	]
+	set_variable = {
+		which = ssex_param_index
+		value = $param_index$
+	}
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	else = { log_error = "ssex_append_parameter: Invalid scope reference passed by argument: bound_to." }
+	event_target:ssex_hidden_string_owner_scope = {
+	]
+	ssex_get_database = { bound_to = this }
+	if = {
+		limit = { exists = event_target:ssex_return_value }
+		event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+	}
+	else = { event_target:ssex_global_database = { save_global_event_target_as = ssex_hidden_scoped_string_database } }
+	event_target:ssex_hidden_scoped_string_database = {
+		if = {
+			limit = { prev[[bound_to].prev] = { is_variable_set = ssex_string_append_index } }
+			set_variable = {
+				which = ssex_temp_append_index
+				value = {
+					scope = prev[[bound_to].prev]
+					variable = ssex_string_append_index
+				}
+			}
+		}
+		ssex_create_list_entry = {
+			identifier = $identifier$
+			[[index]index = ssex_temp_append_index]
+		}
+		event_target:ssex_return_value = {
+			ssex_set_database_entry_flag = { flag = ssex_string_parameter }
+			set_variable = {
+				which = ssex_param_index
+				value = prev.prev[[bound_to].prev]
+			}
+		}
+		ssex_clear_return_value = yes
+		[[index]clear_variable = ssex_temp_append_index]
+	}
+	clear_global_event_target = ssex_hidden_scoped_string_database
+	[[bound_to]
+	}
+	clear_global_event_target = ssex_hidden_string_owner_scope
+	]
+	clear_variable = ssex_param_index
+	[[index]clear_variable = ssex_string_append_index]
+}
+
+ #####				   #####
+##### Comparable String #####
+ #####				   #####
+ # Comparable strings are similar to default strings but lack certain features to allow for string and character based equality
+ # Comparable strings CANNOT have parameters due to their dynamic values
+ # These strings are used for user input and for comparing string values in the niche cases you need them
+
+### Creates a new string which is capable of being compared to another string
+### Parameters
+# identifier 				- A database unique identifier for the given string
+# char(optional)			- The root character in the string, NOTE that a char is a single ascii character, such as a, 1, or !
+# bound_to(optional) 		- Binds the string to the set object, default value is this
+# overwrite(optional) 		- Determines whether or not to delete any existing string with the same identifier, default value is no
+ssex_new_comparable_string = {
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	else = { log_error = "ssex_new_comparable_string: Invalid scope reference passed by argument: bound_to." }
+	event_target:ssex_hidden_string_owner_scope = {
+	]
+	if = {
+		limit = { ssex_scope_can_be_named = yes }
+		ssex_clear_return_value = yes
+		ssex_get_database = { bound_to = this }
+		if = {
+			limit = { exists = event_target:ssex_return_value }
+			event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+		}
+		else = {
+			ssex_create_database = { bound_to = this }
+			event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+		}
+		ssex_clear_return_value = yes
+		event_target:ssex_hidden_scoped_string_database = {
+			ssex_create_list = {
+				identifier = $identifier$
+				overwrite = $overwrite|no$
+			}
+		}
+		clear_global_event_target = ssex_hidden_scoped_string_database
+		event_target:ssex_return_value = {
+			ssex_set_database_entry_flag = { flag = ssex_string_of_@prev }
+			ssex_set_database_entry_flag = { flag = ssex_comparable_string }
+			[[char]set_name = $char$]
+		}
+	}
+	else = { log_error = "ssex_new_comparable_string: Scope bound_to cannot be renamed as it does not support an implementation of the set_name effect." }
+	[[bound_to]
+	}
+	clear_global_event_target = ssex_hidden_string_owner_scope
+	]
+}
+
+### Appends a new character in a method that it can be compared vs other strings
+### Parameters
+# identifier 			- A unique identifier for the given string
+# char					- The character to add to the string, NOTE that a char is a single ascii character, such as a, 1, or !
+# bound_to(optional) 	- The scope that the associated string is stored to
+# index(optional) 		- The index in the string to append this text, default value is current count - 1
+ssex_append_char = {
+	[[index]
+	set_variable = {
+		which = ssex_string_append_index
+		value = $index$
+	}
+	change_variable = {
+		which = ssex_string_append_index
+		value = 4
+	}
+	]
+	if = {
+		limit = { is_variable_set = ssex_string_append_index }
+		log = "\\[This.GetName].ssex_string_append_index = \\[This.ssex_string_append_index]"
+	}
+	ssex_ensure_string_dictionary_exists = yes
+	event_target:ssex_char_dictionary = {
+		ssex_get_database_entry = { identifier = ssex_char_$char$ }
+		if = {
+			limit = { exists = event_target:ssex_return_value }
+			event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_char_value }
+		}
+		else = {
+			log_error = "ssex_append_char: Invalid char passed to string value."
+			break = yes
+		}
+	}
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	else = {
+		log_error = "ssex_append_char: Invalid scope reference passed by argument: bound_to."
+		break = yes
+	}
+	event_target:ssex_hidden_string_owner_scope = {
+	]
+	ssex_get_database = { bound_to = this }
+	if = {
+		limit = { NOT = { exists = event_target:ssex_return_value } }
+		log_error = "ssex_append_char: Scope this is not a database and does not have an obviously accessable database."
+		break = yes
+	}
+	event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+	event_target:ssex_hidden_scoped_string_database = {
+		prev[[bound_to].prev] = {
+			if = {
+				limit = { is_variable_set = ssex_string_append_index }
+				event_target:ssex_hidden_scoped_string_database = {
+					set_variable = {
+						which = ssex_string_append_index
+						value = prev
+					}
+				}
+			}
+		}
+		log = "ssex_string_append_index = \\[This.ssex_string_append_index]"
+		ssex_create_list_entry = {
+			identifier = $identifier$
+			[[index]index = ssex_string_append_index]
+		}
+		event_target:ssex_hidden_char_value = {
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = prev
+				}
+				set_name = \\[Prev.GetName]
+			}
+		}
+		[[index]clear_variable = ssex_string_append_index]
+	}
+	[[bound_to]
+	}
+	clear_global_event_target = ssex_hidden_string_owner_scope
+	]
+	clear_global_event_target = ssex_hidden_char_value
+	[[index]clear_variable = ssex_string_append_index]
+	ssex_clear_return_value = yes
+}
+
+### Removes a character from the comparable string
+### Parameters
+# identifier			- A unique identifier for the given string
+# index					- The index of which character to remove
+# bound_to(optional)	- The scope that the associated string is stored to
+ssex_remove_char = {
+	set_variable = {
+		which = ssex_hidden_remove_index
+		value = $index$
+	}
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	else = {
+		log_error = "ssex_remove_char: Invalid scope reference passed by argument: bound_to."
+		break = yes
+	}
+	event_target:ssex_hidden_string_owner_scope = {
+	]
+	ssex_clear_return_value = yes
+	ssex_get_database = { bound_to = this }
+	if = {
+		limit = { NOT = { exists = event_target:ssex_return_value } }
+		log_error = "ssex_remove_char: Scope this is not a database and does not have an obviously accessable database."
+		break = yes
+	}
+	event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+	event_target:ssex_hidden_scoped_string_database = {
+		set_variable = {
+			which = ssex_hidden_remove_index
+			value = prev[[bound_to].prev]
+		}
+		ssex_remove_list_entry = {
+			identifier = $identifier$
+			index = ssex_hidden_remove_index
+			delete = yes
+		}
+		clear_variable = ssex_hidden_remove_index
+	}
+	clear_global_event_target = ssex_hidden_scoped_string_database
+	[[bound_to]
+	}
+	clear_global_event_target = ssex_hidden_string_owner_scope
+	]
+	clear_variable = ssex_hidden_remove_index
+}
+
+### Internal use, do not use outside of code within this mod
+ssex_ensure_string_dictionary_exists = {
+	if = {
+		limit = { NOT = { exists = event_target:ssex_char_dictionary } }
+		ssex_get_database = { identifier = ssex_internal_string_dictionary }
+		if = {
+			limit = { NOT = { exists = event_target:ssex_return_value } }
+			ssex_create_database = { identifier = ssex_internal_string_dictionary }
+		}
+		event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database }
+		ssex_clear_return_value = yes
+		event_target:ssex_hidden_scoped_string_database = {
+			# Lowercase Letters
+			ssex_create_database_entry = { identifier = ssex_char_a }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 0
+				}
+				set_name = "a"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_b }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 1
+				}
+				set_name = "b"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_c }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 2
+				}
+				set_name = "c"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_d }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 3
+				}
+				set_name = "d"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_e }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 4
+				}
+				set_name = "e"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_f }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 5
+				}
+				set_name = "f"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_g }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 6
+				}
+				set_name = "g"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_h }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 7
+				}
+				set_name = "h"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_i }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 8
+				}
+				set_name = "i"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_j }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 9
+				}
+				set_name = "j"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_k }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 10
+				}
+				set_name = "k"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_l }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 11
+				}
+				set_name = "l"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_m }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 12
+				}
+				set_name = "m"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_n }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 13
+				}
+				set_name = "n"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_o }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 14
+				}
+				set_name = "o"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_p }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 15
+				}
+				set_name = "p"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_q }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 16
+				}
+				set_name = "q"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_r }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 17
+				}
+				set_name = "r"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_s }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 18
+				}
+				set_name = "s"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_t }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 19
+				}
+				set_name = "t"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_u }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 20
+				}
+				set_name = "u"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_v }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 21
+				}
+				set_name = "v"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_w }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 22
+				}
+				set_name = "w"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_x }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 23
+				}
+				set_name = "x"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_y }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 24
+				}
+				set_name = "y"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_z }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 25
+				}
+				set_name = "z"
+			}
+			# Capital Letters
+			ssex_create_database_entry = { identifier = ssex_char_ca }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 26
+				}
+				set_name = "A"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cb }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 27
+				}
+				set_name = "B"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cc }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 28
+				}
+				set_name = "C"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cd }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 29
+				}
+				set_name = "D"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_ce }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 30
+				}
+				set_name = "E"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cf }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 31
+				}
+				set_name = "F"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cg }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 32
+				}
+				set_name = "G"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_ch }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 33
+				}
+				set_name = "H"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_ci }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 34
+				}
+				set_name = "I"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cj }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 35
+				}
+				set_name = "J"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_ck }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 36
+				}
+				set_name = "K"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cl }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 37
+				}
+				set_name = "L"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cm }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 38
+				}
+				set_name = "M"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cn }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 39
+				}
+				set_name = "N"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_co }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 40
+				}
+				set_name = "O"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cp }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 41
+				}
+				set_name = "P"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cq }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 42
+				}
+				set_name = "Q"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cr }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 43
+				}
+				set_name = "R"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cs }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 44
+				}
+				set_name = "S"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_ct }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 45
+				}
+				set_name = "T"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cu }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 46
+				}
+				set_name = "U"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cv }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 47
+				}
+				set_name = "V"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cw }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 48
+				}
+				set_name = "W"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cx }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 49
+				}
+				set_name = "X"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cy }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 50
+				}
+				set_name = "Y"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_cz }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 51
+				}
+				set_name = "Z"
+			}
+			# Number Chars
+			ssex_create_database_entry = { identifier = ssex_char_0 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 52
+				}
+				set_name = "0"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_1 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 53
+				}
+				set_name = "1"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_2 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 54
+				}
+				set_name = "2"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_3 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 55
+				}
+				set_name = "3"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_4 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 56
+				}
+				set_name = "4"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_5 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 57
+				}
+				set_name = "5"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_6 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 58
+				}
+				set_name = "6"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_7 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 59
+				}
+				set_name = "7"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_8 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 60
+				}
+				set_name = "8"
+			}
+			ssex_create_database_entry = { identifier = ssex_char_9 }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 61
+				}
+				set_name = "9"
+			}
+			# Special Chars
+			ssex_create_database_entry = { identifier = ssex_char_space }
+			event_target:ssex_return_value = {
+				set_variable = {
+					which = ssex_character_value
+					value = 61
+				}
+				set_name = " "
+			}
+			save_global_event_target_as = ssex_char_dictionary
+		}
+		clear_global_event_target = ssex_hidden_scoped_string_database
+	}
+}
+
+### Compares two strings for equality
+### Parameters
+# identifier					- A database unique identifier for the first string
+# bound_to(optional)			- The scope that the primary string is stored to
+# compare_identifier			- A database unique identifier for the comparing string
+# compare_database(optional)	- The database containing the comparing string
+# compare_owner(optional)		- The owner scope of the comparing string(Will not execute if compare_database is passed)
+ssex_compare_string = {
+	ssex_internal_reset_comparison = yes
+	[[compare_database]
+	if = {
+		limit = { is_scope_set = $compare_database$ }
+		$compare_database$ = { save_global_event_target_as = ssex_hidden_compare_database }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$compare_database$ }
+		event_target:$compare_database$ = { save_global_event_target_as = ssex_hidden_compare_database }
+	}
+	else = {
+		log_error = "ssex_compare_string: The provided scope is not a database entry: compare_database"
+		break = yes
+	}
+	]
+	[[compare_owner]
+	if = {
+		limit = { NOT = { exists = event_target:ssex_hidden_compare_database } }
+		if = {
+			limit = { is_scope_set = $compare_owner$ }
+			$compare_database$ = { save_global_event_target_as = ssex_hidden_compare_owner }
+		}
+		elssex_if = {
+			limit = { is_scope_set = event_target:$compare_owner$ }
+			event_target:$compare_database$ = { save_global_event_target_as = ssex_hidden_compare_owner }
+		}
+		else = {
+			log_error = "ssex_compare_string: The provided scope is not a database entry: compare_database"
+			break = yes
+		}
+		event_target:ssex_hidden_compare_owner = {
+			ssex_clear_return_value = yes
+			ssex_get_database = { bound_to = this }
+		}
+		if = {
+			limit = { NOT = { exists = event_target:ssex_return_value } }
+			clear_global_event_target = ssex_hidden_compare_owner
+			log_error = "ssex_compare_string: Invalid scope reference passed by argument: compare_owner"
+			break = yes
+		}
+		event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_compare_database }
+		clear_global_event_target = ssex_hidden_compare_owner
+	}
+	]
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_string_owner_scope }
+	}
+	else = {
+		log_error = "ssex_compare_string: Invalid scope reference passed by argument: bound_to."
+		break = yes
+	}
+	event_target:ssex_hidden_string_owner_scope = {
+	]
+	ssex_clear_return_value = yes
+	ssex_get_database = { bound_to = this }
+	if = {
+		limit = { NOT = { exists = event_target:ssex_return_value } }
+		log_error = "ssex_compare_string: Scope this is not a database and does not have an obviously accessable database."
+		break = yes
+	}
+	event_target:ssex_return_value = {
+		save_global_event_target_as = ssex_hidden_scoped_string_database
+		if = {
+			limit = { NOT = { exists = event_target:ssex_hidden_compare_database } }
+			save_global_event_target_as = ssex_hidden_compare_database
+		}
+	}
+	event_target:ssex_hidden_scoped_string_database = {
+		ssex_clear_return_value = yes
+		ssex_get_enumerator = { identifier = $identifier$ }]
+		if = {
+			limit = { NOT = { exists = event_target:ssex_return_value } }
+			log_error = "ssex_compare_string: Scope this is not a database and does not have an obviously accessable database."
+			break = yes
+		}
+		event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_scoped_string_database_enumerator }
+		ssex_clear_return_value = yes
+		event_target:ssex_hidden_scoped_string_database_enumerator = {
+			ssex_enumerator_return_current = yes
+			event_target:ssex_return_value = { save_global_event_target_as = ssex_hidden_char_value }
+			ssex_clear_return_value = yes
+			ssex_internal_set_comparison_true = yes
+			while = {
+				limit = { exists = event_target:ssex_hidden_char_value }
+				event_target:ssex_hidden_char_value = {
+					if = {
+						limit = { is_variable_set = ssex_character_value }
+						event_target:ssex_hidden_compare_database = {
+							ssex_get_list_entry = {
+								identifier = $compare_identifier$
+								index = ssex_hidden_index
+							}
+							event_target:ssex_return_value = {
+								if = {
+									limit = { is_variable_set = ssex_character_value }
+									set_variable = {
+										which = ssex_hidden_char_comparison
+										value = {
+											scope = event_target:ssex_hidden_char_value
+											variable = ssex_list_index
+										}
+									}
+									if = {
+										limit = {
+											check_variable = {
+												which = ssex_list_index
+												value != ssex_hidden_char_comparison
+											}
+										}
+										clear_variable = ssex_hidden_char_comparison
+										ssex_internal_set_comparison_false = yes
+										break = yes
+									}
+									clear_variable = ssex_hidden_char_comparison
+								}
+								else = {
+									ssex_internal_set_comparison_false = yes
+									log_error = "ssex_compare_string: The string character is not a valid comparable token and cannot be compared."
+									break = yes
+								}
+							}
+						}
+					}
+					else = {
+						log_error = "ssex_compare_string: The string character is not a valid comparable token and cannot be compared."
+						break = yes
+					}
+				}
+			}
+			ssex_clear_return_value = yes
+			if = {
+				limit = { exists = event_target:ssex_hidden_char_value }
+				clear_global_event_target = ssex_hidden_char_value
+			}
+		}
+	}
+	clear_global_event_target = ssex_hidden_scoped_string_database
+	clear_global_event_target = ssex_hidden_compare_database
+	[[bound_to]
+	}
+	clear_global_event_target = ssex_hidden_string_owner_scope
+	]
+}

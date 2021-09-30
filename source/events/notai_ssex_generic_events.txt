@@ -1,42 +1,42 @@
-namespace = se_setup
+namespace = ssex_setup
 
  #######################
 ##### Library Setup #####
  #######################
 
  event = {
-	id = se_setup.0
+	id = ssex_setup.0
 	is_triggered_only = yes
 	hide_window = yes
-	trigger = { NOT = { exists = event_target:se_global_event_database } }
+	trigger = { NOT = { exists = event_target:ssex_global_event_database } }
 	immediate = {
+		set_global_flag = script_extender_enabled						# Generic mod installed key
 		create_species = {
-			name = se_database_species_name
+			name = ssex_database_species_name
 			class = MACHINE
 			traits = {}
-			effect = { se_save_global_event_target_as = { event_target_name = se_database_entry_species } }
+			effect = { ssex_save_global_event_target_as = { event_target_name = ssex_database_entry_species } }
 		}
-		se_create_database = yes
-		event_target:se_last_created_database = {
+		ssex_create_database = yes
+		event_target:ssex_last_created_database = {
 			set_variable = {
-				which = se_global_database_count
+				which = ssex_global_database_count
 				value = 1
 			}
-			se_set_database_flag = { flag = se_global_database }
-			se_save_global_event_target_as = { event_target_name = se_global_database }
+			ssex_set_database_flag = { flag = ssex_global_database }
+			ssex_save_global_event_target_as = { event_target_name = ssex_global_database }
 		}
-		se_create_event_country = { identifier = se_private_event_country }
-		event_target:se_return_value = { se_save_global_event_target_as = { event_target_name = se_event_country } }
-		se_clear_return_value = yes
+		ssex_create_event_country = { identifier = ssex_private_event_country }
+		event_target:ssex_return_value = { ssex_save_global_event_target_as = { event_target_name = ssex_event_country } }
+		ssex_clear_return_value = yes
 	}
 }
 
 event = {
-	id = se_setup.1
+	id = ssex_setup.1
 	is_triggered_only = yes
 	hide_window = yes
 	immediate = {
-		set_global_flag = script_extender_enabled						# Generic mod installed key
 		fire_on_action = { on_action = on_game_start_begin }
 		# Done for compatibility with vanilla
 		if = {
@@ -54,7 +54,7 @@ event = {
 ##### Mod Updating #####
  ######################
 
-namespace = se_mod_auto_update
+namespace = ssex_mod_auto_update
 
 ### On game loaded, register mod version
 # if mod version doesnt already exist
@@ -63,12 +63,12 @@ namespace = se_mod_auto_update
 
 # Initial register event
 event = {
-	id = se_mod_auto_update.0
+	id = ssex_mod_auto_update.0
 	is_triggered_only = yes
 	hide_window = yes
-	trigger = { has_global_flag = se_mod_update_enabled }
+	trigger = { has_global_flag = ssex_mod_update_enabled }
 	immediate = {
-		fire_on_action = { on_action = on_se_register_mod_version }
+		fire_on_action = { on_action = on_ssex_register_mod_version }
 	}
 }
 
@@ -76,7 +76,7 @@ event = {
 ##### Paged Events #####
  ######################
 
-namespace = se_pagination
+namespace = ssex_pagination
 
 
 
@@ -84,360 +84,360 @@ namespace = se_pagination
 ##### Rand Num Gen #####
  ######################
 
-namespace = se_rng
+namespace = ssex_rng
 
 country_event = {
-	id = se_rng.0
+	id = ssex_rng.0
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = { factor = 1 }
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_min_checks
+			has_country_flag = ssex_rng_disable_min_checks
 			check_variable = {
-				which = se_rng_min_current_column
+				which = ssex_rng_min_current_column
 				value < 1
 			}
 		}
 	}
 	immediate = {
 		set_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 0
 		}
 	}
 }
 country_event = {
-	id = se_rng.1
+	id = ssex_rng.1
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = {
 		factor = 1
 		modifier = {
 			factor = -0.5
-			NOT = { has_country_flag = se_rng_disable_max_checks }
+			NOT = { has_country_flag = ssex_rng_disable_max_checks }
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value = 1
 			}
 		}
 	}
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_max_checks
+			has_country_flag = ssex_rng_disable_max_checks
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value > 0
 			}
 		}
 		OR = {
-			has_country_flag = se_rng_disable_min_checks
+			has_country_flag = ssex_rng_disable_min_checks
 			check_variable = {
-				which = se_rng_min_current_column
+				which = ssex_rng_min_current_column
 				value < 2
 			}
 		}
 	}
 	immediate = {
 		set_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 1
 		}
 	}
 }
 country_event = {
-	id = se_rng.2
+	id = ssex_rng.2
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = {
 		factor = 1
 		modifier = {
 			factor = -0.5
-			NOT = { has_country_flag = se_rng_disable_max_checks }
+			NOT = { has_country_flag = ssex_rng_disable_max_checks }
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value = 2
 			}
 		}
 	}
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_max_checks
+			has_country_flag = ssex_rng_disable_max_checks
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value > 1
 			}
 		}
 		OR = {
-			has_country_flag = se_rng_disable_min_checks
+			has_country_flag = ssex_rng_disable_min_checks
 			check_variable = {
-				which = se_rng_min_current_column
+				which = ssex_rng_min_current_column
 				value < 3
 			}
 		}
 	}
 	immediate = {
 		change_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 2
 		}
 	}
 }
 country_event = {
-	id = se_rng.3
+	id = ssex_rng.3
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = {
 		factor = 1
 		modifier = {
 			factor = -0.5
-			NOT = { has_country_flag = se_rng_disable_max_checks }
+			NOT = { has_country_flag = ssex_rng_disable_max_checks }
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value = 3
 			}
 		}
 	}
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_max_checks
+			has_country_flag = ssex_rng_disable_max_checks
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value > 2
 			}
 		}
 		OR = {
-			has_country_flag = se_rng_disable_min_checks
+			has_country_flag = ssex_rng_disable_min_checks
 			check_variable = {
-				which = se_rng_min_current_column
+				which = ssex_rng_min_current_column
 				value < 4
 			}
 		}
 	}
 	immediate = {
 		change_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 3
 		}
 	}
 }
 country_event = {
-	id = se_rng.4
+	id = ssex_rng.4
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = {
 		factor = 1
 		modifier = {
 			factor = -0.5
-			NOT = { has_country_flag = se_rng_disable_max_checks }
+			NOT = { has_country_flag = ssex_rng_disable_max_checks }
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value = 4
 			}
 		}
 	}
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_max_checks
+			has_country_flag = ssex_rng_disable_max_checks
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value > 3
 			}
 		}
 		OR = {
-			has_country_flag = se_rng_disable_min_checks
+			has_country_flag = ssex_rng_disable_min_checks
 			check_variable = {
-				which = se_rng_min_current_column
+				which = ssex_rng_min_current_column
 				value < 5
 			}
 		}
 	}
 	immediate = {
 		change_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 4
 		}
 	}
 }
 country_event = {
-	id = se_rng.5
+	id = ssex_rng.5
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = {
 		factor = 1
 		modifier = {
 			factor = -0.5
-			NOT = { has_country_flag = se_rng_disable_max_checks }
+			NOT = { has_country_flag = ssex_rng_disable_max_checks }
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value = 5
 			}
 		}
 	}
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_max_checks
+			has_country_flag = ssex_rng_disable_max_checks
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value > 4
 			}
 		}
 		OR = {
-			has_country_flag = se_rng_disable_min_checks
+			has_country_flag = ssex_rng_disable_min_checks
 			check_variable = {
-				which = se_rng_min_current_column
+				which = ssex_rng_min_current_column
 				value < 6
 			}
 		}
 	}
 	immediate = {
 		change_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 5
 		}
 	}
 }
 country_event = {
-	id = se_rng.6
+	id = ssex_rng.6
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = {
 		factor = 1
 		modifier = {
 			factor = -0.5
-			NOT = { has_country_flag = se_rng_disable_max_checks }
+			NOT = { has_country_flag = ssex_rng_disable_max_checks }
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value = 6
 			}
 		}
 	}
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_max_checks
+			has_country_flag = ssex_rng_disable_max_checks
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value > 5
 			}
 		}
 		OR = {
-			has_country_flag = se_rng_disable_min_checks
+			has_country_flag = ssex_rng_disable_min_checks
 			check_variable = {
-				which = se_rng_min_current_column
+				which = ssex_rng_min_current_column
 				value < 7
 			}
 		}
 	}
 	immediate = {
 		change_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 6
 		}
 	}
 }
 country_event = {
-	id = se_rng.7
+	id = ssex_rng.7
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = {
 		factor = 1
 		modifier = {
 			factor = -0.5
-			NOT = { has_country_flag = se_rng_disable_max_checks }
+			NOT = { has_country_flag = ssex_rng_disable_max_checks }
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value = 7
 			}
 		}
 	}
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_max_checks
+			has_country_flag = ssex_rng_disable_max_checks
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value > 6
 			}
 		}
 		OR = {
-			has_country_flag = se_rng_disable_min_checks
+			has_country_flag = ssex_rng_disable_min_checks
 			check_variable = {
-				which = se_rng_min_current_column
+				which = ssex_rng_min_current_column
 				value < 8
 			}
 		}
 	}
 	immediate = {
 		change_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 7
 		}
 	}
 }
 country_event = {
-	id = se_rng.8
+	id = ssex_rng.8
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = {
 		factor = 1
 		modifier = {
 			factor = -0.5
-			NOT = { has_country_flag = se_rng_disable_max_checks }
+			NOT = { has_country_flag = ssex_rng_disable_max_checks }
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value = 8
 			}
 		}
 	}
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_max_checks
+			has_country_flag = ssex_rng_disable_max_checks
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value > 7
 			}
 		}
 		OR = {
-			has_country_flag = se_rng_disable_min_checks
+			has_country_flag = ssex_rng_disable_min_checks
 			check_variable = {
-				which = se_rng_min_current_column
+				which = ssex_rng_min_current_column
 				value < 9
 			}
 		}
 	}
 	immediate = {
 		change_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 8
 		}
 	}
 }
 country_event = {
-	id = se_rng.9
+	id = ssex_rng.9
 	is_triggered_only = yes
 	hide_window = yes
 	weight_multiplier = {
 		factor = 1
 		modifier = {
 			factor = -0.5
-			NOT = { has_country_flag = se_rng_disable_max_checks }
+			NOT = { has_country_flag = ssex_rng_disable_max_checks }
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value = 9
 			}
 		}
 	}
 	trigger = {
 		OR = {
-			has_country_flag = se_rng_disable_max_checks
+			has_country_flag = ssex_rng_disable_max_checks
 			check_variable = {
-				which = se_rng_max_current_column
+				which = ssex_rng_max_current_column
 				value > 8
 			}
 		}
 	}
 	immediate = {
 		change_variable = {
-			which = se_rng_column_value
+			which = ssex_rng_column_value
 			value = 9
 		}
 	}

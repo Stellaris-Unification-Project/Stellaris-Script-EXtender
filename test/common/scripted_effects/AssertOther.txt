@@ -1,0 +1,23 @@
+init_assert = {
+	if = {
+		limit = { NOT = { exists = event_target:ssex_test_global_database } }
+		ssex_clear_return_value = yes
+		ssex_get_database = { identifier = ssex_test_database }
+		if = {
+			limit = { NOT = { exists = event_target:ssex_return_value } }
+			ssex_create_database = { identifier = ssex_test_database }
+		}
+		event_target:ssex_return_value = { save_global_event_target_as = ssex_test_global_database }
+	}
+	ssex_clear_return_value = yes
+}
+
+set_assert_failed = {
+	set_global_flag = ssex_test_assert_failed
+}
+set_assert_passed = {
+	remove_global_flag = ssex_test_assert_failed
+}
+clear_assert_result = {
+	remove_global_flag = ssex_test_assert_failed
+}

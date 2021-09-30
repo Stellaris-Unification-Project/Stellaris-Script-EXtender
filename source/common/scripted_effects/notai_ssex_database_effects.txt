@@ -1,0 +1,691 @@
+
+ #####                         #####
+##### Script Extender Databases #####
+ #####                         #####
+ # All database effects should be assumed to take 1 effect call on the effect call stack
+ # Databases are used for the storage and collection of specific data, mainly required for a specific scope
+ # For best compatibility, databases should not be interacted with behind the scenes beyond the specific Script Extender provided triggers and effect
+
+### Creates a database object
+### Parameters
+# identifier(optional)		- A global unique identifier to make retrieving the database easier(useful mainly for global databases)
+# bound_to(optional)		- A scope object to lock database access to, default value is this
+### Access return value by scope - event_target:ssex_last_created_database or event_target:ssex_return_value
+ssex_create_database = {
+	[[bound_to]
+	if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_db_owner }
+	}
+	elssex_if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = { save_global_event_target_as = ssex_hidden_db_owner }
+	}
+	else = {
+		log_error = "ssex_create_database: Invalid scope reference passed by argument: bound_to"
+		break = yes
+	}
+	if = {
+		limit = { exists = event_target:ssex_hidden_db_owner }
+	]
+		create_country = {
+			type = ssex_country_database
+			effect = {
+				[[bound_to]
+				if = {
+					limit = { exists = event_target:ssex_hidden_db_owner }
+						set_country_flag = ssex_bound_to_object_@event_target:ssex_hidden_db_owner
+						set_name = ssex_database_bound_name						
+				}
+				elssex_]if = {
+					limit = { exists = event_target:ssex_global_database }
+					set_name = ssex_database_unbound_name
+				}
+				else = { set_name = ssex_database_backup_name }
+				[[identifier]set_country_flag = $identifier$]
+				set_variable = {
+					which = ssex_database_entry_count
+					value = 0
+				}
+				set_country_flag = ssex_country_database
+				if = {
+					limit = { exists = event_target:ssex_last_created_database }
+					clear_global_event_target = ssex_last_created_database
+				}
+				save_global_event_target_as = ssex_last_created_database
+				if = {
+					limit = { exists = event_target:ssex_return_value }
+					clear_global_event_target = ssex_return_value
+				}
+				save_global_event_target_as = ssex_return_value
+			}
+		}
+		[[bound_to]
+		if = {
+			limit = { exists = event_target:ssex_hidden_db_owner }
+			clear_global_event_target = ssex_hidden_db_owner
+		}
+		]
+	}
+}
+
+### Deletes a specific database from the game
+### Parameters
+# identifier(optional)		- A global unique identifier to make retrieving the database easier(useful mainly for global databases)
+# bound_to(optional) 		- The database(if any) assigned the parameter object
+### If none of these are written the effect will delete the calling scope if it is a database or the bound database to the calling scope
+ssex_delete_database = {
+	[[identifier]
+	if = {
+		limit = { NOT = { has_global_flag = ssex_delete_performed } }
+		random_country = {
+			limit = {
+				is_scope_type = country
+				is_country_type = ssex_country_database
+				has_country_flag = $identifier$
+			}
+			every_owned_leader = {
+				kill_leader = {
+					fire = yes
+					show_notification = no
+				}
+			}
+			every_owned_fleet = { delete_fleet = this }
+			destroy_country = yes
+		}
+		set_global_flag = ssex_delete_performed
+	}
+	]
+	[[bound_to]
+	if = {
+		limit = { NOT = { has_global_flag = ssex_delete_performed } }
+		if = {
+			limit = { exists = $bound_to$ }
+			$bound_to$ = { save_global_event_target_as = ssex_hidden_database_to_delete_owner }
+		}
+		elssex_if = {
+			limit = { exists = event_target:$bound_to$ }
+			event_target:$bound_to$ = { save_global_event_target_as = ssex_hidden_database_to_delete_owner }
+		}
+		else = { log_error = "ssex_delete_database: Invalid scope reference passed by argument: bound_to" }
+		if = {
+			limit = { exists = event_target:ssex_hidden_database_to_delete_owner }
+			random_country = {
+				limit = {
+					is_scope_type = country
+					is_country_type = ssex_country_database
+					has_country_flag = ssex_bound_to_object_@event_target:ssex_hidden_database_to_delete_owner
+				}
+				every_owned_leader = {
+					kill_leader = {
+						fire = yes
+						show_notification = no
+					}
+				}
+				every_owned_fleet = { delete_fleet = this }
+				destroy_country = yes
+			}
+			set_global_flag = ssex_delete_performed
+		}
+		clear_global_event_target = ssex_hidden_database_to_delete_owner
+	}
+	]
+	if = {
+		limit = { NOT = { has_global_flag = ssex_delete_performed } }
+		if = {
+			limit = {
+				is_scope_type = country
+				is_country_type = ssex_country_database
+			}
+			every_owned_leader = {
+				kill_leader = {
+					fire = yes
+					show_notification = no
+				}
+			}
+			every_owned_fleet = { delete_fleet = this }
+			destroy_country = yes
+		}
+		else = {
+			random_country = {
+				limit = {
+					is_scope_type = country
+					is_country_type = ssex_country_database
+					has_country_flag = ssex_bound_to_object_@this
+				}
+				every_owned_leader = {
+					kill_leader = {
+						fire = yes
+						show_notification = no
+					}
+				}
+				every_owned_fleet = { delete_fleet = this }
+				destroy_country = yes
+			}
+		}
+	}
+	else = { remove_global_flag = ssex_delete_performed }
+}
+
+### Retrieves a database object
+### Parameters
+# bound_to(optional) - The database(if any) assigned the parameter object
+# identifier(optional) - Unique identifier to single out which database to select
+### Access return value by scope event_target:ssex_return_value
+ssex_get_database = {
+	[[bound_to]
+	set_global_flag = ssex_optional_parameter_set
+	if = {
+		limit = { is_scope_set = $bound_to$ }
+		$bound_to$ = {
+			if = {
+				limit = {
+					is_scope_type = country
+					is_country_type = ssex_country_database
+				}
+				if = {
+					limit = { exists = event_target:ssex_return_value }
+					clear_global_event_target = ssex_return_value
+				}
+				save_global_event_target_as = ssex_return_value
+				break = yes
+			}
+			else = { save_global_event_target_as = ssex_hidden_db_target }
+		}
+	}
+	elssex_if = {
+		limit = { is_scope_set = event_target:$bound_to$ }
+		event_target:$bound_to$ = {
+			if = {
+				limit = {
+					is_scope_type = country
+					is_country_type = ssex_country_database
+				}
+				if = {
+					limit = { exists = event_target:ssex_return_value }
+					clear_global_event_target = ssex_return_value
+				}
+				save_global_event_target_as = ssex_return_value
+				break = yes
+			}
+			else = { save_global_event_target_as = ssex_hidden_db_target }
+		}
+	}
+	]
+	[[identifier]set_global_flag = ssex_optional_parameter_set]
+	if = {
+		limit = { has_global_flag = ssex_optional_parameter_set }
+		if = {
+			limit = { exists = event_target:ssex_return_value }
+			clear_global_event_target = ssex_return_value
+		}
+		random_country = {
+			limit = {
+				is_scope_type = country
+				is_country_type = ssex_country_database
+				OR = {
+					[[bound_to]
+					AND = {
+						exists = event_target:ssex_hidden_db_target
+						has_country_flag = ssex_bound_to_object_@event_target:ssex_hidden_db_target
+					}
+					]
+					[[identifier]has_country_flag = $identifier$]
+				}
+				
+			}
+			if = {
+				limit = { exists = event_target:ssex_return_value }
+				clear_global_event_target = ssex_return_value
+			}
+			save_global_event_target_as = ssex_return_value
+		}
+		remove_global_flag = ssex_optional_parameter_set
+	}
+	else = { log_error = "ssex_get_database: A parameter was required but not given, to properly function  one of the parameters bound_to or identifier are required to be inputed." }
+	if = {
+		limit = { exists = event_target:ssex_hidden_db_target }
+		clear_global_event_target = ssex_hidden_db_target
+	}
+}
+
+### Sets a flag to a database(accessed by ssex_get_database)
+### Parameters
+# flag - the flag to be added to the database
+# days(optional) 	- 	days for the flag to expire
+# months(optional) 	- 	months for the flag to expire
+# years(optional)	-	years for the flag to expire
+### If none of the optional parameters are added, the flag will remain until removed
+ssex_set_database_flag = {
+	if = {
+		limit = {
+			is_scope_type = country
+			is_country_type = ssex_country_database
+		}
+		[[days]
+			set_variable = {
+				which = ssex_database_days_value
+				value = $days$
+			}
+		]
+		[[months]
+			set_variable = {
+				which = ssex_database_months_value
+				value = $months$
+			}
+		]
+		[[years]
+			set_variable = {
+				which = ssex_database_years_value
+				value = $years$
+			}
+		]
+		if = {
+			limit = {
+				OR = {
+					[[days]
+						check_variable = {
+							which = ssex_database_days_value
+							value = $days$
+						}
+					]
+					[[months]
+						check_variable = {
+							which = ssex_database_months_value
+							value = $months$
+						}
+					]
+					[[years]
+						check_variable = {
+							which = ssex_database_years_value
+							value = $years$
+						}
+					]
+					always = no
+				}
+			}
+			[[days]clear_variable = ssex_database_days_value]
+			[[months]clear_variable = ssex_database_months_value]
+			[[years]clear_variable = ssex_database_years_value]
+			set_timed_country_flag = {
+				flag = $flag$
+				days = $days|0$
+				[[months]months = $months$]
+				[[years]years = $years$]
+			}
+		}
+		else = { set_country_flag = $flag$ }
+	}
+	else = { log_error = "ssex_set_database_flag: The provided scope is not a database entry:" }
+}
+
+### Removes a flag to a database(accessed by ssex_get_database)
+### Parameters
+# flag - the flag to be removed from the database
+ssex_remove_database_flag = {
+	if = {
+		limit = {
+			is_scope_type = country
+			is_country_type = ssex_country_database
+		}
+		remove_country_flag = $flag$
+	}
+	else = { log_error = "ssex_remove_database_flag: The provided scope is not a database entry:" }
+}
+
+### Creates a new database entry
+### Requires to be in the scope of a database(use ssex_get_database to get the database reference)
+### Parameters
+# identifier - A unique identifier for the entry, will not create a new entry if an entry with this identifier already exists
+# name(optional) - The name of the database entry
+# overwrite(optional) - Whether to delete the existing database entry if it finds one, default value is no
+### Access return value by scope event_target:ssex_return_value
+ssex_create_database_entry = {
+	if = {
+		limit = { exists = event_target:ssex_return_value }
+		clear_global_event_target = ssex_return_value
+	}
+	if = {
+		limit = {
+			is_scope_type = country
+			is_country_type = ssex_country_database
+		}
+		random_owned_leader = {
+			limit = {
+				is_scope_type = leader
+				exists = owner
+				owner = { is_country_type = ssex_country_database }
+				has_leader_flag = ssex_database_entry
+				has_leader_flag = $identifier$
+			}
+			[[overwrite]
+			prev = {
+				subtract_variable = {
+					which = ssex_database_entry_count
+					value = 1
+				}
+			}
+			kill_leader = {
+				fire = yes
+				show_notification = no
+			}
+			]
+			[[!overwrite]
+			if = {
+				limit = { exists = event_target:ssex_return_value }
+				clear_global_event_target = ssex_return_value
+			}
+			save_global_event_target_as = ssex_return_value
+			]
+		}
+		if = {
+			limit = { NOT = { exists = event_target:ssex_return_value } }
+			change_variable = {
+				which = ssex_database_entry_count
+				value = 1
+			}
+			create_leader = {
+				name = $name|ssex_empty_database_entry$
+				class = governor
+				species = event_target:ssex_database_entry_species
+				traits = {}
+				immortal = yes
+				effect = {
+					set_leader_flag = $identifier$
+					set_leader_flag = ssex_database_entry
+					if = {
+						limit = { exists = event_target:ssex_return_value }
+						clear_global_event_target = ssex_return_value
+					}
+					save_global_event_target_as = ssex_return_value
+				}
+			}
+		}
+	}
+	else = { log_error = "ssex_create_database_entry: The provided scope is not a database entry: This" }
+}
+
+### Removes an entry from the database
+### Requires to be the in the scope of the database(use ssex_get_database to get the database reference)
+### Parameters
+# identifier - a unique identifier for the entry
+ssex_remove_database_entry = {
+	if = {
+		limit = {
+			is_scope_type = country
+			is_country_type = ssex_country_database
+		}
+		random_owned_leader = {
+			limit = {
+				is_scope_type = leader
+				exists = owner
+				owner = { is_scope_type = country }
+				has_leader_flag = ssex_database_entry
+				has_leader_flag = $identifier$
+			}
+			owner = {
+				subtract_variable = {
+					which = ssex_database_entry_count
+					value = 1
+				}
+			}
+			kill_leader = {
+				fire = yes
+				show_notification = no
+			}
+		}
+	}
+	else = { log_error = "ssex_remove_database_entry: The provided scope is not a database entry:" }
+}
+
+### Retrieves an entry from a database
+### Requires to be in the scope of a database(use ssex_get_database to get the database reference)
+### Parameters
+# identifier - A unique identifier to the entry that needs to be found
+### Access return value by scope event_target:ssex_return_value
+ssex_get_database_entry = {
+	if = {
+		limit = { exists = event_target:ssex_return_value }
+		clear_global_event_target = ssex_return_value
+	}
+	if = {
+		limit = {
+			is_scope_type = country
+			is_country_type = ssex_country_database
+		}
+		random_owned_leader = {
+			limit = {
+				is_scope_type = leader
+				exists = owner
+				owner = { is_scope_type = country }
+				has_leader_flag = ssex_database_entry
+				has_leader_flag = $identifier$
+			}
+			if = {
+				limit = { exists = event_target:ssex_return_value }
+				clear_global_event_target = ssex_return_value
+			}
+			save_global_event_target_as = ssex_return_value
+		}
+	}
+	else = { log_error = "ssex_get_database_entry: The provided scope is not a database entry:" }
+}
+
+### Adds a flag to a database entry
+### Requires to be in the scope of a database entry(use ssex_get_database_entry to get the reference)
+### Parameters
+# flag - the flag to add to the entry
+# days(optional) 	- 	days for the flag to expire
+# months(optional) 	- 	months for the flag to expire
+# years(optional)	-	years for the flag to expire
+### If none of the optional parameters are added, the flag will remain until removed
+ssex_set_database_entry_flag = {
+	if = {
+		limit = {
+			is_scope_type = leader
+			exists = owner
+			owner = { is_scope_type = country }
+			OR = {
+				has_leader_flag = ssex_database_entry
+				has_leader_flag = ssex_list_header
+				has_leader_flag = ssex_item_in_list
+			}
+		}
+		[[days]
+			set_variable = {
+				which = ssex_entry_days_value
+				value = $days$
+			}
+		]
+		[[months]
+			set_variable = {
+				which = ssex_entry_months_value
+				value = $months$
+			}
+		]
+		[[years]
+			set_variable = {
+				which = ssex_entry_years_value
+				value = $years$
+			}
+		]
+		if = {
+			limit = {
+				OR = {
+					[[days]
+						check_variable = {
+							which = ssex_entry_days_value
+							value = $days$
+						}
+					]
+					[[months]
+						check_variable = {
+							which = ssex_entry_months_value
+							value = $months$
+						}
+					]
+					[[years]
+						check_variable = {
+							which = ssex_entry_years_value
+							value = $years$
+						}
+					]
+					always = no
+				}
+			}
+			[[days]clear_variable = ssex_entry_days_value]
+			[[months]clear_variable = ssex_entry_months_value]
+			[[years]clear_variable = ssex_entry_years_value]
+			set_timed_leader_flag = {
+				flag = $flag$
+				days = $days|0$
+				[[months]months = $months$]
+				[[years]years = $years$]
+			}
+		}
+		else = { set_leader_flag = $flag$ }
+		
+	}
+	else = { log_error = "ssex_add_database_entry_flag: The provided scope is not a database entry: This" }
+}
+
+### Removes a flag to a database entry
+### Requires to be in the scope of a database entry(use ssex_get_database_entry to get the reference)
+### Parameters
+# flag - the flag to be removed from the entry
+ssex_remove_database_entry_flag = {
+	if = {
+		limit = {
+			is_scope_type = leader
+			exists = owner
+			owner = { is_scope_type = country }
+			OR = {
+				has_leader_flag = ssex_database_entry
+				has_leader_flag = ssex_list_header
+				has_leader_flag = ssex_item_in_list
+			}
+		}
+		remove_leader_flag = $flag$
+	}
+	else = { log_error = "ssex_remove_database_entry_flag: The provided scope is not a database entry: This" }
+}
+
+ #####							#####
+##### Database Extension Effects #####
+ #####							#####
+ # Assume all extension effects below take 2 effect calls on the effect stack
+ # Not distinct in their own right, merely pieces the above database effects together to create situational and convient data
+
+### Retrieves the database for the executing scope or returns the global database
+### Access return value by scope event_target:ssex_return_value
+ssex_get_scope_or_global_database = {
+	ssex_clear_return_value = yes
+	ssex_get_database = { bound_to = this }
+	if = {
+		limit = { NOT = { exists = event_target:ssex_return_value } }
+		event_target:ssex_global_database = { save_global_event_target_as = ssex_return_value }
+	}
+}
+
+### Retrieves the existing database and creates one if it does not exist
+### Parameters
+# identifier(optional)	- The unique identifier of this database, used for global databases
+# bound_to(optional)	- The scope this database is bound to, used for scope specific variables
+### Access return value by scope event_target:ssex_return_value
+ssex_get_or_create_database = {
+	[[identifier]set_global_flag = ssex_param_one_activated]
+	[[bound_to]set_global_flag = ssex_param_two_activated]
+	if = {
+		limit = {
+			NOR = {
+				has_global_flag = ssex_param_one_activated
+				has_global_flag = ssex_param_two_activated
+			}
+		}
+		log_error = "ssex_get_or_create_database: Neither parameters identifier or bound_to are fulfilled, a database lacking both parameters cannot be managed or found once all scopes point away from it."
+		break = yes
+	}
+	else = {
+		remove_global_flag = ssex_param_one_activated
+		remove_global_flag = ssex_param_two_activated
+	}
+	[[bound_to]
+		if = {
+			limit = { is_scope_set = $bound_to$ }
+			save_global_event_target_as = ssex_hidden_database_owner_scope
+		}
+		elssex_if = {
+			limit = { is_scope_set = event_target:$bound_to$ }
+			save_global_event_target_as = ssex_hidden_database_owner_scope
+		}
+		else = {
+			log_error = "ssex_get_or_create_database: Invalid scope reference passed by argument: bound_to"
+			break = yes
+		}
+	]
+	ssex_clear_return_value = yes
+	ssex_get_database = {
+		[[identifier]identifier = $identifier$]
+		[[bound_to]bound_to = event_target:ssex_hidden_database_owner_scope]
+	}
+	if = {
+		limit = { NOT = { exists = event_target:ssex_return_value } }
+		event_target:ssex_hidden_database_owner_scope = {
+			ssex_create_database = {
+				[[identifier]identifier = $identifier$]
+				[[bound_to]bound_to = event_target:ssex_hidden_database_owner_scope]
+			}
+		}
+	}
+}
+
+### Overwrites or just creates a new database if one does not already exists
+### Parameters
+# identifier(optional)	- The unique identifier of this database, used for global databases
+# bound_to(optional)	- The scope this database is bound to, used for scope specific variables
+### Access return value by scope event_target:ssex_return_value
+ssex_overwrite_database = {
+	[[identifier]set_global_flag = ssex_param_one_activated]
+	[[bound_to]set_global_flag = ssex_param_two_activated]
+	if = {
+		limit = {
+			NOR = {
+				has_global_flag = ssex_param_one_activated
+				has_global_flag = ssex_param_two_activated
+			}
+		}
+		log_error = "ssex_get_or_create_database: Neither parameters identifier or bound_to are fulfilled, a database lacking both parameters cannot be managed or found once all scopes point away from it."
+		break = yes
+	}
+	else = {
+		remove_global_flag = ssex_param_one_activated
+		remove_global_flag = ssex_param_two_activated
+	}
+	[[bound_to]
+		if = {
+			limit = { is_scope_set = $bound_to$ }
+			save_global_event_target_as = ssex_hidden_database_owner_scope
+		}
+		elssex_if = {
+			limit = { is_scope_set = event_target:$bound_to$ }
+			save_global_event_target_as = ssex_hidden_database_owner_scope
+		}
+		else = {
+			log_error = "ssex_get_or_create_database: Invalid scope reference passed by argument: bound_to"
+			break = yes
+		}
+	]
+	ssex_clear_return_value = yes
+	ssex_get_database = {
+		[[identifier]identifier = $identifier$]
+		[[bound_to]bound_to = event_target:ssex_hidden_database_owner_scope]
+	}
+	if = {
+		limit = { exists = event_target:ssex_return_value }
+		event_target:ssex_return_value = { ssex_delete_database = { database = this } }
+	}
+	ssex_create_database = {
+		[[identifier]identifier = $identifier$]
+		[[bound_to]bound_to = event_target:ssex_hidden_database_owner_scope]
+	}
+}

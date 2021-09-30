@@ -1,5 +1,5 @@
 ### Determines if the executing scope supports the GetName loc command
-se_scope_has_name = {
+ssex_scope_has_name = {
 	hidden_trigger = {
 		OR = {
 			is_scope_type = ambient_object
@@ -26,7 +26,7 @@ se_scope_has_name = {
 	}
 }
 ### Determines if the executing scope supports the set_name effect
-se_scope_can_be_named = {
+ssex_scope_can_be_named = {
 	hidden_trigger = {
 		OR = {
 			is_scope_type = army

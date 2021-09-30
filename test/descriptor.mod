@@ -5,4 +5,4 @@ tags={
 	"Script Extender"
 }
 name="Script Extender Testing"
-supported_version="3.0.*"
+supported_version="3.1.*"

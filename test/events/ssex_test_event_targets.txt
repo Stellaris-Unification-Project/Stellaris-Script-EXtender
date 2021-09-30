@@ -1,0 +1,36 @@
+namespace = ssex_test_event_targets
+
+country_event = {
+	id = ssex_test_event_targets.0
+	is_triggered_only = yes
+	hide_window = yes
+
+	immediate = {
+		init_assert = yes
+		ssex_clear_return_value = yes
+		ssex_get_or_create_database = { bound_to = this }
+		random_playable_country = {
+			set_country_flag = event_target_captured
+			ssex_save_scoped_event_target = {
+				target_owner = prev
+				event_target_name = saved_country
+			}
+			log = "Scope Captured: String value is [This.GetNameOrFallback]"
+		}
+		ssex_clear_return_value = yes
+		ssex_get_scoped_event_target_value = { event_target_name = saved_country }
+		assert_scope_exists = { SCOPE = ssex_return_value }
+		if = {
+			limit = { assert_passed = yes }
+			log_error = "Scope Retrieved: String value is [ssex_return_value.GetNameOrFallback]"
+		}
+		ssex_clear_return_value = yes
+		ssex_delete_scoped_event_target = { event_target_name = saved_country }
+		ssex_get_scoped_event_target_value = { event_target_name = saved_country }
+		assert_scope_not_exists = { SCOPE = ssex_return_value }
+		if = {
+			limit = { assert_passed = yes }
+			log_error = "Event target successfully deleted."
+		}
+	}
+}

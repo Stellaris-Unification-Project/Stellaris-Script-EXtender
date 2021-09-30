@@ -1,9 +1,0 @@
-se_is_keyboard_active_trigger = {
-	NOT = { has_country_flag = se_keyboard_enabled }
-}
-se_keyboard_is_capitals_enabled_trigger = {
-	OR = {
-		has_country_flag = se_shift_enabled
-		has_country_flag = se_caps_enabled
-	}
-}

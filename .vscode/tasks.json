@@ -5,7 +5,7 @@
             "label": "Test Stellaris",
             "type": "process",
             "command": "${config:cwtools.cache.stellaris}\\stellaris.exe",
-            "args": ["-gdpr-compliant", "-dx11", "-logprefix se_debug_", "-debugtooltip", "-logall", "-mod \"P:/Stellaris Mods/Script Extensions/source\"", "-mod \"P:/Stellaris Mods/Script Extensions/test\""]
+            "args": ["-gdpr-compliant", "-dx11", "-logprefix ssex_debug_", "-debugtooltip", "-logall", "-mod \"P:/Stellaris Mods/Script Extensions/source\"", "-mod \"P:/Stellaris Mods/Script Extensions/test\""]
         }
     ]
 }

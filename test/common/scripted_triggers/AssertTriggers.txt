@@ -1,0 +1,21 @@
+assert_passed = {
+	OR = {
+		if = {
+			limit = { NOT = { has_global_flag = ssex_test_assert_failed } }
+			log = "Test Assertion Passed"
+			always = yes
+		}
+		always = no
+	}	
+}
+assert_failed = {
+	OR = {
+		if = {
+			limit = { has_global_flag = ssex_test_assert_failed }
+			log = "Test Assertion Failed"
+			always = yes
+		}
+		always = no
+	}
+	
+}

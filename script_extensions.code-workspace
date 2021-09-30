@@ -23,10 +23,7 @@
 		}
 	],
 	"settings": {
-		"cwtools.errors.ignore": [
-			262,
-			264
-		],
+		"cwtools.errors.ignore": [ ],
 		"files.exclude": {
 			"**/source": true,
 			"**/test": true,

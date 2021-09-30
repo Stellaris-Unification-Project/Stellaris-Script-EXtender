@@ -1,0 +1,24 @@
+assert_scope_exists = {
+	clear_assert_result = yes
+	if = {
+		limit = { NOT = { exists = $SCOPE$ } }
+		log_error = "Test Error: Could not find required scope in test."
+		set_assert_failed = yes
+	}
+	else = {
+		set_assert_passed = yes
+	}
+}
+assert_scope_not_exists = {
+	clear_assert_result = yes
+	if = {
+		limit = { exists = $SCOPE$ }
+		$SCOPE$ = { save_global_event_target_as = assert_scope }
+		log_error = "Test Error: Testing assertion found scope \\[assert_scope.GetNameOrFallback] in test where it should not."
+		clear_global_event_target = assert_scope
+		set_assert_failed = yes
+	}
+	else = {
+		set_assert_passed = yes
+	}
+}

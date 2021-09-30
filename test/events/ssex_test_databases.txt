@@ -1,0 +1,111 @@
+namespace = ssex_database_test
+
+### Test that, creates, checks for, and deletes a global database
+country_event = {
+	id = ssex_database_test.0
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {}
+
+	immediate = {
+		init_assert = yes
+		ssex_clear_return_value = yes
+		ssex_get_database = { identifier = ssex_test_global_database_object }
+		assert_scope_not_exists = { SCOPE = event_target:ssex_return_value }
+		if = {
+			limit = { assert_passed = yes }
+			log_error = "Called Line"
+			ssex_create_database = { identifier = ssex_test_global_database_object }
+			assert_scope_exists = { SCOPE = event_target:ssex_return_value }
+		}
+		if = {
+			limit = { assert_passed = yes }
+			log_error = "Called Line"
+			ssex_clear_return_value = yes
+			ssex_get_database = { identifier = ssex_test_global_database_object }
+			assert_scope_exists = { SCOPE = event_target:ssex_return_value }
+		}
+		if = {
+			limit = { assert_passed = yes }
+			log_error = "Called Line"
+			ssex_delete_database = { identifier = ssex_test_global_database_object }
+			ssex_get_database = { identifier = ssex_test_global_database_object }
+			assert_scope_not_exists = { SCOPE = event_target:ssex_return_value }
+		}
+		if = {
+			limit = { assert_passed = yes }
+			log_error = "ssex_database_test.0 passed all tests"
+		}
+	}
+}
+
+### Test that, creates, checks for, and deletes a bound database
+country_event = {
+	id = ssex_database_test.1
+	is_triggered_only = yes
+	hide_window = yes
+
+	trigger = {}
+
+	immediate = {
+		init_assert = yes
+		ssex_clear_return_value = yes
+		ssex_get_database = { bound_to = this }
+		assert_scope_not_exists = { SCOPE = event_target:ssex_return_value }
+		if = {
+			limit = { assert_passed = yes }
+			ssex_create_database = { bound_to = this }
+			assert_scope_exists = { SCOPE = event_target:ssex_return_value }
+		}
+		if = {
+			limit = { assert_passed = yes }
+			ssex_clear_return_value = yes
+			ssex_get_database = { bound_to = this }
+			assert_scope_exists = { SCOPE = event_target:ssex_return_value }
+		}
+		if = {
+			limit = { assert_passed = yes }
+			ssex_delete_database = { bound_to = this }
+			ssex_get_database = { identifier = ssex_global_test }
+			assert_scope_not_exists = { SCOPE = event_target:ssex_return_value }
+		}
+		if = {
+			limit = { assert_passed = yes }
+			log_error = "ssex_database_test.1 passed all tests"
+		}
+	}
+}
+### Creates, checks for, and deletes a database entry
+country_event = {
+	id = ssex_database_test.2
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		init_assert = yes
+		ssex_clear_return_value = yes
+		ssex_get_database = { bound_to = this }
+		assert_scope_not_exists = { SCOPE = event_target:ssex_return_value }
+		if = {
+			limit = { assert_passed = yes }
+			ssex_create_database = { bound_to = this }
+			assert_scope_exists = { SCOPE = event_target:ssex_return_value }
+			ssex_clear_return_value = yes
+			ssex_get_database = { bound_to = this }
+			assert_scope_exists = { SCOPE = event_target:ssex_return_value }
+		}
+		event_target:ssex_return_value = {
+			
+		}
+		if = {
+			limit = { assert_passed = yes }
+			ssex_delete_database = { bound_to = this }
+			ssex_get_database = { identifier = ssex_global_test }
+			assert_scope_not_exists = { SCOPE = event_target:ssex_return_value }
+		}
+		if = {
+			limit = { assert_passed = yes }
+			log_error = "ssex_database_test.1 passed all tests"
+		}
+	}
+}

@@ -53,7 +53,7 @@ bitmapfonts = {
 
 	bitmapfont_override = {
 		name = "large_title_font"
-        ttf_font = "Chinese_bigger"
+        ttf_font = "Chinessex_bigger"
         ttf_size = "32"
 		languages = { "l_simp_chinese" } 
 		vertical_offset  = "5"
@@ -74,7 +74,7 @@ bitmapfonts = {
 
 	bitmapfont_override = {
 		name = "large_title_font_28"
-        ttf_font = "Chinese_big"
+        ttf_font = "Chinessex_big"
         ttf_size = "28"
 		languages = { "l_simp_chinese" }
 		vertical_offset  = "4"		
@@ -99,7 +99,7 @@ bitmapfonts = {
 
 	bitmapfont_override = {
 		name = "cg_16b"
-        ttf_font = "Chinese_normal"
+        ttf_font = "Chinessex_normal"
         ttf_size = "15"
 		vertical_offset  = "2"
 		languages = { "l_simp_chinese" }
@@ -128,7 +128,7 @@ bitmapfonts = {
 
 	bitmapfont_override = {
 		name = "malgun_goth_24"
-        ttf_font = "Chinese_header"
+        ttf_font = "Chinessex_header"
         ttf_size = "20"
 		vertical_offset  = "1"
 		languages = { "l_simp_chinese" } 
@@ -151,7 +151,7 @@ bitmapfonts = {
 
 	bitmapfont_override = {
 		name = "map_name_border"
-        ttf_font = "Chinese_header"
+        ttf_font = "Chinessex_header"
         ttf_size = "20"
 		vertical_offset  = "1"
 		languages = { "l_simp_chinese" } 
@@ -173,7 +173,7 @@ bitmapfonts = {
 
 	bitmapfont_override = {
 		name = "map_name_nebula"
-        ttf_font = "Chinese_header"
+        ttf_font = "Chinessex_header"
         ttf_size = "20"
 		vertical_offset  = "1"
 		languages = { "l_simp_chinese" } 
@@ -195,7 +195,7 @@ bitmapfonts = {
 
 	bitmapfont_override = {
 		name = "map_name_sector"
-        ttf_font = "Chinese_header"
+        ttf_font = "Chinessex_header"
         ttf_size = "20"
 		vertical_offset  = "1"
 		languages = { "l_simp_chinese" } 

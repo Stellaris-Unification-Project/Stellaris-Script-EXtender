@@ -1,7 +1,7 @@
 on_game_start = {
 	events = {
-		se_setup.0
-		se_setup.1
+		ssex_setup.0
+		ssex_setup.1
 	}
 }
 
@@ -10,27 +10,27 @@ on_game_start = {
 ### event_target:global_event_country DOES NOT EXIST YET AND WILL BE OVERWRITTEN AFTER THIS CALL TO KEEP THE GAME FUNCTIONAL
 on_game_start_begin = {
 	events = {
-		se_mod_auto_update.0
+		ssex_mod_auto_update.0
 	}
 }
 
-on_se_register_mod_version = {
+on_ssex_register_mod_version = {
 	events = {
 		
 	}
 }
 
-on_se_random_number_create_digit = {
+on_ssex_random_number_create_digit = {
 	random_events = {
-		1 = se_rng.0
-		1 = se_rng.1
-		1 = se_rng.2
-		1 = se_rng.3
-		1 = se_rng.4
-		1 = se_rng.5
-		1 = se_rng.6
-		1 = se_rng.7
-		1 = se_rng.8
-		2 = se_rng.9
+		1 = ssex_rng.0
+		1 = ssex_rng.1
+		1 = ssex_rng.2
+		1 = ssex_rng.3
+		1 = ssex_rng.4
+		1 = ssex_rng.5
+		1 = ssex_rng.6
+		1 = ssex_rng.7
+		1 = ssex_rng.8
+		2 = ssex_rng.9
 	}
 }

@@ -1,0 +1,9 @@
+ssex_is_keyboard_active_trigger = {
+	has_country_flag = ssex_keyboard_enabled
+}
+ssex_keyboard_is_capitals_enabled_trigger = {
+	OR = {
+		has_country_flag = ssex_shift_enabled
+		has_country_flag = ssex_caps_enabled
+	}
+}

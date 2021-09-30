@@ -1,0 +1,37 @@
+### None of these events are called or should be called, they exist solely to shut up CWTools errors
+namespace = ssex_cwtools_shutup
+event = {
+	id = ssex_cwtools_shutup.0
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		# Public values
+		save_global_event_target_as = ssex_return_value
+		save_global_event_target_as = ssex_last_created_database
+		save_global_event_target_as = ssex_last_created_event_country
+		# Temp/Important values
+		save_global_event_target_as = ssex_discovered_event_country
+		save_global_event_target_as = ssex_hidden_database_target
+		save_global_event_target_as = ssex_hidden_scope_pointer
+		save_global_event_target_as = ssex_initial_search_scope
+		save_global_event_target_as = ssex_owner_search_scope
+		save_global_event_target_as = ssex_point_to_scope
+		save_global_event_target_as = ssex_point_from_scope
+		save_global_event_target_as = ssex_scoped_event_target_owner_database
+		save_global_event_target_as = ssex_global_database
+		save_global_event_target_as = ssex_hidden_db_owner
+		# Feature flags
+		set_global_flag = ssex_active_daily_pulse
+		set_global_flag = ssex_active_weekly_pulse
+		set_global_flag = ssex_active_daily_pulssex_country
+		set_global_flag = ssex_active_weekly_pulssex_country
+		random_owned_leader = {
+			set_leader_flag = ssex_scoped_event_target
+			set_leader_flag = ssex_requires_initial_search
+			set_leader_flag = ssex_has_owner
+			set_leader_flag = ssex_initial_search_for_@prev
+			set_leader_flag = ssex_owner_@prev
+			set_leader_flag = ssex_points_to_@prev
+		}
+	}
+}

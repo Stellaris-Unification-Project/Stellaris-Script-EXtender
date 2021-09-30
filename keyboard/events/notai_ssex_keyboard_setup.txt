@@ -1,0 +1,10 @@
+namespace = ssex_keyboard_setup
+
+event = {
+	id = ssex_keyboard_setup.0
+	is_triggered_only = yes
+	hide_window = yes
+	immediate = {
+		ssex_ensure_string_dictionary_exists = yes
+	}
+}

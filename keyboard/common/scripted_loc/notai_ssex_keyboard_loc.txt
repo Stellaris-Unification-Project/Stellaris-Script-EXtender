@@ -1,0 +1,15 @@
+defined_text = {
+	name = GetInputOrDefault
+	text = {
+		trigger = {
+			event_target:ssex_keyboard_input_metadata = {
+				check_variable = {
+					which = ssex_list_item_count
+					value = 0 
+				} 
+			}
+		}
+		localization_key = ssex_keyboard_empty_text
+	}
+	text = { localization_key = ssex_keyboard_user_text }
+}

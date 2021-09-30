@@ -4,44 +4,44 @@
 # daily_country(Optional) - if yes, enables country specific daily pulses
 # scopeless_weekly(Optional) - if yes, enables global scopeless weekly pulses
 # weekly_country(Optional) - if yes, enables country specific weekly pulses
-se_enable_pulse = {
+ssex_enable_pulse = {
 	[[scopeless_daily]
 	if = {
 		limit = { always = $scopeless_daily$ }
-		set_global_flag = se_active_daily_pulse
+		set_global_flag = ssex_active_daily_pulse
 	}
 	]
 	[[daily_country]
 	if = {
 		limit = { always = $daily_country$ }
-		set_global_flag = se_active_daily_pulse_country
+		set_global_flag = ssex_active_daily_pulssex_country
 	}
 	]
 	[[scopeless_weekly]
 	if = { 
 		limit = { always = $scopeless_weekly$ }
-		set_global_flag = se_active_weekly_pulse
+		set_global_flag = ssex_active_weekly_pulse
 	}
 	]
 	[[weekly_country]
 	if = {
 		limit = { always = $weekly_country$ }
-		set_global_flag = se_active_weekly_pulse_country
+		set_global_flag = ssex_active_weekly_pulssex_country
 	}
 	]
 }
 
 ### Enables script extenders auto update detector feature
 ### Triggering this will result in an intake of all mods update registrations
-se_enable_mod_update_detector = {
-	if = {
-		limit = { NOT = { has_global_flag = se_mod_update_enabled } }
-		set_global_flag = se_mod_update_enabled
-	}
-}
+#ssex_enable_mod_update_detector = {
+#	if = {
+#		limit = { NOT = { has_global_flag = ssex_mod_update_enabled } }
+#		set_global_flag = ssex_mod_update_enabled
+#	}
+#}
 
 ### Register your current mod version to the mod update detector
 ### Parameters
-se_register_mod_version = {
-
-}
+#ssex_register_mod_version = {
+#
+#}

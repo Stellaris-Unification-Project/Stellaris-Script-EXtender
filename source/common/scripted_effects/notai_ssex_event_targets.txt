@@ -1,0 +1,692 @@
+
+ #####									  #####
+##### Script Extender Scoped Event Targets #####
+ #####									  #####
+ # Scoped event target effects do not have a static or assumed value of effects on the stack but change depending on the effect being called
+ # Used for creating event targets accessible only from a specific scope
+ # Scoped event targets are not restricted to one as a global or to the nested effects of an event call but instead are only accessible from a specific scope
+
+### Creates a scope exclusive event target
+### Parameters
+# target_owner - the scope to register the event target too
+# event_target_name - unique event target name
+### Effect takes 2 effect calls on the effect call stack
+### Access return value by scope event_target:ssex_return_value
+ssex_save_scoped_event_target = {
+	save_global_event_target_as = ssex_point_to_scope
+	if = {
+		limit = {
+			is_scope_set = $target_owner$
+			exists = $target_owner$
+		}
+		event_target:$target_owner$ = {
+			if = {
+				limit = { exists = event_target:ssex_point_from_scope }
+				clear_global_event_target = ssex_point_from_scope
+			}
+			save_global_event_target_as = ssex_point_from_scope
+		}
+	}
+	elssex_if = {
+		limit = {
+			is_scope_set = event_target:$target_owner$
+			exists = event_target:$target_owner$
+		}
+		$target_owner$ = {
+			if = {
+				limit = { exists = event_target:ssex_point_from_scope }
+				clear_global_event_target = ssex_point_from_scope
+			}
+			save_global_event_target_as = ssex_point_from_scope
+		}
+	}
+	else = {
+		log_error = "ssex_save_scoped_event_target: Invalid scope reference passed by argument: target_owner"
+		break = yes
+	}
+	ssex_clear_return_value = yes
+	ssex_get_database = { bound_to = ssex_point_from_scope }
+	if = {
+		limit = { NOT = { exists = event_target:ssex_return_value } }
+		ssex_create_database = { bound_to = ssex_point_from_scope }
+		event_target:ssex_return_value = {
+			if = {
+				limit = { exists = event_target:ssex_point_from_scope }
+				clear_global_event_target = ssex_point_from_scope
+			}
+			save_global_event_target_as = ssex_point_from_scope
+		}
+	}
+	else = {
+		event_target:ssex_return_value = {
+			if = {
+				limit = { exists = event_target:ssex_point_from_scope }
+				clear_global_event_target = ssex_point_from_scope
+			}
+			save_global_event_target_as = ssex_point_from_scope
+		}
+		ssex_clear_return_value = yes
+	}
+	event_target:ssex_scoped_event_target_owner_database = {
+		ssex_create_database_entry = {
+			identifier = $event_target_name$
+			overwrite = yes
+		}
+		event_target:ssex_return_value = {
+			set_leader_flag = ssex_points_to_@event_target:ssex_point_to_scope
+			ssex_set_database_entry_flag = { flag = ssex_scoped_event_target }
+			event_target:ssex_point_to_scope = {
+				switch = {
+					trigger = is_scope_type
+					default = {}
+					country = { prev = { ssex_set_database_entry_flag = { flag = ssex_country_scope } } }
+					sector = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_sector_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.owner }
+							ssex_set_database_entry_flag = { flag = ssex_country_owner }
+						}
+					}
+					galactic_object = { prev = { ssex_set_database_entry_flag = { flag = ssex_system_scope } } }
+					megastructure = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_megastructure_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.planet }
+							ssex_set_database_entry_flag = { flag = ssex_planet_owner }
+							ssex_set_database_entry_flag = { flag = ssex_requires_initial_search }
+							ssex_set_database_entry_flag = { flag = ssex_initial_system_search }
+							ssex_set_database_entry_flag = { flag = ssex_initial_search_for_@event_target:ssex_point_to_scope.planet.solar_system }
+						}
+					}
+					ambient_object = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_ambient_object_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.solar_system }
+							ssex_set_database_entry_flag = { flag = ssex_system_owner }
+						}
+					}
+					planet = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_planet_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.solar_system }
+							ssex_set_database_entry_flag = { flag = ssex_system_owner }
+						}
+					}
+					deposit = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_deposit_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.planet }
+							ssex_set_database_entry_flag = { flag = ssex_planet_owner }
+							ssex_set_database_entry_flag = { flag = ssex_requires_initial_search }
+							ssex_set_database_entry_flag = { flag = ssex_initial_system_search }
+							ssex_set_database_entry_flag = { flag = ssex_initial_search_for_@event_target:ssex_point_to_scope.planet.solar_system }
+						}
+					}
+					archeaological_site = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_archeaological_site_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.planet }
+							ssex_set_database_entry_flag = { flag = ssex_planet_owner }
+							ssex_set_database_entry_flag = { flag = ssex_requires_initial_search }
+							ssex_set_database_entry_flag = { flag = ssex_initial_system_search }
+							ssex_set_database_entry_flag = { flag = ssex_initial_search_for_@event_target:ssex_point_to_scope.planet.solar_system }
+						}
+					}
+					army = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_army_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.owner }
+							ssex_set_database_entry_flag = { flag = ssex_country_owner }
+						}
+					}
+					pop = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_pop_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.planet }
+							ssex_set_database_entry_flag = { flag = ssex_planet_owner }
+							ssex_set_database_entry_flag = { flag = ssex_requires_initial_search }
+							ssex_set_database_entry_flag = { flag = ssex_initial_system_search }
+							ssex_set_database_entry_flag = { flag = ssex_initial_search_for_@event_target:ssex_point_to_scope.planet.solar_system }
+						}
+					}
+					species = { prev = { ssex_set_database_entry_flag = { flag = ssex_species_scope } } }
+					leader = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_leader_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.owner }
+							ssex_set_database_entry_flag = { flag = ssex_country_owner }
+						}
+					}
+					pop_faction = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_faction_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.owner }
+							ssex_set_database_entry_flag = { flag = ssex_country_owner }
+						}
+					}
+					ship = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_ship_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.owner }
+							ssex_set_database_entry_flag = { flag = ssex_country_owner }
+						}
+					}
+					fleet = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_fleet_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.owner }
+							ssex_set_database_entry_flag = { flag = ssex_country_owner }
+						}
+					}
+					federation = { prev = { ssex_set_database_entry_flag = { flag = ssex_federation_scope } } }
+					war = { prev = { ssex_set_database_entry_flag = { flag = ssex_war_scope } } }
+					first_contact = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_first_contact_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.owner }
+							ssex_set_database_entry_flag = { flag = ssex_country_owner }
+						}
+					}
+					spynetwork = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_spy_network_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.owner }
+							ssex_set_database_entry_flag = { flag = ssex_country_owner }
+						}
+					}
+					starbase = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_starbassex_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.solar_system }
+							ssex_set_database_entry_flag = { flag = ssex_system_owner }
+						}
+					}
+					espionage_operation = {
+						prev = {
+							ssex_set_database_entry_flag = { flag = ssex_espionage_operation_scope }
+							ssex_set_database_entry_flag = { flag = ssex_has_owner }
+							ssex_set_database_entry_flag = { flag = ssex_owner_@event_target:ssex_point_to_scope.owner }
+							ssex_set_database_entry_flag = { flag = ssex_country_owner }
+						}
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = { exists = event_target:ssex_point_to_scope }
+		clear_global_event_target = ssex_point_to_scope
+	}
+	if = {
+		limit = { exists = event_target:ssex_point_from_scope }
+		clear_global_event_target = ssex_point_from_scope
+	}
+	if = {
+		limit = { exists = event_target:ssex_scoped_event_target_owner_database }
+		clear_global_event_target = ssex_scoped_event_target_owner_database
+	}
+}
+
+### Retrieves a scope exclusive event target
+### Parameters
+# event_target_name - unique event target name
+### Effect takes 3 effect calls on the effect call stack
+ssex_get_scoped_event_target_value = {
+	ssex_clear_return_value = yes
+	if = {
+		limit = { ssex_is_database = yes }
+		ssex_set_return_value = yes
+	}
+	else = { ssex_get_database = { bound_to = this } }
+	if = {
+		limit = { exists = event_target:ssex_return_value }
+		event_target:ssex_return_value = {
+			if = {
+				limit = { exists = event_target:ssex_hidden_database_target }
+				clear_global_event_target = ssex_hidden_database_target
+			}
+			save_global_event_target_as = ssex_hidden_database_target
+		}
+		ssex_clear_return_value = yes
+		event_target:ssex_hidden_database_target = {
+			ssex_get_database_entry = { identifier = $event_target_name$ }
+			if = {
+				limit = {
+					exists = event_target:ssex_return_value
+					event_target:ssex_return_value = { has_leader_flag = ssex_scoped_event_target }
+				}
+				event_target:ssex_return_value = {
+					if = {
+						limit = { exists = event_target:ssex_hidden_scope_pointer }
+						clear_global_event_target = ssex_hidden_scope_pointer
+					}
+					save_global_event_target_as = ssex_hidden_scope_pointer
+				}
+				ssex_clear_return_value = yes
+				event_target:ssex_hidden_scope_pointer = {
+					if = {
+						limit = { has_leader_flag = ssex_requires_initial_search }
+						switch = {
+							trigger = has_leader_flag
+							ssex_initial_system_search = {
+								random_system = {
+									limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_initial_search_for_@prev } }
+									if = {
+										limit = { exists = event_target:ssex_initial_search_scope }
+										clear_global_event_target = ssex_initial_search_scope
+									}
+									save_global_event_target_as = ssex_initial_search_scope
+								}
+							}
+						}
+						event_target:ssex_initial_search_scope = { ssex_internal_get_owner_scope = yes }
+						clear_global_event_target = ssex_initial_search_scope
+					}
+					else = { ssex_internal_get_owner_scope = yes }
+				}
+				if = {
+					limit = { exists = event_target:ssex_return_value }
+					event_target:ssex_return_value = { save_event_target_as = $event_target_name$ }
+					ssex_clear_return_value = yes
+				}
+				else = { event_target:ssex_hidden_database_target = { ssex_remove_database_entry = { identifier = $event_target_name$ } } }
+			}
+			else = { log_error = "ssex_get_scoped_event_target_value: Scope this does not have a valid event target with the given identifier." }
+		}
+	}
+	else = { log_error = "ssex_get_scoped_event_target_value: Scope this is not a database and does not have an obviously accessable database." }
+	if = {
+		limit = { exists = event_target:ssex_hidden_database_target }
+		clear_global_event_target = ssex_hidden_database_target
+	}
+	if = {
+		limit = { exists = event_target:ssex_hidden_scope_pointer }
+		clear_global_event_target = ssex_hidden_scope_pointer
+	}
+}
+### Internal use, do not use outside of code within this mod
+ssex_internal_get_owner_scope = {
+	event_target:ssex_hidden_scope_pointer = {
+		if = {
+			limit = { has_leader_flag = ssex_has_owner }
+			switch = {
+				trigger = has_leader_flag
+				ssex_country_owner = {
+					prev = {
+						random_country = {
+							limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_owner_@prev } }
+							if = {
+								limit = { exists = event_target:ssex_owner_search_scope }
+								clear_global_event_target = ssex_owner_search_scope
+							}
+							save_global_event_target_as = ssex_owner_search_scope
+						}
+					}
+				}
+				ssex_planet_owner = {
+					prev = {
+						random_system_planet = {
+							limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_owner_@prev } }
+							if = {
+								limit = { exists = event_target:ssex_owner_search_scope }
+								clear_global_event_target = ssex_owner_search_scope
+							}
+							save_global_event_target_as = ssex_owner_search_scope
+						}
+					}
+				}
+				ssex_system_owner = {
+					prev = {
+						random_system = {
+							limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_owner_@prev } }
+							if = {
+								limit = { exists = event_target:ssex_owner_search_scope }
+								clear_global_event_target = ssex_owner_search_scope
+							}
+							save_global_event_target_as = ssex_owner_search_scope
+						}
+					}
+				}
+			}
+			if = {
+				limit = { exists = event_target:ssex_owner_search_scope }
+				event_target:ssex_owner_search_scope = { ssex_internal_grab_event_target_scope = yes }
+				clear_global_event_target = ssex_owner_search_scope
+			}
+		}
+		else = { ssex_internal_grab_event_target_scope = yes }
+	}
+}
+### Internal use, do not use outside of code within this mod
+ssex_internal_grab_event_target_scope = {
+	event_target:ssex_hidden_scope_pointer = {
+		switch = {
+			trigger = has_leader_flag
+			ssex_espionage_operation_scope = {
+				prev = {
+					every_espionage_operation = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_starbassex_scope = {
+				prev = {
+					if = {
+						limit = { exists = starbase }
+						starbase = {
+							if = {
+								limit = { event_target:ssex_point_from_scope = { has_leader_flag = ssex_points_to_@prev } }
+								if = {
+									limit = { exists = event_target:ssex_return_value }
+									clear_global_event_target = ssex_return_value
+								}
+								save_global_event_target_as = ssex_return_value
+							}
+						}
+					}
+				}
+			}
+			ssex_spy_network_scope = {
+				prev = {
+					every_spynetwork = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_first_contact_scope = {
+				prev = {
+					every_first_contact = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_war_scope = {
+				prev = {
+					random_war = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_federation_scope = {
+				prev = {
+					random_federation = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_species_scope = {
+				prev = {
+					random_galaxy_species = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_country_scope = {
+				prev = {
+					random_country = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_system_scope = {
+				prev = {
+					random_system = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_fleet_scope = {
+				prev = {
+					random_owned_fleet = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_ship_scope = {
+				prev = {
+					random_owned_ship = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_faction_scope = {
+				prev = {
+					random_pop_faction = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_leader_scope = {
+				prev = {
+					random_owned_leader = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+					if = {
+						limit = { NOT = { exists = event_target:ssex_return_value } }
+						random_pool_leader = {
+							limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+							if = {
+								limit = { exists = event_target:ssex_return_value }
+								clear_global_event_target = ssex_return_value
+							}
+							save_global_event_target_as = ssex_return_value
+						}
+					}
+				}
+			}
+			ssex_pop_scope = {
+				prev = {
+					random_owned_pop = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_army_scope = {
+				prev = {
+					random_owned_army = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_archeaological_site_scope = {
+				prev = {
+					if = {
+						limit = { exists = archaeological_site }
+						archaeological_site = {
+							if = {
+								limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+								if = {
+									limit = { exists = event_target:ssex_return_value }
+									clear_global_event_target = ssex_return_value
+								}
+								save_global_event_target_as = ssex_return_value
+							}
+						}
+					}
+				}
+			}
+			ssex_deposit_scope = {
+				prev = {
+					random_deposit = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_planet_scope = {
+				prev = {
+					random_system_planet = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_ambient_object_scope = {
+				prev = {
+					random_system_ambient_object = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+			ssex_megastructure_scope = {
+				prev = {
+					if = {
+						limit = { exists = megastructure }
+						megastructure = {
+							if = {
+								limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+								if = {
+									limit = { exists = event_target:ssex_return_value }
+									clear_global_event_target = ssex_return_value
+								}
+								save_global_event_target_as = ssex_return_value
+							}
+						}
+					}
+				}
+			}
+			ssex_sector_scope = {
+				prev = {
+					random_owned_sector = {
+						limit = { event_target:ssex_hidden_scope_pointer = { has_leader_flag = ssex_points_to_@prev } }
+						if = {
+							limit = { exists = event_target:ssex_return_value }
+							clear_global_event_target = ssex_return_value
+						}
+						save_global_event_target_as = ssex_return_value
+					}
+				}
+			}
+		}
+	}
+}
+
+### Deletes a scope exclusive event target
+### Parameters
+# event_target_name - unique event target name
+ssex_delete_scoped_event_target = {
+	ssex_clear_return_value = yes
+	if = {
+		limit = { ssex_is_database = yes }
+		if = {
+			limit = { exists = event_target:ssex_hidden_database_target }
+			clear_global_event_target = ssex_hidden_database_target
+		}
+		save_global_event_target_as = ssex_hidden_database_target
+	}
+	else = {
+		ssex_get_database = { bound_to = this }
+		if = {
+			limit = { exists = event_target:ssex_return_value }
+			event_target:ssex_return_value = {
+				if = {
+					limit = { exists = event_target:ssex_hidden_database_target }
+					clear_global_event_target = ssex_hidden_database_target
+				}
+				save_global_event_target_as = ssex_hidden_database_target
+			}
+			ssex_clear_return_value = yes
+		}
+		else = { log_error = "ssex_delete_scoped_event_target: Scope this is not a database and does not have an obviously accessable database" }
+	}
+	event_target:ssex_hidden_database_target = { ssex_remove_database_entry = { identifier = $event_target_name$ } }
+	ssex_clear_return_value = yes
+}

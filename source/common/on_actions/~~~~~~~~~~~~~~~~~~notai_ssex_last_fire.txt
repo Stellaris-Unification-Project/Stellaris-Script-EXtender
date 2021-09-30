@@ -1,0 +1,24 @@
+on_monthly_pulse = {
+	events = {
+		ssex_pulssex_engine.0	# Fires on_daily_pulse
+		ssex_pulssex_engine.1	# Fires on_weekly_pulse
+	}
+}
+on_monthly_pulse_country = {
+	events = {
+		ssex_pulssex_engine.10 	# Fires on_daily_pulssex_country
+		ssex_pulssex_engine.11 	# Fires on_weekly_pulssex_country
+	}
+}
+on_daily_pulse = {
+	events = { }
+}
+on_daily_pulssex_country = {
+	events = { }
+}
+on_weekly_pulse = {
+	events = { }
+}
+on_weekly_pulssex_country = {
+	events = { }
+}

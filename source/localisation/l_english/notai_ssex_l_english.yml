@@ -1,0 +1,31 @@
+﻿l_english:
+ ### Internal defined strings
+ ssex_database_unbound_name: "Global Database [ssex_global_database.ssex_global_database_count]"
+ ssex_database_bound_name: "[ssex_hidden_db_owner.GetName] Database"
+
+ ### Scope Names
+ ssex_scope_name_ambient_object: "ambient_object"
+ ssex_scope_name_archaeological_site: "archaeological_site"
+ ssex_scope_name_army: "army"
+ ssex_scope_name_country: "country"
+ ssex_scope_name_deposit: "deposit"
+ ssex_scope_name_espionage_asset: "espionage_asset"
+ ssex_scope_name_espionage_operation: "espionage_operation"
+ ssex_scope_name_federation: "federation"
+ ssex_scope_name_first_contact: "first_contact"
+ ssex_scope_name_fleet: "fleet"
+ ssex_scope_name_galactic_object: "galactic_object"
+ ssex_scope_name_leader: "leader"
+ ssex_scope_name_megastructure: "megastructure"
+ ssex_scope_name_planet: "planet"
+ ssex_scope_name_pop_faction: "pop_faction"
+ ssex_scope_name_pop: "pop"
+ ssex_scope_name_sector: "sector"
+ ssex_scope_name_ship: "ship"
+ ssex_scope_name_spynetwork: "spynetwork"
+ ssex_scope_name_starbase: "starbase"
+ ssex_scope_name_war: "war"
+ ssex_scope_unknown: "?"
+ ### GetNameOrFallback
+ ssex_get_name: "[This.GetName]"
+ ssex_get_name_fallback: "[This.GetScopeType]"

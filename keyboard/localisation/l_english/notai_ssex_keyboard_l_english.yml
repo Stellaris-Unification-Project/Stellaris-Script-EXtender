@@ -1,0 +1,129 @@
+﻿l_english:
+ 
+  #####             #####
+ ##### Main Keyboard #####
+  #####             #####
+
+ ### Primary Text
+ ssex_keyboard_title:			"Script Extender Keyboard"			# Event title
+ ssex_keyboard_empty_text:	"§gUse your keyboard to fill§!"		# Empty filler text
+ ssex_keyboard_user_text:		"[ssex_final_input_field.GetName]"	# Currently filled text
+ ssex_keyboard_desc:			"[This.GetInputOrDefault]"			# Event description/input field
+ ### Letter Keys
+ ssex_key_a: "[This.GetLetterA]"
+ ssex_key_b: "[This.GetLetterB]"
+ ssex_key_c: "[This.GetLetterC]"
+ ssex_key_d: "[This.GetLetterD]"
+ ssex_key_e: "[This.GetLetterE]"
+ ssex_key_f: "[This.GetLetterF]"
+ ssex_key_g: "[This.GetLetterG]"
+ ssex_key_h: "[This.GetLetterH]"
+ ssex_key_i: "[This.GetLetterI]"
+ ssex_key_j: "[This.GetLetterJ]"
+ ssex_key_k: "[This.GetLetterK]"
+ ssex_key_l: "[This.GetLetterL]"
+ ssex_key_m: "[This.GetLetterM]"
+ ssex_key_n: "[This.GetLetterN]"
+ ssex_key_o: "[This.GetLetterO]"
+ ssex_key_p: "[This.GetLetterP]"
+ ssex_key_q: "[This.GetLetterQ]"
+ ssex_key_r: "[This.GetLetterR]"
+ ssex_key_s: "[This.GetLetterS]"
+ ssex_key_t: "[This.GetLetterT]"
+ ssex_key_u: "[This.GetLetterU]"
+ ssex_key_v: "[This.GetLetterV]"
+ ssex_key_w: "[This.GetLetterW]"
+ ssex_key_x: "[This.GetLetterX]"
+ ssex_key_y: "[This.GetLetterY]"
+ ssex_key_z: "[This.GetLetterZ]"
+ ### Number Keys
+ ssex_key_zero:			"0"
+ ssex_key_one:			"1"
+ ssex_key_two:			"2"
+ ssex_key_three:			"3"
+ ssex_key_four:			"4"
+ ssex_key_five:			"5"
+ ssex_key_six:			"6"
+ ssex_key_seven:			"7"
+ ssex_key_eight:			"8"
+ ssex_key_nine:			"9"
+ ### Special Key Loc
+ ssex_key_caps:			"Caps-Lock"
+ ssex_key_shift:			"Shift"
+ ssex_key_enter:			"Enter"
+ ssex_key_exit:			"X"
+ ssex_key_space:			"Space"
+ ssex_key_backspace:		"Backspace"
+ ssex_key_delete:			"Delete"
+ # Enable selection?
+ ssex_key_left_arrow:		"<-"
+ ssex_key_right_arrow:	"->"
+ ssex_key_up_arrow:	"Up"
+ ssex_key_down_arrow:	"Down"
+ ### Colour Code Keys
+
+ 
+  #####                #####
+ ##### Confirmation Box #####
+  #####                #####
+
+ ssex_keyboard_confirm_title: "Confirm Submission"
+ ssex_keyboard_confirm_desc: "Are you sure you want to finish the current keyboard input?"
+ ssex_keyboard_option_accept: "Yes"
+ ssex_keyboard_option_reject: "No"
+
+  #####                #####
+ ##### Letters/Alphabet #####
+  #####                #####
+ ssex_letter_cap_a: "A"
+ ssex_letter_low_a: "a"
+ ssex_letter_cap_b: "B"
+ ssex_letter_low_b: "b"
+ ssex_letter_cap_c: "C"
+ ssex_letter_low_c: "c"
+ ssex_letter_cap_d: "D"
+ ssex_letter_low_d: "d"
+ ssex_letter_cap_e: "E"
+ ssex_letter_low_e: "e"
+ ssex_letter_cap_f: "F"
+ ssex_letter_low_f: "f"
+ ssex_letter_cap_g: "G"
+ ssex_letter_low_g: "g"
+ ssex_letter_cap_h: "H"
+ ssex_letter_low_h: "h"
+ ssex_letter_cap_i: "I"
+ ssex_letter_low_i: "i"
+ ssex_letter_cap_j: "J"
+ ssex_letter_low_j: "j"
+ ssex_letter_cap_k: "K"
+ ssex_letter_low_k: "k"
+ ssex_letter_cap_l: "L"
+ ssex_letter_low_l: "l"
+ ssex_letter_cap_m: "M"
+ ssex_letter_low_m: "m"
+ ssex_letter_cap_n: "N"
+ ssex_letter_low_n: "n"
+ ssex_letter_cap_o: "O"
+ ssex_letter_low_o: "o"
+ ssex_letter_cap_p: "P"
+ ssex_letter_low_p: "p"
+ ssex_letter_cap_q: "Q"
+ ssex_letter_low_q: "q"
+ ssex_letter_cap_r: "R"
+ ssex_letter_low_r: "r"
+ ssex_letter_cap_s: "S"
+ ssex_letter_low_s: "s"
+ ssex_letter_cap_t: "T"
+ ssex_letter_low_t: "t"
+ ssex_letter_cap_u: "U"
+ ssex_letter_low_u: "u"
+ ssex_letter_cap_v: "V"
+ ssex_letter_low_v: "v"
+ ssex_letter_cap_w: "W"
+ ssex_letter_low_w: "w"
+ ssex_letter_cap_x: "X"
+ ssex_letter_low_x: "x"
+ ssex_letter_cap_y: "Y"
+ ssex_letter_low_y: "y"
+ ssex_letter_cap_z: "Z"
+ ssex_letter_low_z: "z"
