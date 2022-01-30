@@ -230,7 +230,7 @@ ssex_create_list_entry = {
 			[[index]
 			set_variable = {
 				which = ssex_list_append_index
-				value = prev
+				value = prev.ssex_list_append_index
 			}
 			]
 			random_owned_leader = {
@@ -808,9 +808,9 @@ ssex_enumerator_return_current = {
 		limit = { ssex_is_list_enumerator = yes }
 		if = {
 			limit = {
-				OR = {
-					NOT = { exists = event_target:ssex_hidden_current_scope_list }
-					NOT = { has_leader_flag = ssex_points_to_list_@event_target:ssex_hidden_current_scope_list }
+				NAND = {
+					exists = event_target:ssex_hidden_current_scope_list
+					has_leader_flag = ssex_points_to_list_@event_target:ssex_hidden_current_scope_list
 				}
 			}
 			if = {

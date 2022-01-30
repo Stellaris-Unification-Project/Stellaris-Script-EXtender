@@ -80,7 +80,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_one cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -114,7 +114,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_two cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -147,7 +147,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_three cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -180,7 +180,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_four cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -213,7 +213,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_five cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -246,7 +246,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_six cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -279,7 +279,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_seven cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -312,7 +312,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_eight cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -345,7 +345,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_nine cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -378,7 +378,7 @@ ssex_return_string = {
 	}
 	event_target:ssex_hidden_string_param = {
 		if = {
-			limit = { NOT = { ssex_scope_can_be_named = yes } }
+			limit = { ssex_scope_can_be_named = no }
 			log_error = "ssex_return_string: Scope param_ten cannot be renamed as it does not support an implementation of the set_name effect."
 			break = yes
 		}
@@ -530,7 +530,7 @@ ssex_append_space = {
 					limit = { has_leader_flag = ssex_comparable_string }
 					set_variable = {
 						which = ssex_temp_append_index
-						value = prev
+						value = prev.ssex_temp_append_index
 					}
 					while = {
 						limit = {
@@ -967,7 +967,7 @@ ssex_append_char = {
 				event_target:ssex_hidden_scoped_string_database = {
 					set_variable = {
 						which = ssex_string_append_index
-						value = prev
+						value = prev.ssex_string_append_index
 					}
 				}
 			}
@@ -981,7 +981,7 @@ ssex_append_char = {
 			event_target:ssex_return_value = {
 				set_variable = {
 					which = ssex_character_value
-					value = prev
+					value = prev.ssex_character_value
 				}
 				set_name = \\[Prev.GetName]
 			}

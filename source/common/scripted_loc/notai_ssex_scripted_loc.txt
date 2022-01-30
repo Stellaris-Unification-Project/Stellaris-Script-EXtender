@@ -98,7 +98,7 @@ defined_text = {
 		localization_key = ssex_get_name
 	}
 	text = {
-		trigger = { NOT = { ssex_scope_has_name = yes } }
+		trigger = { ssex_scope_has_name = no }
 		localization_key = ssex_get_name_fallback
 	}
 }
